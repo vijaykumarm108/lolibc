@@ -1,0 +1,102 @@
+/*
+ * Copyright © 2012, MuThink Inc, All rights reserved.
+ * http://www.muthink.com
+ * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
+ */
+// xception - Visual C++ MSVCRT.DLL version of exception.
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
+#ifndef _EXCEPTION_
+#define _EXCEPTION_
+#include <xstddef>
+#include <eh.h>
+
+#ifdef  _MSC_VER
+#pragma pack(push,8)
+#endif  /* _MSC_VER */
+
+ #if !defined(_WIN32) && !defined(_MAC)
+  #error ERROR: Only Mac or Win32 targets supported!
+ #endif
+
+#ifndef _CRTIMP
+#ifdef	_NTSDK
+/* definition compatible with NT SDK */
+#define _CRTIMP
+#else	/* ndef _NTSDK */
+/* current definition */
+#ifdef	_DLL
+#define _CRTIMP __declspec(dllimport)
+#else	/* ndef _DLL */
+#define _CRTIMP
+#endif	/* _DLL */
+#endif	/* _NTSDK */
+#endif	/* _CRTIMP */
+
+typedef const char *__exString;
+
+class _CRTIMP exception
+{
+public:
+    exception();
+    exception(const __exString&);
+    exception(const exception&);
+    exception& operator= (const exception&);
+    virtual ~exception();
+    virtual __exString what() const;
+private:
+    __exString _m_what;
+    int _m_doFree;
+};
+
+namespace std {
+using ::exception;
+
+		// CLASS bad_exception
+class _CRTIMP bad_exception : public exception {
+public:
+	bad_exception(const char *_S = "bad exception") _THROW0()
+		: exception(_S) {}
+	virtual ~bad_exception() _THROW0()
+		{}
+protected:
+	virtual void _Doraise() const
+		{_RAISE(*this); }
+	};
+
+/// Returns true when the caught exception violates the throw specification.
+_CRTIMP bool __cdecl uncaught_exception();
+/// If you write a replacement terminate handler, it must be of this type.
+typedef void (*terminate_handler) (void);
+/// If you write a replacement unexpected handler, it must be of this type.
+typedef void (*unexpected_handler) (void);
+/// Takes a new handler function as an argument, returns the old function.
+terminate_handler set_terminate (terminate_handler pHandler) throw();
+/// The runtime will call this function if exception handling must be
+/// abandoned for any reason.  It can also be called by the user.
+void terminate (void) throw() __attribute__ ((__noreturn__));
+/// Takes a new handler function as an argument, returns the old function.
+unexpected_handler set_unexpected (unexpected_handler pHandler) throw();
+/// The runtime will call this function if an exception is thrown which
+/// violates the function's exception specification.
+void unexpected (void) __attribute__ ((__noreturn__));
+
+} // end namespace std
+
+#ifdef __RTTI_OLDNAMES
+typedef exception xmsg;        // A synonym for folks using older standard
+#endif
+
+#ifdef  _MSC_VER
+#pragma pack(pop)
+#endif  /* _MSC_VER */
+
+#endif /* _EXCEPTION_ */
+
+/*
+ * 1994-1995, Microsoft Corporation. All rights reserved.
+ * Modified January 1996 by P.J. Plauger
+ * Consult your license regarding permissions and restrictions.
+ */
