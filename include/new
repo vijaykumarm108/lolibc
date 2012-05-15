@@ -2,13 +2,28 @@
 //
 #pragma once
 
-#include "lo_uexception.h"
+#include "exception"
 #include <stdlib.h>
 
 /// Just like malloc, but throws on failure.
 void* tmalloc (size_t n) /*throw (lo::std::bad_alloc)*/ __attribute__((malloc));
 /// Just like free, but doesn't crash when given a NULL.
 inline void nfree (void* p) throw() { if (p) free (p); }
+
+namespace std {
+
+	class bad_alloc : public ::exception {
+	public:
+		explicit		bad_alloc (size_t nBytes = 0) throw();
+		inline virtual const char*	what (void) const throw() { return ("memory allocation failed"); }
+		virtual void	info (string& msgbuf, const char* fmt = NULL) const throw();
+		virtual void	read (istream& is);
+		virtual void	write (ostream& os) const;
+		virtual size_t	stream_size (void) const;
+	protected:
+		size_t		m_nBytesRequested;	///< Number of bytes requested by the failed allocation.
+	};
+} // namespace std
 
 #if WITHOUT_LIBSTDCPP
 

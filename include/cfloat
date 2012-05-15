@@ -1,0 +1,10 @@
+
+#pragma once
+#ifndef _CFLOAT_
+#define _CFLOAT_
+#include <yvals.h>
+
+#include <float.h>
+
+#endif /* _CFLOAT_ */
+#include <clocale>

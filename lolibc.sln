@@ -3,16 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lolibc", "lolibc.vcxproj", "{D85E4EBC-E979-4897-9D35-005B5C9442B8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LolibcMinimalC", "LolibcMinimalC\LolibcMinimalC.vcxproj", "{BE2C3508-F720-432C-92CB-85A8354B7BD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Debug|Win32.Build.0 = Debug|Win32
+		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Debug|x64.ActiveCfg = Debug|x64
+		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Debug|x64.Build.0 = Debug|x64
 		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Release|Win32.ActiveCfg = Release|Win32
 		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Release|Win32.Build.0 = Release|Win32
+		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Release|x64.ActiveCfg = Release|x64
+		{D85E4EBC-E979-4897-9D35-005B5C9442B8}.Release|x64.Build.0 = Release|x64
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Debug|Win32.Build.0 = Debug|Win32
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Debug|x64.ActiveCfg = Debug|x64
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Debug|x64.Build.0 = Debug|x64
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Release|Win32.ActiveCfg = Release|Win32
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Release|Win32.Build.0 = Release|Win32
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Release|x64.ActiveCfg = Release|x64
+		{BE2C3508-F720-432C-92CB-85A8354B7BD0}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

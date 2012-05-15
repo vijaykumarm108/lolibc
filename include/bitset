@@ -1,0 +1,94 @@
+// Lo-Overhead STL library - Lostl
+//
+#pragma once
+
+#include "stdint.h"
+#include "string"
+#include "functional"
+
+namespace std {
+
+typedef uint32_t	bitset_value_type;
+
+void convert_to_bitstring (const bitset_value_type* v, size_t n, string& buf);
+void convert_from_bitstring (const string& buf, bitset_value_type* v, size_t n);
+
+/*!
+\brief  bitset is a fixed-size block of memory with addressable bits.
+
+ Normally used for state flags; allows setting and unsetting of individual
+ bits as well as bitwise operations on the entire set. The interface is
+ most like that of unsigned integers, and is intended to be used as such.
+ If you were using begin() and end() functions in STL's bitset, you would
+ not be able to do the same thing here, because those functions return
+ host type iterators, not bits.
+*/
+template <size_t Size>
+class bitset {
+public:
+    typedef bitset_value_type	value_type;
+    typedef value_type*			pointer;
+    typedef const value_type*	const_pointer;
+    typedef pointer				iterator;
+    typedef const_pointer		const_iterator;
+    typedef size_t				difference_type;
+    typedef size_t				size_type;
+    typedef const bitset<Size>&	rcself_t;
+private:
+    static const size_t s_WordBits	= BitsInType (value_type);
+    static const size_t	s_nWords	= Size / s_WordBits + ((Size % s_WordBits) != 0);
+    static const size_t	s_nBits		= s_nWords * s_WordBits;
+private:
+    value_type&				BitRef (uoff_t n);
+    value_type				BitRef (uoff_t n) const;
+    inline value_type		Mask (uoff_t n) const;
+public:
+							bitset (value_type v = 0);
+							bitset (const string& buf);
+	inline bool				any (void) const;
+	inline value_type		at (uoff_t n) const			{ return (test(n)); }
+	value_type				at (uoff_t first, uoff_t last) const;
+    inline const_iterator	begin (void) const			{ return (m_Bits); }
+    inline iterator			begin (void)				{ return (m_Bits); }
+	inline size_type		capacity (void) const		{ return (s_nBits); }
+	inline void				clear (void)				{ fill_n (m_Bits, s_nWords, 0); }
+	inline size_t			count (void) const;
+    inline const_iterator	end (void) const			{ return (m_Bits + s_nWords); }
+    inline iterator			end (void)					{ return (m_Bits + s_nWords); }
+	inline void				flip (uoff_t n)				{ BitRef(n) ^= Mask(n); }
+	/// Flips all the bits in the set.
+	void					flip (void);
+			/// Returns the value in bits \p first through \p last.
+    inline bool				none (void) const	{ return (!any()); }
+	bool					operator== (rcself_t v) const;
+	bitset					operator& (rcself_t v) const;
+	bitset					operator| (rcself_t v) const;
+	bitset					operator^ (rcself_t v) const;
+	rcself_t				operator&= (rcself_t v);
+	rcself_t				operator|= (rcself_t v);
+	rcself_t				operator^= (rcself_t v);
+	bitset					operator~ (void) const;
+	inline bool				operator[] (uoff_t n) const	{ return (test(n)); }
+	inline void				read (istream& is)			{ nr_container_read (is, *this); }
+	inline void				reset (void)				{ fill_n (m_Bits, s_nWords, 0); }
+	/// Clears the bit \p n.
+	inline void				reset (uoff_t n)		{ set (n, false); }
+	/// Sets or clears bit \p n.
+	void					set (uoff_t n, bool val = true);
+	// Sets the value of the bit-range \p first through \p last to the equivalent number of bits from \p v.
+	void					set (uoff_t first, uoff_t DebugArg(last), value_type v);
+	inline void				set (void)						{ fill_n (m_Bits, s_nWords, -1); }
+	inline bool				test (uoff_t n) const			{ return (BitRef(n) & Mask(n)) != 0; }
+	inline size_type		size (void) const				{ return (Size); }
+	inline size_t			stream_size (void) const		{ return (sizeof(m_Bits)); }
+	inline void				text_write (ostringstream& os) const	{ os << to_string(); }
+	/// Returns a string with bits MSB "001101001..." LSB.
+	string					to_string (void) const;
+	/// Returns the value_type with the equivalent bits. If size() > 1, you'll get only the first BitsInType(value_type) bits.
+	inline value_type		to_value (void) const			{ return (m_Bits[0]); }
+	inline void				write (ostream& os) const		{ nr_container_write (os, *this); }
+private:
+    value_type		m_Bits [s_nWords];
+};
+
+} // namespace std

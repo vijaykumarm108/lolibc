@@ -2,12 +2,10 @@
 //
 #pragma once
 
-#include "lo_utuple.h"
+#include "tuple"
 
-namespace lo { namespace std {
+namespace std {
 
-/// \class matrix umatrix.h std.h
-/// \ingroup Sequences
 ///
 /// \brief A two-dimensional array of NX*NY elements of type T.
 ///
@@ -112,4 +110,4 @@ SSE_TUPLE_SPECS(16,uint32_t)
 #undef MATRIX_W
 #endif
 
-} } // namespace lo::std
+} // namespace std

@@ -91,7 +91,7 @@
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_ASSERT_OK;_LIB;_CRTBLD;_STATIC_CPPLIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -118,7 +118,7 @@
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_ASSERT_OK;_LIB;_CRTBLD;_STATIC_CPPLIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -145,7 +145,7 @@
     </CustomBuildStep>
     <ClCompile>
       <Optimization>MinSpace</Optimization>
-      <AdditionalIncludeDirectories>./;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_ASSERT_OK;NDEBUG;_DLL;_LIB;_CRTBLD;_STATIC_CPPLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -175,7 +175,7 @@
     </CustomBuildStep>
     <ClCompile>
       <Optimization>MinSpace</Optimization>
-      <AdditionalIncludeDirectories>./;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_ASSERT_OK;NDEBUG;_DLL;_LIB;_CRTBLD;_STATIC_CPPLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -216,7 +216,6 @@
     <ClCompile Include="std\lo_string.cpp" />
     <ClCompile Include="std\algobase.cpp" />
     <ClCompile Include="std\bitset.cpp" />
-    <ClCompile Include="std\bktrace.cpp" />
     <ClCompile Include="std\bvtstd.cpp" />
     <ClCompile Include="std\cmemlink.cpp" />
     <ClCompile Include="std\exception.cpp" />
@@ -476,12 +475,25 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\array" />
+    <ClInclude Include="include\cassert" />
+    <ClInclude Include="include\cctype" />
+    <ClInclude Include="include\cerrno" />
+    <ClInclude Include="include\cfloat" />
+    <ClInclude Include="include\clocale" />
+    <ClInclude Include="include\cmath" />
+    <ClInclude Include="include\errno.h" />
+    <ClInclude Include="include\float.h" />
     <ClInclude Include="include\istream" />
     <ClInclude Include="include\ios" />
     <ClInclude Include="include\algorithm" />
     <ClInclude Include="include\functional" />
+    <ClInclude Include="include\locale.h" />
+    <ClInclude Include="include\lostlbase.h" />
+    <ClInclude Include="include\math.h" />
     <ClInclude Include="include\numeric" />
     <ClInclude Include="include\stdexcept" />
+    <ClInclude Include="include\stdint.h" />
     <ClInclude Include="include\tuple" />
     <ClInclude Include="include\memory" />
     <ClInclude Include="include\utility" />
@@ -490,12 +502,10 @@
     <ClInclude Include="include\typeinfo" />
     <ClInclude Include="include\exception" />
     <ClInclude Include="include\list" />
-    <ClInclude Include="include\lo_bktrace.h" />
     <ClInclude Include="include\lo_cmemlink.h" />
-    <ClInclude Include="include\lo_fstream.h" />
+    <ClInclude Include="include\fstream" />
     <ClInclude Include="include\lo_memblock.h" />
     <ClInclude Include="include\lo_memlink.h" />
-    <ClInclude Include="include\lo_mistream.h" />
     <ClInclude Include="include\lo_mostream.h" />
     <ClInclude Include="include\lo_ofstream.h" />
     <ClInclude Include="include\lo_simd.h" />
@@ -503,44 +513,30 @@
     <ClInclude Include="include\lo_sostream.h" />
     <ClInclude Include="include\lo_strmsize.h" />
     <ClInclude Include="include\lo_traits.h" />
-    <ClInclude Include="include\lo_typeinfo.h" />
     <ClInclude Include="include\lo_typelist.h" />
     <ClInclude Include="include\lo_typet.h" />
-    <ClInclude Include="include\lo_ualgo.h" />
     <ClInclude Include="include\lo_ualgobase.h" />
-    <ClInclude Include="include\lo_ubitset.h" />
+    <ClInclude Include="include\bitset" />
     <ClInclude Include="include\lo_uctralgo.h" />
     <ClInclude Include="include\lo_uctrstrm.h" />
-    <ClInclude Include="include\lo_uexception.h" />
-    <ClInclude Include="include\lo_ufunction.h" />
     <ClInclude Include="include\lo_uheap.h" />
-    <ClInclude Include="include\lo_uios.h" />
-    <ClInclude Include="include\lo_uiosfunc.h" />
-    <ClInclude Include="include\lo_uiterator.h" />
     <ClInclude Include="include\lo_ulaalgo.h" />
-    <ClInclude Include="include\lo_ulimits.h" />
-    <ClInclude Include="include\lo_umap.h" />
-    <ClInclude Include="include\lo_umatrix.h" />
-    <ClInclude Include="include\lo_umemory.h" />
-    <ClInclude Include="include\lo_umultimap.h" />
-    <ClInclude Include="include\lo_umultiset.h" />
-    <ClInclude Include="include\lo_unew.h" />
+    <ClInclude Include="include\map" />
+    <ClInclude Include="include\lo_matrix.h" />
+    <ClInclude Include="include\map" />
+    <ClInclude Include="include\new" />
     <ClInclude Include="include\lo_unumeric.h" />
-    <ClInclude Include="include\lo_upair.h" />
     <ClInclude Include="include\lo_upredalgo.h" />
-    <ClInclude Include="include\lo_uqueue.h" />
-    <ClInclude Include="include\lo_uset.h" />
+    <ClInclude Include="include\queue" />
+    <ClInclude Include="include\set" />
     <ClInclude Include="include\lo_uspecial.h" />
     <ClInclude Include="include\lo_ustack.h" />
     <ClInclude Include="include\lo_ustdxept.h" />
     <ClInclude Include="include\lo_utf8.h" />
-    <ClInclude Include="include\lo_utuple.h" />
     <ClInclude Include="include\lo_utypes.h" />
     <ClInclude Include="include\lo_uutility.h" />
     <ClInclude Include="include\vector" />
     <ClInclude Include="lolibc.h" />
-    <ClInclude Include="LolibcMinimalC\stdafx.h" />
-    <ClInclude Include="LolibcMinimalSTL\stdafx.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="include\winunix.h" />
@@ -640,8 +636,6 @@
     <None Include="include\initializer_list" />
     <None Include="include\iterator" />
     <None Include="include\limits" />
-    <None Include="LolibcMinimalC\ReadMe.txt" />
-    <None Include="LolibcMinimalSTL\ReadMe.txt" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

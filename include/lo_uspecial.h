@@ -2,14 +2,14 @@
 //
 #pragma once
 
-#include "lo_vector.hpp"
-#include "lo_string.hpp"
-#include "lo_uset.h"
+#include "vector"
+#include "string"
+#include "set"
 #include "lo_umultiset.h"
-#include "lo_ubitset.h"
+#include "bitset"
 #include "lo_ulaalgo.h"
 #include "lo_uctralgo.h"
-#include "lo_ufunction.h"
+#include "functional"
 #include "lo_uctrstrm.h"
 #include "lo_sistream.h"
 #include <ctype.h>
@@ -17,7 +17,7 @@
 namespace lo { namespace std {
 
 //----------------------------------------------------------------------
-// Alogrithm specializations not in use by the library code.
+// Algorithm specializations not in use by the library code.
 //----------------------------------------------------------------------
 
 template <> inline void swap (cmemlink& a, cmemlink& b)			{ a.swap (b); }

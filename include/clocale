@@ -1,0 +1,7 @@
+// clocale standard header
+#pragma once
+#ifndef _CLOCALE_
+#define _CLOCALE_
+#include <yvals.h>
+#include <locale.h>
+#endif /* _CLOCALE_ */

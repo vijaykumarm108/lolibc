@@ -1,15 +1,13 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-
 #ifndef NDEBUG	// Optimized code here. asserts slow it down, and are checked elsewhere.
 #define NDEBUG
 #endif
 
 #include "lo_ualgo.h"
 
-namespace lo { namespace std {
+namespace std {
 
 // Generic version for implementing fill_nX_fast on non-i386 architectures.
 template <typename T> static inline void stosv (T*& p, size_t n, T v)
@@ -261,7 +259,6 @@ size_t popcount (uint32_t v)
     return (((x + (x >> 4) & 0x0F0F0F0F) * 0x01010101) >> 24);
 }
 
-#if HAVE_INT64_T
 /// \brief Returns the number of 1s in \p v in binary.
 size_t popcount (uint64_t v)
 {
@@ -270,7 +267,6 @@ size_t popcount (uint64_t v)
     v = (v + (v >> 4)) & UINT64_C(0x0F0F0F0F0F0F0F0F);
     return ((v * UINT64_C(0x0101010101010101)) >> 56);
 }
-#endif	// HAVE_INT64_T
 #endif	// !__GNUC__
 
 //----------------------------------------------------------------------
@@ -281,4 +277,4 @@ size_t popcount (uint64_t v)
 // Used in uspecial to print printable characters
 const char _FmtPrtChr[2][8]={"'%c'","%d"};
 
-} } // namespace
+} // namespace

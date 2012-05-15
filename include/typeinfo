@@ -56,48 +56,41 @@ private:
     type_info& operator=(const type_info& rhs);
 };
 
-
 // This include must occur below the definition of class type_info
  #include <exception>
 
- _STD_BEGIN
+ namespace std {
 		// CLASS bad_cast
-class _CRTIMP bad_cast : public exception {
-public:
-	bad_cast(const char *_S = "bad cast") _THROW0()
-		: exception(_S) {}
-	virtual ~bad_cast() _THROW0()
-		{}
-protected:
-	virtual void _Doraise() const
-		{_RAISE(*this); }
+	class _CRTIMP bad_cast : public exception {
+	public:
+		bad_cast(const char *_S = "bad cast") _THROW0()
+			: exception(_S) {}
+		virtual ~bad_cast() _THROW0()
+			{}
+	protected:
+		virtual void _Doraise() const
+			{_RAISE(*this); }
 	};
 		// CLASS bad_typeid
-class _CRTIMP bad_typeid : public exception {
-public:
-	bad_typeid(const char *_S = "bad typeid") _THROW0()
-		: exception(_S) {}
-	virtual ~bad_typeid() _THROW0()
-		{}
-protected:
-	virtual void _Doraise() const
-		{_RAISE(*this); }
+	class _CRTIMP bad_typeid : public exception {
+	public:
+		bad_typeid(const char *_S = "bad typeid") _THROW0()
+			: exception(_S) {}
+		virtual ~bad_typeid() _THROW0()
+			{}
+	protected:
+		virtual void _Doraise() const
+			{_RAISE(*this); }
 	};
 
-class _CRTIMP __non_rtti_object : public bad_typeid {
-public:
-    __non_rtti_object(const char * what_arg) : bad_typeid(what_arg) {}
-};
-using ::type_info;
- _STD_END
-using std::__non_rtti_object;
+	class _CRTIMP __non_rtti_object : public bad_typeid {
+	public:
+		__non_rtti_object(const char * what_arg) : bad_typeid(what_arg) {}
+	};
+	using ::type_info;
+}	// end namespace std
 
-#ifdef __RTTI_OLDNAMES
-// Some synonyms for folks using older standard
-typedef type_info Type_info;
-typedef bad_cast Bad_cast;
-typedef bad_typeid Bad_typeid;
-#endif	// __RTTI_OLDNAMES
+using std::__non_rtti_object;
 
 #ifdef  _MSC_VER
 #pragma pack(pop)

@@ -1,1 +1,1 @@
-This is a minimal dependency STL application using mlac.
+This is a minimal dependency STL application using lolibc.

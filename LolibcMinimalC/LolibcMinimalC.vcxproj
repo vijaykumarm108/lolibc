@@ -194,7 +194,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mlac.vcxproj">
+    <ProjectReference Include="..\lolibc.vcxproj">
       <Project>{d85e4ebc-e979-4897-9d35-005b5c9442b8}</Project>
     </ProjectReference>
   </ItemGroup>

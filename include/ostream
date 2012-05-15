@@ -7,14 +7,11 @@
 #include "lo_utf8.h"
 #include "ios"
 
-namespace lo { namespace std {
+namespace std {
 
 class istream;
 class string;
 
-/// \class ostream LoMostream.h std.h
-/// \ingroup BinaryStreams
-///
 /// \brief Helper class to write packed binary streams.
 ///
 /// This class contains a set of functions to write integral types into an
@@ -57,18 +54,18 @@ public:
     inline const_iterator ipos (void) const	{ return (begin() + pos()); }
     inline streamsize	remaining (void) const;
     inline bool		aligned (streamsize grain = c_DefaultAlignment) const;
-    bool		verify_remaining (const char* op, const char* type, size_t n);
+    bool			verify_remaining (const char* op, const char* type, size_t n);
     inline streamsize	align_size (streamsize grain = c_DefaultAlignment) const;
-    void		align (streamsize grain = c_DefaultAlignment);
+    void			align (streamsize grain = c_DefaultAlignment);
     inline void		write (const void* buffer, streamsize size);
     inline void		write (const cmemlink& buf);
-    void		write_strz (const char* str);
-    void		read (istream& is);
+    void			write_strz (const char* str);
+    void			read (istream& is);
     inline void		write (ostream& os) const	{ os.write (begin(), pos()); }
-    void		text_write (ostringstream& os) const;
+    void			text_write (ostringstream& os) const;
     inline size_t	stream_size (void) const	{ return (pos()); }
-    void		insert (iterator start, streamsize size);
-    void		erase (iterator start, streamsize size);
+    void			insert (iterator start, streamsize size);
+    void			erase (iterator start, streamsize size);
     inline void		swap (ostream& os);
     template <typename T>
     inline void		iwrite (const T& v);
@@ -124,10 +121,10 @@ private:
 
 //----------------------------------------------------------------------
 
-typedef ostream_iterator<utf8subchar_t> ostream_iterator_for_utf8;
-typedef utf8out_iterator<ostream_iterator_for_utf8> utf8ostream_iterator;
+typedef ostream_iterator<utf8subchar_t>				ostream_iterator_for_utf8;
+typedef utf8out_iterator<ostream_iterator_for_utf8>	utf8ostream_iterator;
 
-/// Returns a UTF-8 adaptor writing to \p os.
+/// Returns a UTF-8 adapter writing to \p os.
 inline utf8ostream_iterator utf8out (ostream& os)
 {
     ostream_iterator_for_utf8 si (os);
@@ -260,21 +257,24 @@ inline void ostream::iwrite (const T& v)
 inline void ostream::swap (ostream& os)
 {
     memlink::swap (os);
-    ::lo::std::swap (m_Pos, os.m_Pos);
+    ::std::swap (m_Pos, os.m_Pos);
 }
 
 //----------------------------------------------------------------------
 
-template <typename T> struct object_writer {
+template <typename T> struct object_writer
+{
     inline void operator()(ostream& os, const T& v) const { v.write (os); }
 };
 
-template <typename T> struct integral_object_writer {
+template <typename T> struct integral_object_writer
+{
     inline void operator()(ostream& os, const T& v) const { os.iwrite (v); }
 };
 
 template <typename T>
-inline ostream& operator<< (ostream& os, const T& v) {
+inline ostream& operator<< (ostream& os, const T& v)
+{
     typedef typename tm::Select <numeric_limits<T>::is_integral,
 	integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
     object_writer_t()(os, v);
@@ -282,7 +282,8 @@ inline ostream& operator<< (ostream& os, const T& v) {
 }
 
 template <typename T>
-inline ostream& operator<< (ostream& os, size_t& i ) {
+inline ostream& operator<< (ostream& os, size_t& i )
+{
     typedef typename tm::Select <numeric_limits<T>::is_integral,
 	integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
     integral_object_writer()(os, i);
@@ -292,4 +293,5 @@ inline ostream& operator<< (ostream& os, size_t& i ) {
 
 //----------------------------------------------------------------------
 
-} } // namespace
+} // namespace std
+

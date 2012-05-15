@@ -1,0 +1,558 @@
+/*
+std::array - Fixed arrays
+*/
+
+#pragma once
+#ifndef _ARRAY_
+#define _ARRAY_
+#ifndef RC_INVOKED
+#include <algorithm>
+#include <iterator>
+#include <errno.h>
+
+#pragma pack(push,_CRT_PACKING)
+#pragma warning(push,3)
+
+namespace std {
+	/*!
+	\brief array is for a fixed array of values.
+	Cannot be resized.
+	 */
+	template<class _Ty,	size_t _Size>
+	class array
+	{	// fixed size array of values
+	public:
+		enum {_EEN_SIZE = _Size};	// helper for expression evaluator
+		typedef array<_Ty, _Size> _Myt;
+		typedef _Ty value_type;
+		typedef size_t size_type;
+		typedef ptrdiff_t difference_type;
+		typedef _Ty *pointer;
+		typedef const _Ty *const_pointer;
+		typedef _Ty& reference;
+		typedef const _Ty& const_reference;
+
+		typedef _Array_iterator<_Ty, _Size> iterator;
+		typedef _Array_const_iterator<_Ty, _Size> const_iterator;
+
+		typedef ::std::reverse_iterator<iterator> reverse_iterator;
+		typedef ::std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+		// assign value to all elements
+		void assign(const _Ty& _Value)
+		{
+			::std::fill_n(_Elems, _Size, _Value);
+		}
+
+		// assign value to all elements
+		void fill(const _Ty& _Value)
+		{
+			::std::fill_n(_Elems, _Size, _Value);
+		}
+
+		void swap(_Myt& _Other)
+		{	// swap contents with _Other
+			_Swap_ranges(::std::addressof(_Elems[0]), ::std::addressof(_Elems[0]) + _Size, ::std::addressof(_Other._Elems[0]));
+		}
+
+		void swap(_Myt&& _Other)
+		{	// swap contents with _Other
+			_Move(_Other.begin(), _Other.end(), begin());
+		}
+
+		// return iterator for beginning of mutable sequence
+		iterator begin()
+		{
+			return (iterator(::std::addressof(_Elems[0]), 0));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator begin() const
+		{
+			return (const_iterator(::std::addressof(_Elems[0]), 0));
+		}
+
+		// return iterator for end of mutable sequence
+		iterator end()
+		{
+			return (iterator(::std::addressof(_Elems[0]), _Size));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator end() const
+		{
+			return (const_iterator(::std::addressof(_Elems[0]), _Size));
+		}
+
+		// return iterator for beginning of reversed mutable sequence
+		reverse_iterator rbegin()
+		{
+			return (reverse_iterator(end()));
+		}
+
+		// return iterator for beginning of reversed non-mutable sequence
+		const_reverse_iterator rbegin() const
+		{
+			return (const_reverse_iterator(end()));
+		}
+
+		// return iterator for end of reversed mutable sequence
+		reverse_iterator rend()
+		{
+			return (reverse_iterator(begin()));
+		}
+
+		// return iterator for end of reversed non-mutable sequence
+		const_reverse_iterator rend() const
+		{
+			return (const_reverse_iterator(begin()));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator cbegin() const
+		{
+			return (((const _Myt *)this)->begin());
+		}
+
+		// return iterator for end of non-mutable sequence
+		const_iterator cend() const
+		{
+			return (((const _Myt *)this)->end());
+		}
+
+		// return iterator for beginning of reversed non-mutable sequence
+		const_reverse_iterator crbegin() const
+		{
+			return (((const _Myt *)this)->rbegin());
+		}
+
+		// return iterator for end of reversed non-mutable array
+		const_reverse_iterator crend() const
+		{
+			return (((const _Myt *)this)->rend());
+		}
+
+		// return the array length
+		size_type size() const
+		{
+			return (_Size);
+		}
+
+		// return maximum possible length of array
+		size_type max_size() const
+		{
+			return (_Size);
+		}
+
+		// test if the array is empty
+		bool empty() const
+		{
+			return (_Size == 0);
+		}
+
+		// subscript mutable sequence with checking
+		reference at(size_type _Pos)
+		{
+			if (_Size <= _Pos)
+				_Xran();
+			return (_Elems[_Pos]);
+		}
+
+		// subscript non-mutable sequence with checking
+		const_reference at(size_type _Pos) const
+		{
+			if (_Size <= _Pos)
+				_Xran();
+			return (_Elems[_Pos]);
+		}
+
+		// subscript mutable array
+		reference operator[](size_type _Pos)
+		{
+#ifndef NDEBUG
+			if (_Size <= _Pos)
+				strerror(ERANGE);				// array subscript out of range
+#endif
+			__analysis_assume(_Pos < _Size);
+			return (_Elems[_Pos]);
+		}
+
+		// subscript non-mutable array
+		const_reference operator[](size_type _Pos) const
+		{
+#ifndef NDEBUG
+			if (_Size <= _Pos)
+				strerror(ERANGE);			// array subscript out of range
+#endif
+			__analysis_assume(_Pos < _Size);
+			return (_Elems[_Pos]);
+		}
+
+		// return first element of mutable array
+		reference front()
+		{
+			return (_Elems[0]);
+		}
+
+		// return first element of non-mutable array
+		const_reference front() const
+		{
+			return (_Elems[0]);
+		}
+
+		// return last element of mutable array
+		reference back()
+		{
+			return (_Elems[_Size - 1]);
+		}
+
+		// return last element of non-mutable array
+		const_reference back() const
+		{
+			return (_Elems[_Size - 1]);
+		}
+
+		// return pointer to mutable data array
+		_Ty *data()
+		{
+			return (_Elems);
+		}
+
+		// return pointer to non-mutable data array
+		const _Ty *data() const
+		{
+			return (_Elems);
+		}
+
+		__declspec(noreturn) void _Xran() const
+		{	// report an out_of_range error
+			::std::_Xout_of_range("invalid array<T, N> subscript");
+		}
+
+		_Ty _Elems[_Size == 0 ? 1 : _Size];
+	};
+
+	template<class _Ty>
+	class array<_Ty, 0>
+	{	// zero size array of values
+	public:
+		enum {_EEN_SIZE = 0};	// helper for expression evaluator
+		typedef array<_Ty, 0> _Myt;
+		typedef _Ty value_type;
+		typedef size_t size_type;
+		typedef ptrdiff_t difference_type;
+		typedef _Ty *pointer;
+		typedef const _Ty *const_pointer;
+		typedef _Ty& reference;
+		typedef const _Ty& const_reference;
+
+		typedef _Array_iterator<_Ty, 0> iterator;
+		typedef _Array_const_iterator<_Ty, 0> const_iterator;
+		typedef ::std::reverse_iterator<iterator> reverse_iterator;
+		typedef ::std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+		// assign value to all elements
+		void assign(const _Ty&)
+		{
+		}
+
+		// assign value to all elements
+		void fill(const _Ty&)
+		{
+		}
+
+		// swap contents with _Other
+		void swap(_Myt&)
+		{
+		}
+
+		// return iterator for beginning of mutable sequence
+		iterator begin()
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator begin() const
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for end of mutable sequence
+		iterator end()
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator end() const
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for beginning of reversed mutable sequence
+		reverse_iterator rbegin()
+		{
+			return (reverse_iterator(end()));
+		}
+
+		// return iterator for beginning of reversed non-mutable sequence
+		const_reverse_iterator rbegin() const
+		{	
+			return (const_reverse_iterator(end()));
+		}
+
+		// return iterator for end of reversed mutable sequence
+		reverse_iterator rend()
+		{
+			return (reverse_iterator(begin()));
+		}
+
+		// return iterator for end of reversed non-mutable sequence
+		const_reverse_iterator rend() const
+		{
+			return (const_reverse_iterator(begin()));
+		}
+
+		// return iterator for beginning of non-mutable sequence
+		const_iterator cbegin() const
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for end of non-mutable sequence
+		const_iterator cend() const
+		{
+			return (iterator(0, 0));
+		}
+
+		// return iterator for beginning of reversed non-mutable sequence
+		const_reverse_iterator crbegin() const
+		{
+			return (((const _Myt *)this)->rbegin());
+		}
+
+		// return iterator for end of reversed non-mutable sequence
+		const_reverse_iterator crend() const
+		{
+			return (((const _Myt *)this)->rend());
+		}
+
+		// return length of sequence
+		size_type size() const
+		{
+			return (0);
+		}
+
+		// return maximum possible length of sequence
+		size_type max_size() const
+		{
+			return (0);
+		}
+
+		// test if sequence is empty
+		bool empty() const
+		{
+			return (true);
+		}
+
+		// subscript mutable array with checking
+		reference at(size_type)
+		{
+			static int _Zero = 0;
+
+			if (_Zero == 0)	// to quiet diagnostics
+				_Xran();
+			return (_Elems[0]);
+		}
+
+		// subscript non-mutable array with checking
+		const_reference at(size_type) const
+		{
+			static int _Zero = 0;
+
+			if (_Zero == 0)	// to quiet diagnostics
+				_Xran();
+			return (_Elems[0]);
+		}
+
+		// subscript mutable sequence
+		reference operator[](size_type)
+		{
+#ifndef NDEBUG
+			strerror(ERANGE);				// array subscript out of range
+#endif
+			return (_Elems[0]);
+		}
+
+		// subscript non-mutable sequence
+		const_reference operator[](size_type) const
+		{
+#ifndef NDEBUG
+			strerror(ERANGE);				// array subscript out of range
+#endif
+		return (_Elems[0]);
+		}
+
+	reference front()
+		{	// return first element of mutable sequence
+#ifndef NDEBUG
+			strerror(ERANGE);				// array subscript out of range
+#endif
+
+		return (_Elems[0]);
+		}
+
+		// return first element of non-mutable sequence
+		const_reference front() const
+		{
+#ifndef NDEBUG
+			strerror(ENOSYS);				// invalid call
+#endif
+
+		return (_Elems[0]);
+		}
+
+			// return last element of mutable sequence
+		reference back()
+		{
+#ifndef NDEBUG
+			strerror(ENOSYS);				// invalid call
+#endif
+
+		return (_Elems[0]);
+		}
+
+		// return last element of non-mutable sequence
+		const_reference back() const
+		{
+#ifndef NDEBUG
+			strerror(ENOSYS);				// invalid call
+#endif
+			return (_Elems[0]);
+		}
+
+		_Ty *data()
+		{	// return pointer to mutable data array
+			return (_Elems);
+		}
+
+		const _Ty *data() const
+		{	// return pointer to non-mutable data array
+			return (_Elems);
+		}
+
+		__declspec(noreturn) void _Xran() const
+		{	// report an out_of_range error
+			::std::_Xout_of_range("invalid array<T, 0> subscript");
+		}
+
+		_Ty _Elems[1];
+	};
+
+	// swap arrays
+	template<class _Ty,	size_t _Size>
+	void swap(array<_Ty,_Size>& _Left, array<_Ty,_Size>& _Right)
+	{
+		return (_Left.swap(_Right));
+	}
+
+	// swap arrays
+	template<class _Ty,	size_t _Size>
+	void swap(array<_Ty,_Size>& _Left, array<_Ty,_Size>&& _Right)
+	{
+		typedef array<_Ty, _Size> _Myt;
+		_Left.swap(::std::forward<_Myt>(_Right));
+	}
+
+	// swap arrays
+	template<class _Ty,	size_t _Size>
+	void swap(array<_Ty,_Size>&& _Left, array<_Ty,_Size>& _Right)
+	{
+		typedef array<_Ty, _Size> _Myt;
+		_Right.swap(::std::forward<_Myt>(_Left));
+	}
+
+	// test for array equality
+	template<class _Ty,	size_t _Size>
+	bool operator==(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+		return (::std::equal(_Left.begin(), _Left.end(), _Right.begin()));
+	}
+
+	// test for array inequality
+	template<class _Ty,	size_t _Size>
+	bool operator!=(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+		return (!(_Left == _Right));
+	}
+
+	// test if _Left < _Right for arrays
+	template<class _Ty,	size_t _Size>
+	bool operator<(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+	return (::std::lexicographical_compare(_Left.begin(), _Left.end(), _Right.begin(), _Right.end()));
+	}
+
+	// test if _Left > _Right for arrays
+	template<class _Ty,	size_t _Size>
+	bool operator>(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+		return (_Right < _Left);
+	}
+
+	// test if _Left <= _Right for arrays
+	template<class _Ty,	size_t _Size>
+	bool operator<=(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+		return (!(_Right < _Left));
+	}
+
+	// test if _Left >= _Right for arrays
+	template<class _Ty, size_t _Size>
+	bool operator>=(const array<_Ty,_Size>& _Left, const array<_Ty,_Size>& _Right)
+	{
+		return (!(_Left < _Right));
+	}
+
+	// TUPLE INTERFACE TO array
+	template<class _Tuple>	struct tuple_size;
+
+	template<size_t _Idx, class _Tuple>	struct tuple_element;
+
+	// struct to determine number of elements in array
+	template<class _Ty, size_t _Size> struct tuple_size<array<_Ty, _Size> >
+	{
+		static const int value = _Size;
+	};
+
+	// struct to determine type of element _Idx in array
+	template<size_t _Idx, class _Ty, size_t _Size>
+	struct tuple_element<_Idx, array<_Ty, _Size> >
+	{
+		typedef _Ty type;
+	};
+
+	// return element at _Idx in array _Arr
+	template<int _Idx, class _Ty, size_t _Size>
+	_Ty& get(array<_Ty, _Size>& _Arr)
+	{
+		static_assert(0 <= _Idx && _Idx < _Size, "array index out of bounds");
+		return (_Arr[_Idx]);
+	}
+
+	// return element at _Idx in array _Arr
+	template<int _Idx, class _Ty, size_t _Size>
+	const _Ty& get(const array<_Ty, _Size>& _Arr)
+	{
+		static_assert(0 <= _Idx && _Idx < _Size, "array index out of bounds");
+		return (_Arr[_Idx]);
+	}
+}	// end namespace std
+
+ #pragma warning(pop)
+ #pragma pack(pop)
+
+#endif /* RC_INVOKED */
+#endif /* _ARRAY_ */
+

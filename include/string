@@ -1,10 +1,9 @@
 #pragma once
-#include <milan.h>
 #include "istream"
 
 namespace std {
 
-class string : public Ref<System::String> {
+class string : public memlink {
 public:
     typedef char				value_type;
     typedef value_type*			pointer;

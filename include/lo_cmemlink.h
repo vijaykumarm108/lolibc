@@ -50,28 +50,28 @@ public:
     inline		cmemlink (const void* p, size_type n)	: m_Data (const_pointer(p)), m_Size (n) { assert (p || !n); }
     inline		cmemlink (const cmemlink& l)		: m_Data (l.m_Data), m_Size (l.m_Size) {}
     inline virtual     ~cmemlink (void) throw()			{}
-    void		link (const void* p, size_type n);
-    inline void		link (const cmemlink& l)	{ link (l.begin(), l.size()); }
-    inline void		link (const void* first, const void* last)	{ link (first, distance (first, last)); }
-    inline void		relink (const void* p, size_type n);
-    virtual void	unlink (void) throw();
+    void				link (const void* p, size_type n);
+    inline void			link (const cmemlink& l)	{ link (l.begin(), l.size()); }
+    inline void			link (const void* first, const void* last)	{ link (first, distance (first, last)); }
+    inline void			relink (const void* p, size_type n);
+    virtual void		unlink (void) throw();
     inline rcself_t	operator= (const cmemlink& l)	{ link (l); return (*this); }
     bool		operator== (const cmemlink& l) const;
-    inline void		swap (cmemlink& l)		{ ::lo::std::swap (m_Data, l.m_Data); ::lo::std::swap (m_Size, l.m_Size); }
+    inline void			swap (cmemlink& l)		{ ::lo::std::swap (m_Data, l.m_Data); ::lo::std::swap (m_Size, l.m_Size); }
     inline size_type	size (void) const		{ return (m_Size); }
     inline size_type	max_size (void) const		{ return (size()); }
     inline size_type	readable_size (void) const	{ return (size()); }
-    inline bool		empty (void) const		{ return (!size()); }
+    inline bool			empty (void) const		{ return (!size()); }
    inline const_pointer	cdata (void) const		{ return (m_Data); }
-    inline iterator	begin (void) const		{ return (iterator (cdata())); }
-    inline iterator	iat (size_type i) const		{ assert (i <= size()); return (begin() + i); }
-    inline iterator	end (void) const		{ return (iat (size())); }
-    inline void		resize (size_type n)		{ m_Size = n; }
-    inline void		read (istream&)			{ assert (!"lo::std::cmemlink is a read-only object."); }
-    void		write (ostream& os) const;
-    size_type		stream_size (void) const;
-    void		text_write (ostringstream& os) const;
-    void		write_file (const char* filename, int mode = 0644) const;
+    inline iterator		begin (void) const		{ return (iterator (cdata())); }
+    inline iterator		iat (size_type i) const		{ assert (i <= size()); return (begin() + i); }
+    inline iterator		end (void) const		{ return (iat (size())); }
+    inline void			resize (size_type n)		{ m_Size = n; }
+    inline void			read (istream&)			{ assert (!"lo::std::cmemlink is a read-only object."); }
+    void				write (ostream& os) const;
+    size_type			stream_size (void) const;
+    void				text_write (ostringstream& os) const;
+    void				write_file (const char* filename, int mode = 0644) const;
 private:
     const_pointer	m_Data;		///< Pointer to the data block (const)
     size_type		m_Size;		///< size of the data block

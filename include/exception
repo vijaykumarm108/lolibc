@@ -3,7 +3,7 @@
  * http://www.muthink.com
  * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
  */
-// xception - Visual C++ MSVCRT.DLL version of exception.
+// exception - Visual C++ MSVCRT.DLL version of exception.
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -52,10 +52,9 @@ private:
 };
 
 namespace std {
-using ::exception;
 
 		// CLASS bad_exception
-class _CRTIMP bad_exception : public exception {
+class _CRTIMP bad_exception : public ::exception {
 public:
 	bad_exception(const char *_S = "bad exception") _THROW0()
 		: exception(_S) {}

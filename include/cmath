@@ -1,0 +1,7 @@
+// cmath standard header
+#pragma once
+#ifndef _CMATH_
+#define _CMATH_
+#include <yvals.h>
+#include <math.h>
+#endif /* _CMATH_ */
