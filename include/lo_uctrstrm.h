@@ -13,7 +13,7 @@
 #include "lo_uiosfunc.h"
 #include "typeinfo.h"
 
-namespace lo { namespace std {
+namespace std {
 
 //----------------------------------------------------------------------
 // Macros for easily declaring a container streamable.
@@ -178,4 +178,4 @@ ostringstream& container_text_write (ostringstream& os, const Container& v)
 
 //----------------------------------------------------------------------
 
-} } // namespace lo::std
+} // namespace std

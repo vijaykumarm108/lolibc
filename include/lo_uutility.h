@@ -1,6 +1,3 @@
-// Lo-Overhead STL library - Lostl
-/// \file uutility.h
-/// \brief Utility templates.
 
 #pragma once
 

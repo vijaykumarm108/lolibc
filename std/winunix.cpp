@@ -1,9 +1,10 @@
 // winunix.cpp - Unix functions on windows
 #include <stdafx.h>
 #include <intrin.h>
+#include <io.h>
 #include <winunix.h>
+#include <windows.h>
 
-#if 0
 /* Initialize critical section */
 void csinitialize (CRITICAL_SECTION *cs) {
     InitializeCriticalSection (cs);
@@ -22,7 +23,6 @@ int csleave (CRITICAL_SECTION *cs) {
     LeaveCriticalSection (cs);
     return 0;
 }
-#endif
 
 static int g_cs_initialized;
 static CRITICAL_SECTION g_cs;

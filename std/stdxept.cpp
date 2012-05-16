@@ -9,8 +9,7 @@ namespace std {
 //----------------------------------------------------------------------
 
 /// \p arg contains a description of the error.
-error_message::error_message (const char* arg) throw()
-: m_Arg ()
+error_message::error_message (const char* arg) throw() : m_Arg ()
 {
     try { m_Arg = arg; } catch (...) {}
     set_format (xfmt_ErrorMessage);

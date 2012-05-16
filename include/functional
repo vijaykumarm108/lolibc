@@ -21,16 +21,16 @@ struct void_function {
 
 /// \brief \p Result f (\p Arg) function abstract interface.
 /// \ingroup FunctorObjects
-template <typename Arg, typename Result>
-struct unary_function {
+template <typename Arg, typename Result> struct unary_function
+{
     typedef Arg		argument_type;
     typedef Result	result_type;
 };
 
 /// \brief \p Result f (\p Arg1, \p Arg2) function abstract interface.
 /// \ingroup FunctorObjects
-template <typename Arg1, typename Arg2, typename Result>
-struct binary_function {
+template <typename Arg1, typename Arg2, typename Result> struct binary_function
+{
     typedef Arg1	first_argument_type;
     typedef Arg2	second_argument_type;
     typedef Result	result_type;
@@ -87,7 +87,8 @@ template <class T1, class T2> struct project2nd	: public binary_function<T1,T2,T
 /// Use the ptr_fun accessor to create this object.
 /// \ingroup FunctorObjects
 template <typename Arg, typename Result>
-class pointer_to_unary_function : public unary_function<Arg,Result> {
+class pointer_to_unary_function : public unary_function<Arg,Result>
+{
 public:
     typedef Arg		argument_type;
     typedef Result	result_type;
@@ -102,8 +103,9 @@ private:
 /// \brief Wrapper object for binary function pointers.
 /// Use the ptr_fun accessor to create this object.
 /// \ingroup FunctorObjects
-template <typename Arg1, typename Arg2, typename Result>
-class pointer_to_binary_function : public binary_function<Arg1,Arg2,Result> {
+template <typename Arg1, typename Arg2, typename Result> class pointer_to_binary_function
+	: public binary_function<Arg1,Arg2,Result>
+{
 public:
     typedef Arg1	first_argument_type;
     typedef Arg2	second_argument_type;
@@ -139,9 +141,9 @@ inline pointer_to_binary_function<Arg1,Arg2,Result> ptr_fun (Result (*pfn)(Arg1,
 /// \brief Wraps a unary function to return its logical negative.
 /// Use the unary_negator accessor to create this object.
 /// \ingroup FunctorObjects
-template <class UnaryFunction>
-class unary_negate : public unary_function<typename UnaryFunction::argument_type,
-					   typename UnaryFunction::result_type> {
+template <class UnaryFunction> class unary_negate
+	: public unary_function<typename UnaryFunction::argument_type, typename UnaryFunction::result_type>
+{
 public:
     typedef typename UnaryFunction::argument_type	argument_type;
     typedef typename UnaryFunction::result_type		result_type;
@@ -168,9 +170,9 @@ inline unary_negate<UnaryFunction> unary_negator (UnaryFunction pfn)
 /// by binding a constant value to the first argument.
 /// Use the bind1st accessor to create this object.
 /// \ingroup FunctorObjects
-template <class BinaryFunction> 
-class binder1st : public unary_function<typename BinaryFunction::second_argument_type,
-					typename BinaryFunction::result_type> {
+template <class BinaryFunction> class binder1st
+	: public unary_function<typename BinaryFunction::second_argument_type, typename BinaryFunction::result_type>
+{
 public:
     typedef typename BinaryFunction::first_argument_type	arg1_t;
     typedef typename BinaryFunction::second_argument_type	arg2_t;
@@ -187,9 +189,9 @@ protected:
 /// by binding a constant value to the second argument.
 /// Use the bind2nd accessor to create this object.
 /// \ingroup FunctorObjects
-template <class BinaryFunction> 
-class binder2nd : public unary_function<typename BinaryFunction::first_argument_type,
-					typename BinaryFunction::result_type> {
+template <class BinaryFunction> class binder2nd
+	: public unary_function<typename BinaryFunction::first_argument_type, typename BinaryFunction::result_type>
+{
 public:
     typedef typename BinaryFunction::first_argument_type	arg1_t;
     typedef typename BinaryFunction::second_argument_type	arg2_t;

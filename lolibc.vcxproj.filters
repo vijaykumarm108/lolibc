@@ -120,12 +120,6 @@
     <ClInclude Include="include\lo_typet.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\lo_ualgobase.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_uctralgo.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
     <ClInclude Include="include\lo_uctrstrm.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
@@ -241,36 +235,19 @@
     <ClInclude Include="include\dll.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\dll\Ntoskrnl.h">
+    <ClInclude Include="include\map" />
+    <ClInclude Include="include\dll\ntoskrnl.h">
       <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\metamac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdio.h">
+      <Filter>Header Files\stdc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\memblock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\memlink.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\mistream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\new.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\ofstream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\sistream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\sostream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\stdxept.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="std\winunix.cpp">
@@ -329,6 +306,30 @@
     </ClCompile>
     <ClCompile Include="src\kernel32.cpp">
       <Filter>Source Files\dll</Filter>
+    </ClCompile>
+    <ClCompile Include="std\memlink.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\memblock.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\mistream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ofstream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\new.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\sostream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\sistream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\stdxept.cpp">
+      <Filter>Source Files\stl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

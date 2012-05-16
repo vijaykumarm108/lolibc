@@ -7,29 +7,23 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif
-
 #ifndef _EXCEPTION_
 #define _EXCEPTION_
-#include <xstddef>
-#include <eh.h>
+#include "config.h"
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
 #endif  /* _MSC_VER */
 
- #if !defined(_WIN32) && !defined(_MAC)
-  #error ERROR: Only Mac or Win32 targets supported!
- #endif
-
 #ifndef _CRTIMP
 #ifdef	_NTSDK
 /* definition compatible with NT SDK */
 #define _CRTIMP
-#else	/* ndef _NTSDK */
+#else	/* ifndef _NTSDK */
 /* current definition */
 #ifdef	_DLL
 #define _CRTIMP __declspec(dllimport)
-#else	/* ndef _DLL */
+#else	/* ifndef _DLL */
 #define _CRTIMP
 #endif	/* _DLL */
 #endif	/* _NTSDK */
@@ -40,30 +34,31 @@ typedef const char *__exString;
 class _CRTIMP exception
 {
 public:
-    exception();
-    exception(const __exString&);
-    exception(const exception&);
-    exception& operator= (const exception&);
-    virtual ~exception();
-    virtual __exString what() const;
+	exception();
+	exception(const __exString&);
+	exception(const exception&);
+	exception& operator= (const exception&);
+	virtual ~exception();
+	virtual __exString what() const;
 private:
-    __exString _m_what;
-    int _m_doFree;
+	__exString _m_what;
+	int _m_doFree;
 };
 
 namespace std {
 
 		// CLASS bad_exception
-class _CRTIMP bad_exception : public ::exception {
+class _CRTIMP bad_exception
+	: public ::exception {
 public:
-	bad_exception(const char *_S = "bad exception") _THROW0()
+	bad_exception(const char *_S = "bad exception") throw()
 		: exception(_S) {}
-	virtual ~bad_exception() _THROW0()
+	virtual ~bad_exception() throw()
 		{}
 protected:
 	virtual void _Doraise() const
-		{_RAISE(*this); }
-	};
+		{throw(*this); }
+};
 
 /// Returns true when the caught exception violates the throw specification.
 _CRTIMP bool __cdecl uncaught_exception();

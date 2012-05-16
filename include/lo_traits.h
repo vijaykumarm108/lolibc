@@ -6,7 +6,7 @@
 
 #ifdef __cplusplus
 
-namespace lo { namespace std {
+namespace std {
 namespace tm {
 namespace {
 
@@ -242,5 +242,5 @@ public:
 };
 
 } // namespace tm
-} } // namespace lo::std
+} // namespace std
 #endif

@@ -13,6 +13,9 @@ namespace lolibc
 	void dll::_release()
 	{
 		if(--counter() == 0)
+		{
 			::FreeLibrary((HMODULE)m_handle);
+			m_handle = nullptr;
+		}
 	}
 }

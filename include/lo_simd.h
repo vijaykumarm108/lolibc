@@ -16,8 +16,7 @@
     #include <math.h>
 #endif
 
-namespace lo { namespace std {
-namespace simd {
+namespace std { namespace simd {
 
 //----------------------------------------------------------------------
 // Generic algorithms
@@ -454,5 +453,4 @@ SSE_IPASSIGN_SPEC(4,uint32_t)
 #undef SIMDA_WO
 #undef SIMD_PACKEDOP_SPEC
 
-} // namespace simd
-} } // namespace lo::std
+} } // namespace std::simd

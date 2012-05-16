@@ -2,9 +2,8 @@
 
 #ifdef __cplusplus
 
-namespace lo { namespace std {
-/// Template metaprogramming tools
-namespace tm {
+/// Template meta-programming tools
+namespace std { namespace tm {
 
 /// An empty type useful as a placeholder.
 class NullType { };
@@ -87,7 +86,6 @@ template <bool> struct CompileTimeError;
 template <> struct CompileTimeError<true> {};
 #define static_assert(cond,msg)	{ ::lo::std::tm::CompileTimeError<!!(cond)> ERROR_##msg; (void) ERROR_##msg; }
 
-} // namespace tm
-} } // namespace lo::std
+} } // namespace std::tm
 
 #endif

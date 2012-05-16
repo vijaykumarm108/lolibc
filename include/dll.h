@@ -7,6 +7,7 @@ namespace lolibc
 		inline dll()	{_addref();}
 		~dll()			{_release(); }
 		virtual const char *Name() = 0;
+		static void		_free_unused_dlls();
 	protected:
 		virtual int &counter() = 0;
 		void _addref();

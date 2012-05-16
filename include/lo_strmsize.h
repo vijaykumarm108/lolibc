@@ -22,7 +22,7 @@ inline streamsize stream_size_of (const T& v) {
     return (stream_sizer_t()(v));
 }
 
-} // namespace
+} // namespace std
 
 //
 // Extra overloads in this macro are needed because it is the one used for

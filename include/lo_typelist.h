@@ -7,12 +7,11 @@
 
 #ifdef __cplusplus
 
-namespace lo { namespace std {
-namespace tm {
+namespace std { namespace tm {
 
 /// The building block of typelists. Use it throught the Seq templates.
-template <typename T, typename U>
-struct Typelist {
+template <typename T, typename U> struct Typelist
+{
     typedef T Head;
     typedef U Tail;
 };
@@ -212,8 +211,6 @@ public:
 
 //----------------------------------------------------------------------
 
-} // namespace tl
-} // namespace tm
-} } // namespace lo::std
+} } } // namespace std::tm::tl
 
 #endif

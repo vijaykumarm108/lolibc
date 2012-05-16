@@ -3,6 +3,7 @@
 #pragma once
 
 #include "lo_utypes.h"
+#include "lo_uutility.h"
 
 #ifdef __cplusplus
 

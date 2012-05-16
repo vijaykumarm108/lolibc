@@ -52,18 +52,17 @@ extern "C" {
 
 /* Reading or writing the floating point control/status words is not supported in managed code */
 
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP unsigned int __cdecl _clearfp(void);
+_CRTIMP unsigned int __cdecl _clearfp(void);
 #pragma warning(push)
 #pragma warning(disable: 4141)
-_CRT_MANAGED_FP_DEPRECATE _CRT_INSECURE_DEPRECATE(_controlfp_s) _CRTIMP unsigned int __cdecl _controlfp(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
+_CRTIMP unsigned int __cdecl _controlfp(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
 #pragma warning(pop)
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP void __cdecl _set_controlfp(_In_ unsigned int _NewValue, _In_ unsigned int _Mask);
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP errno_t __cdecl _controlfp_s(_Out_opt_ unsigned int *_CurrentState, _In_ unsigned int _NewValue, _In_ unsigned int _Mask);
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP unsigned int __cdecl _statusfp(void);
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP void __cdecl _fpreset(void);
+_CRTIMP errno_t __cdecl _controlfp_s(_Out_opt_ unsigned int *_CurrentState, _In_ unsigned int _NewValue, _In_ unsigned int _Mask);
+_CRTIMP unsigned int __cdecl _statusfp(void);
+_CRTIMP void __cdecl _fpreset(void);
 
 #if defined (_M_IX86)
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ unsigned int *_SSE2_status);
+_CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ unsigned int *_SSE2_status);
 #endif  /* defined (_M_IX86) */
 
 #define _clear87        _clearfp
@@ -141,9 +140,9 @@ _CRT_MANAGED_FP_DEPRECATE _CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int
 
 #endif  /* defined (_M_AMD64) */
 
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP unsigned int __cdecl _control87(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
+_CRTIMP unsigned int __cdecl _control87(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
 #if defined (_M_IX86)
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP int __cdecl __control87_2(_In_ unsigned int _NewValue, _In_ unsigned int _Mask,
+_CRTIMP int __cdecl __control87_2(_In_ unsigned int _NewValue, _In_ unsigned int _Mask,
                                   _Out_opt_ unsigned int* _X86_cw, _Out_opt_ unsigned int* _Sse2_cw);
 #endif  /* defined (_M_IX86) */
 
@@ -216,7 +215,7 @@ _Check_return_ _CRTIMP float __cdecl _scalbf(_In_ float _X, _In_ long _Y);
 #define status87        _status87
 #define control87       _control87
 
-_CRT_MANAGED_FP_DEPRECATE _CRTIMP void __cdecl fpreset(void);
+_CRTIMP void __cdecl fpreset(void);
 
 #define DBL_RADIX               _DBL_RADIX
 #define DBL_ROUNDS              _DBL_ROUNDS
