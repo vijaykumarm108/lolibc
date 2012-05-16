@@ -1,10 +1,10 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_ofstream.h"
-#include "lo_string.hpp"
-#include "lo_uexception.h"
+#include <stdafx.h>
+#include <fstream>
+#include <string>
+#include <exception>
 //#include <unistd.h>
 #include <errno.h>
 #include <stdio.h>

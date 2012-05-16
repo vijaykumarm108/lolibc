@@ -1,12 +1,12 @@
 
 
-#include "milan.h"
-#include "lo_string.hpp"
+#include "stdafx.h"
+#include "string"
 #include "lo_mistream.h"
 #include "lo_mostream.h"
 #include "lo_ualgo.h"
 
-namespace lo { namespace std {
+namespace std {
 //----------------------------------------------------------------------
 
 //const uoff_t string::npos;
@@ -450,4 +450,4 @@ void wstring::toString( string& text)
 		text.clear();
 }
 
-} } // namespace lo::std
+} // namespace std

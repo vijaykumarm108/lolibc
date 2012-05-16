@@ -4,13 +4,13 @@
 #define _COMPLEX_
 #ifndef RC_INVOKED
 #include <ymath.h>
-#include <cmath>
-#include <sstream>
+#include "cmath"
+#include "sstream"
 
- #pragma pack(push,_CRT_PACKING)
- #pragma warning(push,3)
+#pragma pack(push,8)
+#pragma warning(push,3)
 
- #pragma warning(disable: 4244)
+#pragma warning(disable: 4244)
 
 _C_STD_BEGIN
  #ifndef _C_COMPLEX_T

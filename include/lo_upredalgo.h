@@ -2,9 +2,9 @@
 //
 #pragma once
 
-#include "lo_ualgo.h"
+#include "algorithm"
 
-namespace lo { namespace std {
+namespace std {
 
 /// Copy_if copies elements from the range [first, last) to the range
 /// [result, result + (last - first)) if pred(*i) returns true.
@@ -580,4 +580,4 @@ inline ForwardIterator partition (ForwardIterator first, ForwardIterator last, P
     return (stable_partition (first, last, pred));
 }
 
-} }  // namespace lo::std
+}  // namespace std

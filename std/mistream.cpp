@@ -1,11 +1,11 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_mistream.h"
-#include "lo_sostream.h"
-#include "lo_string.hpp"
-#include "lo_ualgo.h"
+#include <stdafx.h>
+#include <istream>
+#include <ostream>
+#include <string>
+#include <algorithm>
 
 namespace lo { namespace std {
 
@@ -117,4 +117,4 @@ void ostream::erase (iterator start, size_type s)
 
 //--------------------------------------------------------------------
 
-} }  // namespace lo::std
+} // namespace std

@@ -1,14 +1,10 @@
 // Lo-Overhead STL library - Lostl
 
-#include "milan.h"
-#include "lo_ustdxept.h"
-#include "lo_mistream.h"
-#include "lo_mostream.h"
-#include "lo_strmsize.h"
-#include "lo_uiosfunc.h"
-#include "lo_uspecial.h"
+#include <stdafx.h>
+#include <stdexcept>
+#include <sstream>
 
-namespace lo { namespace std {
+namespace std {
 
 //----------------------------------------------------------------------
 
@@ -52,4 +48,4 @@ size_t error_message::stream_size (void) const
     return (exception::stream_size() + Align (stream_size_of (m_Arg)));
 }
 
-} }  // namespace lo::std
+}  // namespace std

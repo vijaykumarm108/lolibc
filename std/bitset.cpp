@@ -1,6 +1,7 @@
 /* bitset.cpp for lolibc */
 
-#include "../include/bitset"
+#include <stdafx.h>
+#include <bitset>
 
 namespace std {
 

@@ -1,12 +1,12 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_mistream.h"
+#include <stdafx.h>
+#include <istream>
 #include "lo_memblock.h"
-#include "lo_ualgo.h"
-#include "lo_umemory.h"
-#include "lo_fstream.h"
+#include <algorithm>
+#include <memory>
+#include <fstream>
 #include <errno.h>
 
 namespace lo { namespace std {

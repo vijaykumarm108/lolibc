@@ -1,25 +1,11 @@
-// cerrno standard header
+/* lolibc */
 #pragma once
 #ifndef _CERRNO_
 #define _CERRNO_
 #ifndef RC_INVOKED
 #include <yvals.h>
 
-#ifdef _STD_USING
-
-#undef _STD_USING
-#include <errno.h>
-#define _STD_USING
-
-#else /* _STD_USING */
-
-#include <errno.h>
-
-#endif /* _STD_USING */
-
-#ifndef errno
-#define errno	errno
-#endif /* errno */
+#include "errno.h"
 
 #endif /* RC_INVOKED */
 #endif /* _CERRNO_ */

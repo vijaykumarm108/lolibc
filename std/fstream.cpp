@@ -1,7 +1,7 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include <milan.h>
+#include <stdafx.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -10,12 +10,12 @@
 #include <errno.h>
 #include <sys\stat.h>
 #include <Windows.h>
-#include "lo_fstream.h"
-#include "lo_uexception.h"
-#include "lo_uutility.h"
-#include "winunix.h"
+#include <fstream>
+#include <exception>
+#include <lo_uutility.h>
+#include <winunix.h>
 
-namespace lo { namespace std {
+namespace std {
 
 /// Default constructor
 fstream::fstream (void)
@@ -265,4 +265,4 @@ void fstream::set_nonblock (bool v)
     fcntl (FCNTLID (F_SETFL), curf);
 }
 
-} } // namespace lo::stl
+} // namespace std

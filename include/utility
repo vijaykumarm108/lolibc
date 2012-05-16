@@ -8,17 +8,14 @@
 
 namespace std {
 
-/// \class pair upair.h std.h
-/// \ingroup AssociativeContainers
-///
-/// \brief Container for two values.
-///
-template <typename T1, typename T2>
-class pair {
-public:
+/**
+This class couples together a pair of values, which may be of different types (T1 and T2).
+The individual values can be accessed through the public members first and second.
+*/
+template <typename T1, typename T2> struct pair
+{
     typedef T1		first_type;
     typedef T2		second_type;
-public:
     /// Default constructor.
     inline pair (void)				: first (T1()), second (T2()) {}
     /// Initializes members with \p a, and \p b.
@@ -26,7 +23,6 @@ public:
     inline pair&	operator= (const pair<T1, T2>& p2) { first = p2.first; second = p2.second; return (*this); }
     template <typename T3, typename T4>
     inline pair&	operator= (const pair<T3, T4>& p2) { first = p2.first; second = p2.second; return (*this); }
-public:
     first_type		first;
     second_type		second;
 };

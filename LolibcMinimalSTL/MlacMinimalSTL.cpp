@@ -2,12 +2,12 @@
 //
 
 #include "stdafx.h"
-#include <lo_string.hpp>
+#include <string>
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	printf("Hello world\n");
-	lo::std::string str = "Press any key to continue";
+	std::string str = "Press any key to continue";
 	printf(str.c_str());
 	getchar();
 	return 0;

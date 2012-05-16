@@ -1,11 +1,12 @@
 // Lo-Overhead STL library - Lostl
 //
 
+#include <stdafx.h>
 #ifndef NDEBUG	// Optimized code here. asserts slow it down, and are checked elsewhere.
 #define NDEBUG
 #endif
 
-#include "lo_ualgo.h"
+#include "algorithm"
 
 namespace std {
 

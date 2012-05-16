@@ -1,12 +1,12 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_sistream.h"
-#include "lo_sostream.h"
-#include "lo_string.hpp"
+#include <stdafx.h>
+#include <istream>
+#include <ostream.h>
+#include <string>
 
-namespace lo { namespace std {
+namespace std {
 
 #define DEFAULT_DELIMITERS	" \t\n\r;:,.?"
 const char ios_base::c_DefaultDelimiters [istringstream::c_MaxDelimiters] = DEFAULT_DELIMITERS;
@@ -212,4 +212,4 @@ istringstream& istringstream::ignore (size_type n, char delim)
     return (*this);
 }
 
-} }  // namespace lo::std
+} // namespace std

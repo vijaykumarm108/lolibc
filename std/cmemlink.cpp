@@ -1,13 +1,13 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
+#include <stdafx.h>
 #include "lo_cmemlink.h"
-#include "lo_ofstream.h"
+#include "fstream"
 #include "lo_strmsize.h"
-#include "lo_ualgo.h"
+#include "algorithm"
 
-namespace lo { namespace std {
+namespace std {
 
 /// \brief Attaches the object to pointer \p p of size \p n.
 ///
@@ -67,4 +67,4 @@ bool cmemlink::operator== (const cmemlink& l) const
 	    (l.m_Data == m_Data || 0 == memcmp (l.m_Data, m_Data, m_Size)));
 }
 
-} } // namespace lo::std
+} // namespace std

@@ -1,14 +1,14 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_mistream.h"	// for istream_iterator, referenced in utf8.h
-#include "lo_sostream.h"
-#include "lo_string.hpp"
-#include "lo_ulimits.h"
+#include <stdafx.h>
+#include <istream>	// for istream_iterator, referenced in utf8.h
+#include <sstream>
+#include <string>
+#include <limits>
 #include <stdio.h>
 
-namespace lo { namespace std {
+namespace std {
 
 /// Creates an output string stream linked to the given memory area.
 ostringstream::ostringstream (void* p, size_t n)
@@ -165,4 +165,4 @@ ostringstream::size_type ostringstream::overflow (size_type n)
     return (remaining());
 }
 
-} }  // namespace lo::std
+}  // namespace std

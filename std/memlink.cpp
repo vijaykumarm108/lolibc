@@ -1,11 +1,11 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include "milan.h"
-#include "lo_mistream.h"
-#include "lo_ustdxept.h"
+#include <stdafx.h>
+#include <istream>
+#include <stdexcept>
 
-namespace lo { namespace std {
+namespace std {
 
 /// Reads the object from stream \p s
 void memlink::read (istream& is)
@@ -38,4 +38,4 @@ void memlink::fill (iterator start, const void* p, size_type elSize, size_type e
 	start = copy_n (const_iterator(p), elSize, start);
 }
 
-} }  // namespace lo::std
+}  // namespace std

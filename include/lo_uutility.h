@@ -6,7 +6,7 @@
 
 #include "lo_utypes.h"
 #include "lo_traits.h"
-#include "lo_ulimits.h"
+#include "limits"
 #include <assert.h>
 
 #ifdef __cplusplus

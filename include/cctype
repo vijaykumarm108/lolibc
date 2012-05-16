@@ -1,10 +1,9 @@
-/* cctype.h standard header*/
-
+/* lolibc */
 #pragma once
 #ifndef _CCTYPE_
 #define _CCTYPE_
 #include <yvals.h>
-#include <cerrno>
+#include "cerrno"
 
 #ifdef _STD_USING
 #undef _STD_USING

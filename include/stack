@@ -1,11 +1,9 @@
 #pragma once
-namespace lo { namespace std {
 
-/// \class stack ustack.h std.h
-/// \ingroup Sequences
-///
+
+namespace std {
+
 /// \brief Stack adapter to std containers.
-///
 template <typename T>
 class stack {
 public:
@@ -32,4 +30,4 @@ private:
     vector<T>			m_Storage;	///< Where the data actually is.
 };
 
-} }  // namespace lo::std
+}  // namespace std
