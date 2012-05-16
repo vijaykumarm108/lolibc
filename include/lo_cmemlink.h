@@ -57,7 +57,7 @@ public:
     virtual void		unlink (void) throw();
     inline rcself_t	operator= (const cmemlink& l)	{ link (l); return (*this); }
     bool		operator== (const cmemlink& l) const;
-    inline void			swap (cmemlink& l)		{ ::lo::std::swap (m_Data, l.m_Data); ::lo::std::swap (m_Size, l.m_Size); }
+    inline void			swap (cmemlink& l)		{ ::std::swap (m_Data, l.m_Data); ::std::swap (m_Size, l.m_Size); }
     inline size_type	size (void) const		{ return (m_Size); }
     inline size_type	max_size (void) const		{ return (size()); }
     inline size_type	readable_size (void) const	{ return (size()); }
