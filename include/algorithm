@@ -186,6 +186,20 @@ namespace std {
 		return (first);
 	}
 
+	// Generate some fill_n aliases - for automatic cases
+#define FILL_N_ALIAS_FUNC(type, alias_type, v_type)				\
+	template <> inline type* fill_n (type* first, size_t n, const v_type& value)	\
+	{ return ((type*) fill_n ((alias_type*) first, n, (const alias_type) value)); }
+	FILL_N_ALIAS_FUNC(void, uint8_t, char)
+	FILL_N_ALIAS_FUNC(void, uint8_t, uint8_t)
+	FILL_N_ALIAS_FUNC(char, uint8_t, char)
+	FILL_N_ALIAS_FUNC(char, uint8_t, uint8_t)
+	FILL_N_ALIAS_FUNC(int8_t, uint8_t, int8_t)
+	FILL_N_ALIAS_FUNC(int16_t, uint16_t, int16_t)
+	FILL_N_ALIAS_FUNC(int32_t, uint32_t, int32_t)
+#undef FILL_N_ALIAS_FUNC
+
+
 #if CPU_HAS_MMX
 	extern "C" void copy_n_fast (const void* src, size_t count, void* dest) throw();
 #else
@@ -349,41 +363,17 @@ namespace std {
 	{ return ((type*) copy_n ((const alias_type*) first, count, (alias_type*) result)); }
 		COPY_N_ALIAS_FUNC(const void, void, uint8_t)
 		COPY_N_ALIAS_FUNC(void, void, uint8_t)
-#if WANT_UNROLLED_COPY
-#if HAVE_THREE_CHAR_TYPES
 		COPY_N_ALIAS_FUNC(const char, char, uint8_t)
 		COPY_N_ALIAS_FUNC(char, char, uint8_t)
-#endif
-		COPY_N_ALIAS_FUNC(int8_t, int8_t, uint8_t)
+//		COPY_N_ALIAS_FUNC(int8_t, int8_t, uint8_t)
 		COPY_N_ALIAS_FUNC(uint8_t, uint8_t, uint8_t)
 		COPY_N_ALIAS_FUNC(const int8_t, int8_t, uint8_t)
-		COPY_N_ALIAS_FUNC(int16_t, int16_t, uint16_t)
+//		COPY_N_ALIAS_FUNC(int16_t, int16_t, uint16_t)
 		COPY_N_ALIAS_FUNC(uint16_t, uint16_t, uint16_t)
 		COPY_N_ALIAS_FUNC(const int16_t, int16_t, uint16_t)
-#if CPU_HAS_MMX || (SIZE_OF_LONG > 4)
 		COPY_N_ALIAS_FUNC(int32_t, int32_t, uint32_t)
 		COPY_N_ALIAS_FUNC(uint32_t, uint32_t, uint32_t)
-		COPY_N_ALIAS_FUNC(const int32_t, int32_t, uint32_t)
-#endif
-#endif
 #undef COPY_N_ALIAS_FUNC
-#define FILL_N_ALIAS_FUNC(type, alias_type, v_type)				\
-	template <> inline type* fill_n (type* first, size_t n, const v_type& value)	\
-	{ return ((type*) fill_n ((alias_type*) first, n, (const alias_type) value)); }
-		FILL_N_ALIAS_FUNC(void, uint8_t, char)
-		FILL_N_ALIAS_FUNC(void, uint8_t, uint8_t)
-#if WANT_UNROLLED_COPY
-#if HAVE_THREE_CHAR_TYPES
-		FILL_N_ALIAS_FUNC(char, uint8_t, char)
-		FILL_N_ALIAS_FUNC(char, uint8_t, uint8_t)
-#endif
-		FILL_N_ALIAS_FUNC(int8_t, uint8_t, int8_t)
-		FILL_N_ALIAS_FUNC(int16_t, uint16_t, int16_t)
-#if CPU_HAS_MMX || (SIZE_OF_LONG > 4)
-		FILL_N_ALIAS_FUNC(int32_t, uint32_t, int32_t)
-#endif
-#endif
-#undef FILL_N_ALIAS_FUNC
 
 		extern const char _FmtPrtChr[2][8];
 
@@ -2085,3 +2075,4 @@ OutputIterator set_union (InputIterator1 first1, InputIterator1 last1, InputIter
 	}
 
 } // namespace std
+

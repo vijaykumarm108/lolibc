@@ -1,48 +1,37 @@
 // Lo-Overhead STL library - Lostl
 //
 
-#include <stdafx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys\types.h>
-#include <io.h>
-#include <errno.h>
-#include <sys\stat.h>
-#include <Windows.h>
-#include <fstream>
-#include <exception>
-#include <xutility>
-#include <winunix.h>
+#include "stdafx.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "fcntl.h"
+#include "sys\types.h"
+#include "errno.h"
+#include "sys\stat.h"
+#include "fstream"
+#include "exception"
+#include "xutility"
+#include "winunix.h"
 
 using namespace lo;
 
 namespace std {
 
 /// Default constructor
-fstream::fstream (void)
-: ios_base (),
-  m_fd (-1),
-  m_Filename ()
+fstream::fstream (void) : ios_base (), m_fd (-1), m_Filename ()
 {
     exceptions (goodbit);
 }
 
 /// Opens \p filename in \p mode.
-fstream::fstream (const char* filename, openmode mode)
-: ios_base (),
-  m_fd (-1),
-  m_Filename ()
+fstream::fstream (const char* filename, openmode mode) : ios_base (), m_fd (-1), m_Filename ()
 {
     exceptions (goodbit);
     fstream::open (filename, mode);
 }
 
 /// Attaches to \p nfd of \p filename.
-fstream::fstream (int nfd, const char* filename)
-: ios_base (),
-  m_fd (-1),
-  m_Filename ()
+fstream::fstream (int nfd, const char* filename) : ios_base (), m_fd (-1), m_Filename ()
 {
     exceptions (goodbit);
     attach (nfd, filename);
@@ -61,7 +50,7 @@ fstream::~fstream (void) throw()
 void fstream::set_and_throw (iostate s, const char* op)
 {
     if (ios_base::set_and_throw (s))
-	throw file_exception (op, name());
+		throw file_exception (op, name());
 }
 
 /// Attaches to the given \p nfd.
@@ -71,7 +60,7 @@ void fstream::attach (int nfd, const char* filename)
     m_Filename = filename;
     clear (goodbit);
     if (nfd < 0)
-	set_and_throw (badbit, "open");
+		set_and_throw (badbit, "open");
     close();
     m_fd = nfd;
 }
@@ -99,9 +88,9 @@ void fstream::detach (void)
     };
     int flags = (m - 1) & O_ACCMODE;	// in and out
     for (uoff_t i = 0; i < _countof(s_OMFlags); ++ i)
-	flags |= s_OMFlags[i] & (!(m & (1 << i)) - 1);
+		flags |= s_OMFlags[i] & (!(m & (1 << i)) - 1);
     if (m & nocreate)
-	flags &= ~O_CREAT;
+		flags &= ~O_CREAT;
     return (flags);
 }
 
@@ -109,7 +98,7 @@ void fstream::detach (void)
 /// \warning The string at \p filename must exist until the object is closed.
 void fstream::open (const char* filename, openmode mode, mode_t perms)
 {
-    int nfd = _wopen (wstring(filename), om_to_flags(mode), perms);
+    int nfd = ::open (filename, om_to_flags(mode), perms);
     attach (nfd, filename);
 }
 
@@ -118,11 +107,13 @@ void fstream::close (void)
 {
     if (m_fd < 0)
 	return;	// already closed
-    while (_close(m_fd)) {
-	if (errno != EINTR) {
-	    set_and_throw (badbit | failbit, "close");
-	    break;
-	}
+    while (_close(m_fd))
+	{
+		if (errno != EINTR)
+		{
+			set_and_throw (badbit | failbit, "close");
+			break;
+		}
     }
     detach();
 }
@@ -155,13 +146,15 @@ off_t fstream::read (void* p, off_t n)
 off_t fstream::readsome (void* p, off_t n)
 {
     ssize_t brn;
-    do { brn = _read (m_fd, p, n); } while ((brn < 0) & (errno == EINTR));
+    do {
+		brn = _read (m_fd, p, n);
+	} while ((brn < 0) & (errno == EINTR));
     if (brn > 0)
-	return (brn);
+		return (brn);
     else if ((brn < 0) & (errno != EAGAIN))
-	set_and_throw (failbit, "read");
+		set_and_throw (failbit, "read");
     else if (!brn && ios_base::set_and_throw (eofbit | failbit))
-	throw stream_bounds_exception ("read", name(), pos(), n, 0);
+		throw stream_bounds_exception ("read", name(), pos(), n, 0);
     return (0);
 }
 
@@ -170,19 +163,19 @@ off_t fstream::write (const void* p, off_t n)
 {
     off_t btw (n);
     while (btw) {
-	const off_t bw (n - btw);
-	ssize_t bwn = _write (m_fd, advance(p,bw), btw);
-	if (bwn > 0)
-	    btw -= bwn;
-	else if (!bwn) {
-	    if (ios_base::set_and_throw (eofbit | failbit))
-		throw stream_bounds_exception ("write", name(), pos() - bw, n, bw);
-	    break;
-	} else if (errno != EINTR) {
-	    if (errno != EAGAIN)
-		set_and_throw (failbit, "write");
-	    break;
-	}
+		const off_t bw (n - btw);
+		ssize_t bwn = _write (m_fd, advance(p,bw), btw);
+		if (bwn > 0)
+			btw -= bwn;
+		else if (!bwn) {
+			if (ios_base::set_and_throw (eofbit | failbit))
+				throw stream_bounds_exception ("write", name(), pos() - bw, n, bw);
+			break;
+		} else if (errno != EINTR) {
+			if (errno != EAGAIN)
+				set_and_throw (failbit, "write");
+			break;
+		}
     }
     return (n - btw);
 }
@@ -209,7 +202,7 @@ void fstream::sync (void)
 void fstream::stat (struct stat& rs) const
 {
     if (fstat (m_fd, &rs))
-	throw file_exception ("stat", name());
+		throw file_exception ("stat", name());
 }
 
 /// Calls the given ioctl. Use IOCTLID macro to pass in both \p name and \p request.
@@ -217,7 +210,7 @@ int fstream::ioctl (const char* rname, int request, long argument)
 {
     int rv = ::ioctl (m_fd, request, argument);
     if (rv < 0)
-	set_and_throw (failbit, rname);
+		set_and_throw (failbit, rname);
     return (rv);
 }
 
@@ -246,7 +239,7 @@ memlink fstream::mmap (off_t n, off_t offset)
 void fstream::munmap (memlink& l)
 {
     if (::munmap (l.data(), (long)l.size()))
-	set_and_throw (failbit, "munmap");
+		set_and_throw (failbit, "munmap");
     l.unlink();
 }
 

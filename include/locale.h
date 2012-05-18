@@ -88,23 +88,23 @@ extern __inline int __dummy(void) { return _charmax; }
 #define _CONFIG_LOCALE_SWT
 #endif  /* _CONFIG_LOCALE_SWT */
 
-_Check_return_opt_ _CRTIMP int __cdecl _configthreadlocale(_In_ int _Flag);
-_Check_return_opt_ _CRTIMP char * __cdecl setlocale(_In_ int _Category, _In_opt_z_ const char * _Locale);
+_Check_return_opt_ _CRTIMP int __cdecl _configthreadlocale( int _Flag);
+_Check_return_opt_ _CRTIMP char * __cdecl setlocale( int _Category, _In_opt_z_ const char * _Locale);
 _Check_return_opt_ _CRTIMP struct lconv * __cdecl localeconv(void);
 _Check_return_opt_ _CRTIMP _locale_t __cdecl _get_current_locale(void);
-_Check_return_opt_ _CRTIMP _locale_t __cdecl _create_locale(_In_ int _Category, _In_z_ const char * _Locale);
+_Check_return_opt_ _CRTIMP _locale_t __cdecl _create_locale( int _Category, _In_z_ const char * _Locale);
 _CRTIMP void __cdecl _free_locale(_In_opt_ _locale_t _Locale);
 
 /* use _get_current_locale, _create_locale and _free_locale, instead of these functions with double leading underscore */
-_Check_return_ _CRT_OBSOLETE(_get_current_locale) _CRTIMP _locale_t __cdecl __get_current_locale(void);
-_Check_return_ _CRT_OBSOLETE(_create_locale) _CRTIMP _locale_t __cdecl __create_locale(_In_ int _Category, _In_z_ const char * _Locale);
+_CRT_OBSOLETE(_get_current_locale) _CRTIMP _locale_t __cdecl __get_current_locale(void);
+_CRT_OBSOLETE(_create_locale) _CRTIMP _locale_t __cdecl __create_locale( int _Category, _In_z_ const char * _Locale);
 _CRT_OBSOLETE(_free_locale) _CRTIMP void __cdecl __free_locale(_In_opt_ _locale_t _Locale);
 
 #ifndef _WLOCALE_DEFINED
 
 /* wide function prototypes, also declared in wchar.h  */
 
-_Check_return_opt_ _CRTIMP wchar_t * __cdecl _wsetlocale(_In_ int _Category, _In_opt_z_ const wchar_t * _Locale);
+_Check_return_opt_ _CRTIMP wchar_t * __cdecl _wsetlocale( int _Category, _In_opt_z_ const wchar_t * _Locale);
 
 #define _WLOCALE_DEFINED
 #endif  /* _WLOCALE_DEFINED */

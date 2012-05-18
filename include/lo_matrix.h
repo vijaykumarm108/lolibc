@@ -8,11 +8,11 @@ namespace lo {
 
 	/// \brief A two-dimensional array of NX*NY elements of type T.
 	template <size_t NX, size_t NY, typename T>
-	class matrix : public tuple<NX*NY,T> {
+	class matrix : public std::tuple<NX*NY,T> {
 	public:
-		typedef tuple<NX,T>							row_type;
-		typedef tuple<NY,T>							column_type;
-		typedef tuple<NX*NY,T>						tuple_type;
+		typedef std::tuple<NX,T>					row_type;
+		typedef std::tuple<NY,T>					column_type;
+		typedef std::tuple<NX*NY,T>					tuple_type;
 		typedef typename tuple_type::value_type		value_type;
 		typedef typename tuple_type::size_type		size_type;
 		typedef typename tuple_type::pointer		pointer;
@@ -91,9 +91,9 @@ namespace lo {
 	/// \brief Transforms vector \p t with matrix \p m
 	/// \ingroup NumericAlgorithms
 	template <size_t NX, size_t NY, typename T>
-	tuple<NX,T> operator* (const tuple<NY,T>& t, const matrix<NX,NY,T>& m)
+	std::tuple<NX,T> operator* (const std::tuple<NY,T>& t, const matrix<NX,NY,T>& m)
 	{
-		tuple<NX,T> tr;
+		std::tuple<NX,T> tr;
 		for (uoff_t x = 0; x < NX; ++ x)
 		{
 			T dpv (0);

@@ -162,4 +162,4 @@ ifstream& ifstream::seekg (off_t p, seekdir d)
 
 //----------------------------------------------------------------------
 
-} }  // namespace lo::std
+}  // namespace std

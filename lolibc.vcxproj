@@ -207,6 +207,7 @@
     <ClCompile Include="src\dll.cpp" />
     <ClCompile Include="src\kernel32.cpp" />
     <ClCompile Include="src\loexcept.cpp" />
+    <ClCompile Include="src\loutf8.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -484,8 +485,12 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\assert.h" />
+    <ClInclude Include="include\fcntl.h" />
     <ClInclude Include="include\ios_base.h" />
+    <ClInclude Include="include\limits.h" />
     <ClInclude Include="include\stdarg.h" />
+    <ClInclude Include="include\stddef.h" />
     <ClInclude Include="include\stdlib.h" />
     <ClInclude Include="include\string.h" />
     <ClInclude Include="include\array" />
@@ -512,6 +517,9 @@
     <ClInclude Include="include\stdexcept" />
     <ClInclude Include="include\stdint.h" />
     <ClInclude Include="include\stdio.h" />
+    <ClInclude Include="include\sys\malloc.h" />
+    <ClInclude Include="include\sys\stat.h" />
+    <ClInclude Include="include\sys\tchar.h" />
     <ClInclude Include="include\sys\types.h" />
     <ClInclude Include="include\tuple" />
     <ClInclude Include="include\memory" />

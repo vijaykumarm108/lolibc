@@ -4,7 +4,7 @@
 #define MAP_FAILED nullptr
 #define MMAP_FAILURE nullptr
 #define PROT_READ	0
-#define PROT_WRITE	PAGE_READWRITE
+#define PROT_WRITE	0x04
 #define MAP_SHARED	0
 void *mmap (void *ptr, long size, long prot, long type, long handle, long arg);
 long munmap (void *ptr, long size);

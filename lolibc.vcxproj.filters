@@ -183,9 +183,6 @@
     <ClInclude Include="include\set">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\map">
-      <Filter>Header Files\STL</Filter>
-    </ClInclude>
     <ClInclude Include="include\map" />
     <ClInclude Include="include\stdafx.h">
       <Filter>Header Files</Filter>
@@ -243,6 +240,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\stdarg.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stddef.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\limits.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assert.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fcntl.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\stat.h">
+      <Filter>Header Files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\malloc.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\tchar.h">
       <Filter>Header Files\stdc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -338,6 +356,9 @@
       <Filter>Source Files\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\loexcept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loutf8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

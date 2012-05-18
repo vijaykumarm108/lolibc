@@ -163,7 +163,7 @@ static int mainret=0;
 static _startupinfo    startinfo;
 
 _CRTIMP int* __cdecl __p__fmode();
-int __cdecl _XcptFilter(_In_ unsigned long _ExceptionNum, _In_ struct _EXCEPTION_POINTERS * _ExceptionPtr);
+int __cdecl _XcptFilter( unsigned long _ExceptionNum,  struct _EXCEPTION_POINTERS * _ExceptionPtr);
 
 /*!
 \brief The code in mainCRTStartup that was executed before executing C

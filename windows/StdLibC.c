@@ -73,7 +73,7 @@ HINSTANCE ghInstance;
 extern UINT_PTR __security_cookie;
 
 #pragma warning(disable:4273)
-_CRTIMP struct tm * __cdecl _localtime64(_In_ const __time64_t * _Time);
+_CRTIMP struct tm * __cdecl _localtime64( const __time64_t * _Time);
 errno_t __cdecl _localtime64_s( struct tm* _tm,	const __time64_t *time );
 
 errno_t __cdecl _localtime64_s( struct tm * _tm, const __time64_t *time )
@@ -127,7 +127,7 @@ errno_t memcpy_s( void *dest, size_t numberOfElements, const void *src, size_t c
 
 }
 
-_CRTIMP void *  __cdecl _memmove(_Out_opt_bytecapcount_(_Size) void * _Dst, _In_opt_bytecount_(_Size) const void * _Src, _In_ size_t _Size);
+_CRTIMP void *  __cdecl _memmove(_Out_opt_bytecapcount_(_Size) void * _Dst, _In_opt_bytecount_(_Size) const void * _Src,  size_t _Size);
 
 errno_t memmove_s( void *dest, size_t numberOfElements, const void *src, size_t count )
 {
@@ -148,7 +148,7 @@ void __cdecl _invalid_parameter_noinfo()
 
 }
 
-_Check_return_ _CRTIMP _CONST_RETURN wchar_t * __cdecl wcsrchr(_In_z_ const wchar_t * str, _In_ wchar_t ch)
+_CRTIMP _CONST_RETURN wchar_t * __cdecl wcsrchr(_In_z_ const wchar_t * str,  wchar_t ch)
 {
 	wchar_t *start = (wchar_t *)str;
 	while (*str++)                       /* find end of string */

@@ -158,22 +158,20 @@ class ostringstream : public ostream {
 public:
 				ostringstream (const string& v = "");
 				ostringstream (void* p, size_t n);
-    void			iwrite (uint8_t v);
-    void			iwrite (wchar_t v);
+    void				iwrite (uint8_t v);
+    void				iwrite (wchar_t v);
     inline void			iwrite (int v)			{ iformat (v); }
     inline void			iwrite (unsigned int v)		{ iformat (v); }
     inline void			iwrite (long int v)		{ iformat (v); }
     inline void			iwrite (unsigned long int v)	{ iformat (v); }
     inline void			iwrite (float v)		{ iformat (v); }
     inline void			iwrite (double v)		{ iformat (v); }
-    void			iwrite (bool v);
+    void				iwrite (bool v);
     inline void			iwrite (const char* s)		{ write (s, strlen(s)); }
     inline void			iwrite (const string& v)	{ write (v.begin(), v.size()); }
     inline void			iwrite (fmtflags f);
-#if HAVE_LONG_LONG
     inline void			iwrite (long long v)		{ iformat (v); }
     inline void			iwrite (unsigned long long v)	{ iformat (v); }
-#endif
     inline size_type		max_size (void) const		{ return (m_Buffer.max_size()); }
     inline ostringstream&	put (char c)			{ iwrite (uint8_t(c)); return (*this); }
     int				vformat (const char* fmt, va_list args);

@@ -1,10 +1,13 @@
 
 #pragma once
+#include "lolibbase.h"
 
-void *malloc(size_t size);
-void free(void *ptr);
-void *realloc(void *ptr, size_t size);
-void *calloc(size_t nmemb, size_t size);
+_CRTIMP void *malloc(size_t size);
+_CRTIMP void free(void *ptr);
+_CRTIMP void *realloc(void *ptr, size_t size);
+_CRTIMP void *calloc(size_t nmemb, size_t size);
+_CRTIMP double strtod ( const char * str, char ** endptr );
+_CRTIMP long int strtol ( const char * str, char ** endptr, int base );
 
 /* _countof helper */
 #if !defined(_countof)

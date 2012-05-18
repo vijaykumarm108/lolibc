@@ -5,7 +5,7 @@
  */
 #pragma once
 #include "ios"
-#include <assert.h>
+#include "assert.h"
 #include "lo_utf8.h"
 
 namespace std {
@@ -305,18 +305,19 @@ inline istream& operator>> (istream& is, const T& v)
 	return (is);
 }
 
-//----------------------------------------------------------------------
-
-typedef istream_iterator<lo::utf8subchar_t> istream_iterator_for_utf8;
-typedef lo::utf8in_iterator<istream_iterator_for_utf8> utf8istream_iterator;
-
-/// Returns a UTF-8 adaptor reading from \p is.
-inline utf8istream_iterator utf8in (istream& is)
-{
-    istream_iterator_for_utf8 si (is);
-    return (utf8istream_iterator (si));
-}
-
-//----------------------------------------------------------------------
-
 } // namespace std
+
+namespace lo {
+
+
+	typedef std::istream_iterator<lo::utf8subchar_t> istream_iterator_for_utf8;
+	typedef utf8in_iterator<istream_iterator_for_utf8> utf8istream_iterator;
+
+	/// Returns a UTF-8 adapter reading from \p is.
+	inline utf8istream_iterator utf8in (std::istream& is)
+	{
+		istream_iterator_for_utf8 si (is);
+		return (utf8istream_iterator (si));
+	}
+
+}

@@ -154,7 +154,7 @@ void string::insert (const uoff_t ipo, wchar_t c, size_type n)
 {
     iterator ip (iat(ipo));
     ip = iterator (memblock::insert (memblock::iterator(ip), n * Utf8Bytes(c)));
-    fill_n (utf8out (ip), n, c);
+    fill_n (lo::utf8out (ip), n, c);
     *end() = 0;
 }
 
@@ -166,7 +166,7 @@ void string::insert (const uoff_t ipo, const wchar_t* first, const wchar_t* last
     for (uoff_t i = 0; i < nti; ++ i)
 	bti += Utf8Bytes(first[i]);
     ip = iterator (memblock::insert (memblock::iterator(ip), n * bti));
-    utf8out_iterator<string::iterator> uout (utf8out (ip));
+    utf8out_iterator<string::iterator> uout (lo::utf8out (ip));
     for (uoff_t j = 0; j < n; ++ j)
 	for (uoff_t k = 0; k < nti; ++ k, ++ uout)
 	    *uout = first[k];
@@ -334,21 +334,13 @@ uoff_t string::find_last_not_of (const string& s, uoff_t pos) const
 	/// Equivalent to a vsprintf on the string.
 	int string::vformat (const char* fmt, va_list args)
 	{
-	#if HAVE_VA_COPY
 		va_list args2;
-	#else
-		#define args2 args
-		#undef __va_copy
-		#define __va_copy(x,y)
-	#endif
+		va_start(args2,args);
 		size_t rv = size();
 		do {
-		reserve (rv);
-		__va_copy (args2, args);
-		//rv = vsnprintf (data(), memblock::capacity(), fmt, args2);
-		rv = vsprintf_s(data(), memblock::capacity(), fmt, args2);
-	//	rv = wvsprintf(data(), fmt, args2);
-		rv = minV (rv, memblock::capacity());
+			reserve (rv);
+			rv = vsnprintf (data(), memblock::capacity(), fmt, args2);
+			rv = minV (rv, memblock::capacity());
 		} while (rv > capacity());
 		resize (minV (rv, capacity()));
 		return (int)(rv);
@@ -378,7 +370,7 @@ uoff_t string::find_last_not_of (const string& s, uoff_t pos) const
 		size_t szsz (Utf8SequenceBytes (szbuf[0]) - 1), n = 0;
 		if (!is.verify_remaining ("read", "lo::std::string", szsz)) return;
 		is.read (szbuf + 1, szsz);
-		n = *utf8in(szbuf);
+		n = *lo::utf8in(szbuf);
 		if (!is.verify_remaining ("read", "lo::std::string", n)) return;
 		resize (n);
 		is.read (data(), size());

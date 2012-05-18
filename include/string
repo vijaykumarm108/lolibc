@@ -3,6 +3,7 @@
 #include "lo_memblock.h"
 #include "stdlib.h"
 #include "lo_utf8.h"
+#include "stdarg.h"
 
 namespace std {
 

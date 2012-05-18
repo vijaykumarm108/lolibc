@@ -83,49 +83,49 @@ const double _HUGE = System::Double::PositiveInfinity;
 #if !defined (__assembler)
 #ifndef _CRT_ABS_DEFINED
 #define _CRT_ABS_DEFINED
-        int     __cdecl abs(_In_ int _X);
-        long    __cdecl labs(_In_ long _X);
-        long long __cdecl llabs(_In_ long long _X);
+        int     __cdecl abs( int _X);
+        long    __cdecl labs( long _X);
+        long long __cdecl llabs( long long _X);
 #endif  /* _CRT_ABS_DEFINED */
 
-        double  __cdecl acos(_In_ double _X);
-        double  __cdecl asin(_In_ double _X);
-        double  __cdecl atan(_In_ double _X);
-        double  __cdecl atan2(_In_ double _Y, _In_ double _X);
+        double  __cdecl acos( double _X);
+        double  __cdecl asin( double _X);
+        double  __cdecl atan( double _X);
+        double  __cdecl atan2( double _Y,  double _X);
 #ifndef _SIGN_DEFINED
-_Check_return_ _CRTIMP double __cdecl _copysign (_In_ double _Number, _In_ double _Sign);
-_Check_return_ _CRTIMP double __cdecl _chgsign (_In_ double _X);
+_CRTIMP double __cdecl _copysign ( double _Number,  double _Sign);
+_CRTIMP double __cdecl _chgsign ( double _X);
 #define _SIGN_DEFINED
 #endif  /* _SIGN_DEFINED */
-        double  __cdecl cos(_In_ double _X);
-        double  __cdecl cosh(_In_ double _X);
-        double  __cdecl exp(_In_ double _X);
-_CRT_JIT_INTRINSIC double  __cdecl fabs(_In_ double _X);
-        double  __cdecl fmod(_In_ double _X, _In_ double _Y);
-        double  __cdecl log(_In_ double _X);
-        double  __cdecl log10(_In_ double _X);
-        double  __cdecl pow(_In_ double _X, _In_ double _Y);
-        double  __cdecl sin(_In_ double _X);
-        double  __cdecl sinh(_In_ double _X);
-        double  __cdecl tan(_In_ double _X);
-        double  __cdecl tanh(_In_ double _X);
-        double  __cdecl sqrt(_In_ double _X);
+        double  __cdecl cos( double _X);
+        double  __cdecl cosh( double _X);
+        double  __cdecl exp( double _X);
+_CRT_JIT_INTRINSIC double  __cdecl fabs( double _X);
+        double  __cdecl fmod( double _X,  double _Y);
+        double  __cdecl log( double _X);
+        double  __cdecl log10( double _X);
+        double  __cdecl pow( double _X,  double _Y);
+        double  __cdecl sin( double _X);
+        double  __cdecl sinh( double _X);
+        double  __cdecl tan( double _X);
+        double  __cdecl tanh( double _X);
+        double  __cdecl sqrt( double _X);
 #ifndef _CRT_ATOF_DEFINED
 #define _CRT_ATOF_DEFINED
-_Check_return_ _CRTIMP double  __cdecl atof(_In_z_ const char *_String);
-_Check_return_ _CRTIMP double  __cdecl _atof_l(_In_z_ const char *_String, _In_opt_ _locale_t _Locale);
+_CRTIMP double  __cdecl atof(_In_z_ const char *_String);
+_CRTIMP double  __cdecl _atof_l(_In_z_ const char *_String, _In_opt_ _locale_t _Locale);
 #endif  /* _CRT_ATOF_DEFINED */
 
-_CRTIMP double  __cdecl _cabs(_In_ struct _complex _Complex_value);
-_CRTIMP double  __cdecl ceil(_In_ double _X);
-_CRTIMP double  __cdecl floor(_In_ double _X);
-_CRTIMP double  __cdecl frexp(_In_ double _X, _Out_ int * _Y);
-_CRTIMP double  __cdecl _hypot(_In_ double _X, _In_ double _Y);
-_CRTIMP float   __cdecl _hypotf(_In_ float _X, _In_ float _Y);
-_CRTIMP double  __cdecl _j0(_In_ double _X );
-_CRTIMP double  __cdecl _j1(_In_ double _X );
-_CRTIMP double  __cdecl _jn(int _X, _In_ double _Y);
-_CRTIMP double  __cdecl ldexp(_In_ double _X, _In_ int _Y);
+_CRTIMP double  __cdecl _cabs( struct _complex _Complex_value);
+_CRTIMP double  __cdecl ceil( double _X);
+_CRTIMP double  __cdecl floor( double _X);
+_CRTIMP double  __cdecl frexp( double _X, _Out_ int * _Y);
+_CRTIMP double  __cdecl _hypot( double _X,  double _Y);
+_CRTIMP float   __cdecl _hypotf( float _X,  float _Y);
+_CRTIMP double  __cdecl _j0( double _X );
+_CRTIMP double  __cdecl _j1( double _X );
+_CRTIMP double  __cdecl _jn(int _X,  double _Y);
+_CRTIMP double  __cdecl ldexp( double _X,  int _Y);
 #ifndef _CRT_MATHERR_DEFINED
 #define _CRT_MATHERR_DEFINED
 #if defined (MRTDLL) || defined (_M_CEE_PURE)
@@ -134,21 +134,21 @@ _CRTIMP double  __cdecl ldexp(_In_ double _X, _In_ int _Y);
         int     __cdecl _matherr(_Inout_ struct _exception * _Except);
 #endif  /* defined (MRTDLL) || defined (_M_CEE_PURE) */
 #endif  /* _CRT_MATHERR_DEFINED */
-_CRTIMP double  __cdecl modf(_In_ double _X, _Out_ double * _Y);
+_CRTIMP double  __cdecl modf( double _X, _Out_ double * _Y);
 
-_CRTIMP double  __cdecl _y0(_In_ double _X);
-_CRTIMP double  __cdecl _y1(_In_ double _X);
-_CRTIMP double  __cdecl _yn(_In_ int _X, _In_ double _Y);
+_CRTIMP double  __cdecl _y0( double _X);
+_CRTIMP double  __cdecl _y1( double _X);
+_CRTIMP double  __cdecl _yn( int _X,  double _Y);
 
 /* hypot and hypotf are now part of the C99 Standard */
 #if !defined (RC_INVOKED) && !defined (__midl)
 
-static __inline double __CRTDECL hypot(_In_ double _X, _In_ double _Y)
+static __inline double __CRTDECL hypot( double _X,  double _Y)
 {
     return _hypot(_X, _Y);
 }
 
-static __inline float __CRTDECL hypotf(_In_ float _X, _In_ float _Y)
+static __inline float __CRTDECL hypotf( float _X,  float _Y)
 {
     return _hypotf(_X, _Y);
 }
@@ -157,7 +157,7 @@ static __inline float __CRTDECL hypotf(_In_ float _X, _In_ float _Y)
 
 #if defined (_M_IX86)
 
-_CRTIMP int     __cdecl _set_SSE2_enable(_In_ int _Flag);
+_CRTIMP int     __cdecl _set_SSE2_enable( int _Flag);
 
 #endif  /* defined (_M_IX86) */
 
@@ -167,36 +167,36 @@ _CRTIMP int     __cdecl _set_SSE2_enable(_In_ int _Flag);
 
 /* 4.5.2 Trigonometric functions */
 
-_CRTIMP float  __cdecl acosf( _In_ float _X);
-_CRTIMP float  __cdecl asinf( _In_ float _X);
-_CRTIMP float  __cdecl atanf( _In_ float _X);
-_CRTIMP float  __cdecl atan2f( _In_ float  _Y, float  _X);
-_CRTIMP float  __cdecl cosf( _In_ float _X);
-_CRTIMP float  __cdecl sinf( _In_ float _X);
-_CRTIMP float  __cdecl tanf( _In_ float _X);
+_CRTIMP float  __cdecl acosf(  float _X);
+_CRTIMP float  __cdecl asinf(  float _X);
+_CRTIMP float  __cdecl atanf(  float _X);
+_CRTIMP float  __cdecl atan2f(  float  _Y, float  _X);
+_CRTIMP float  __cdecl cosf(  float _X);
+_CRTIMP float  __cdecl sinf(  float _X);
+_CRTIMP float  __cdecl tanf(  float _X);
 
 /* 4.5.3 Hyperbolic functions */
-_CRTIMP float  __cdecl coshf( _In_ float _X);
-_CRTIMP float  __cdecl sinhf( _In_ float _X);
-_CRTIMP float  __cdecl tanhf( _In_ float _X);
+_CRTIMP float  __cdecl coshf(  float _X);
+_CRTIMP float  __cdecl sinhf(  float _X);
+_CRTIMP float  __cdecl tanhf(  float _X);
 
 /* 4.5.4 Exponential and logarithmic functions */
-_CRTIMP float  __cdecl expf( _In_ float  _X);
-_CRTIMP float  __cdecl logf( _In_ float  _X);
-_CRTIMP float  __cdecl log10f( _In_ float  _X);
+_CRTIMP float  __cdecl expf(  float  _X);
+_CRTIMP float  __cdecl logf(  float  _X);
+_CRTIMP float  __cdecl log10f(  float  _X);
 _CRTIMP float  __cdecl modff( float  _X, _Out_ float*  _Y);
 
 /* 4.5.5 Power functions */
-_CRTIMP float  __cdecl powf( _In_ float _Base, _In_ float _Exp);
-_CRTIMP float  __cdecl sqrtf( _In_ float  _X);
+_CRTIMP float  __cdecl powf(  float _Base,  float _Exp);
+_CRTIMP float  __cdecl sqrtf(  float  _X);
 
 /* 4.5.6 Nearest integer, absolute value, and remainder functions */
-_CRTIMP float  __cdecl ceilf( _In_ float  _X);
-_CRT_JIT_INTRINSIC  _CRTIMP float  __cdecl fabsf( _In_ float  _X);
-_CRTIMP float  __cdecl floorf( _In_ float  _X);
-_CRTIMP float  __cdecl fmodf( _In_ float _X, _In_ float _Y);
+_CRTIMP float  __cdecl ceilf(  float  _X);
+_CRT_JIT_INTRINSIC  _CRTIMP float  __cdecl fabsf(  float  _X);
+_CRTIMP float  __cdecl floorf(  float  _X);
+_CRTIMP float  __cdecl fmodf(  float _X,  float _Y);
 
-_CRTIMP float  __cdecl ldexpf(_In_ float _X, _In_ int _Y);
+_CRTIMP float  __cdecl ldexpf( float _X,  int _Y);
 
 #endif  /* defined (_M_IA64) */
 
@@ -206,41 +206,41 @@ _CRTIMP float  __cdecl ldexpf(_In_ float _X, _In_ int _Y);
 
 /* 4.5.2 Trigonometric functions */
 
-_CRTIMP float  __cdecl acosf( _In_ float _X);
-_CRTIMP float  __cdecl asinf( _In_ float _X);
-_CRTIMP float  __cdecl atanf( _In_ float _X);
-_CRTIMP float  __cdecl atan2f( _In_ float  _Y, _In_ float  _X);
-_CRTIMP float  __cdecl cosf( _In_ float _X);
-_CRTIMP float  __cdecl sinf( _In_ float _X);
-_CRTIMP float  __cdecl tanf( _In_ float _X);
+_CRTIMP float  __cdecl acosf(  float _X);
+_CRTIMP float  __cdecl asinf(  float _X);
+_CRTIMP float  __cdecl atanf(  float _X);
+_CRTIMP float  __cdecl atan2f(  float  _Y,  float  _X);
+_CRTIMP float  __cdecl cosf(  float _X);
+_CRTIMP float  __cdecl sinf(  float _X);
+_CRTIMP float  __cdecl tanf(  float _X);
 
 /* 4.5.3 Hyperbolic functions */
-_CRTIMP float  __cdecl coshf( _In_ float _X);
-_CRTIMP float  __cdecl sinhf( _In_ float _X);
-_CRTIMP float  __cdecl tanhf( _In_ float _X);
+_CRTIMP float  __cdecl coshf(  float _X);
+_CRTIMP float  __cdecl sinhf(  float _X);
+_CRTIMP float  __cdecl tanhf(  float _X);
 
 /* 4.5.4 Exponential and logarithmic functions */
-_CRTIMP float  __cdecl expf( _In_ float  _X);
-_CRTIMP float  __cdecl logf( _In_ float  _X);
-_CRTIMP float  __cdecl log10f( _In_ float  _X);
-_CRTIMP float  __cdecl modff( _In_ float  _X, _Out_ float*  _Y);
+_CRTIMP float  __cdecl expf(  float  _X);
+_CRTIMP float  __cdecl logf(  float  _X);
+_CRTIMP float  __cdecl log10f(  float  _X);
+_CRTIMP float  __cdecl modff(  float  _X, _Out_ float*  _Y);
 
 /* 4.5.5 Power functions */
-_CRTIMP float  __cdecl powf( _In_ float _X, _In_ float _Y);
-_CRTIMP float  __cdecl sqrtf( _In_ float  _X);
+_CRTIMP float  __cdecl powf(  float _X,  float _Y);
+_CRTIMP float  __cdecl sqrtf(  float  _X);
 
 /* 4.5.6 Nearest integer, absolute value, and remainder functions */
-_CRTIMP float  __cdecl ceilf( _In_ float  _X);
-_CRTIMP float  __cdecl floorf( _In_ float  _X);
-_CRTIMP float  __cdecl fmodf( _In_ float  _X, _In_ float _Y);
+_CRTIMP float  __cdecl ceilf(  float  _X);
+_CRTIMP float  __cdecl floorf(  float  _X);
+_CRTIMP float  __cdecl fmodf(  float  _X,  float _Y);
 
-_CRTIMP float __cdecl _copysignf (_In_ float _Number, _In_ float _Sign);
-_CRTIMP float __cdecl _chgsignf (_In_ float _X);
-_CRTIMP float __cdecl _logbf(_In_ float _X);
-_CRTIMP float __cdecl _nextafterf(_In_ float _X, _In_ float _Y);
-_CRTIMP int    __cdecl _finitef(_In_ float _X);
-_CRTIMP int    __cdecl _isnanf(_In_ float _X);
-_CRTIMP int    __cdecl _fpclassf(_In_ float _X);
+_CRTIMP float __cdecl _copysignf ( float _Number,  float _Sign);
+_CRTIMP float __cdecl _chgsignf ( float _X);
+_CRTIMP float __cdecl _logbf( float _X);
+_CRTIMP float __cdecl _nextafterf( float _X,  float _Y);
+_CRTIMP int    __cdecl _finitef( float _X);
+_CRTIMP int    __cdecl _isnanf( float _X);
+_CRTIMP int    __cdecl _fpclassf( float _X);
 
 #endif  /* defined (_M_AMD64) */
 
@@ -310,116 +310,116 @@ _CRTIMP int    __cdecl _fpclassf(_In_ float _X);
 #endif  /* !defined (_M_IA64) */
 
 #else  /* __cplusplus */
-inline long double acosl(_In_ long double _X)
+inline long double acosl( long double _X)
         {return (acos((double)_X)); }
-inline long double asinl(_In_ long double _X)
+inline long double asinl( long double _X)
         {return (asin((double)_X)); }
-inline long double atanl(_In_ long double _X)
+inline long double atanl( long double _X)
         {return (atan((double)_X)); }
-inline long double atan2l(_In_ long double _Y, _In_ long double _X)
+inline long double atan2l( long double _Y,  long double _X)
         {return (atan2((double)_Y, (double)_X)); }
-inline long double ceill(_In_ long double _X)
+inline long double ceill( long double _X)
         {return (ceil((double)_X)); }
-inline long double cosl(_In_ long double _X)
+inline long double cosl( long double _X)
         {return (cos((double)_X)); }
-inline long double coshl(_In_ long double _X)
+inline long double coshl( long double _X)
         {return (cosh((double)_X)); }
-inline long double expl(_In_ long double _X)
+inline long double expl( long double _X)
         {return (exp((double)_X)); }
-inline long double fabsl(_In_ long double _X)
+inline long double fabsl( long double _X)
         {return (fabs((double)_X)); }
-inline long double floorl(_In_ long double _X)
+inline long double floorl( long double _X)
         {return (floor((double)_X)); }
-inline long double fmodl(_In_ long double _X, _In_ long double _Y)
+inline long double fmodl( long double _X,  long double _Y)
         {return (fmod((double)_X, (double)_Y)); }
-inline long double frexpl(_In_ long double _X, _Out_ int *_Y)
+inline long double frexpl( long double _X, _Out_ int *_Y)
         {return (frexp((double)_X, _Y)); }
-inline long double ldexpl(_In_ long double _X, _In_ int _Y)
+inline long double ldexpl( long double _X,  int _Y)
         {return (ldexp((double)_X, _Y)); }
-inline long double logl(_In_ long double _X)
+inline long double logl( long double _X)
         {return (log((double)_X)); }
-inline long double log10l(_In_ long double _X)
+inline long double log10l( long double _X)
         {return (log10((double)_X)); }
-inline long double modfl(_In_ long double _X, _Out_ long double *_Y)
+inline long double modfl( long double _X, _Out_ long double *_Y)
         {double _Di, _Df = modf((double)_X, &_Di);
         *_Y = (long double)_Di;
         return (_Df); }
-inline long double powl(_In_ long double _X, _In_ long double _Y)
+inline long double powl( long double _X,  long double _Y)
         {return (pow((double)_X, (double)_Y)); }
-inline long double sinl(_In_ long double _X)
+inline long double sinl( long double _X)
         {return (sin((double)_X)); }
-inline long double sinhl(_In_ long double _X)
+inline long double sinhl( long double _X)
         {return (sinh((double)_X)); }
-inline long double sqrtl(_In_ long double _X)
+inline long double sqrtl( long double _X)
         {return (sqrt((double)_X)); }
 #ifndef _M_IA64
-inline long double tanl(_In_ long double _X)
+inline long double tanl( long double _X)
         {return (tan((double)_X)); }
 #else  /* _M_IA64 */
-_CRTIMP long double __cdecl tanl(_In_ long double _X);
+_CRTIMP long double __cdecl tanl( long double _X);
 #endif  /* _M_IA64 */
 
-inline long double tanhl(_In_ long double _X)
+inline long double tanhl( long double _X)
         {return (tanh((double)_X)); }
 
-inline long double _chgsignl(_In_ long double _Number)
+inline long double _chgsignl( long double _Number)
 {
     return _chgsign(static_cast<double>(_Number));
 }
 
-inline long double _copysignl(_In_ long double _Number, _In_ long double _Sign)
+inline long double _copysignl( long double _Number,  long double _Sign)
 {
     return _copysign(static_cast<double>(_Number), static_cast<double>(_Sign));
 }
 
-inline float frexpf(_In_ float _X, _Out_ int *_Y)
+inline float frexpf( float _X, _Out_ int *_Y)
         {return ((float)frexp((double)_X, _Y)); }
 
 #if !defined (_M_IA64)
-inline float fabsf(_In_ float _X)
+inline float fabsf( float _X)
         {return ((float)fabs((double)_X)); }
-inline float ldexpf(_In_ float _X, _In_ int _Y)
+inline float ldexpf( float _X,  int _Y)
         {return ((float)ldexp((double)_X, _Y)); }
 #if !defined (_M_AMD64)
-inline float acosf(_In_ float _X)
+inline float acosf( float _X)
         {return ((float)acos((double)_X)); }
-inline float asinf(_In_ float _X)
+inline float asinf( float _X)
         {return ((float)asin((double)_X)); }
-inline float atanf(_In_ float _X)
+inline float atanf( float _X)
         {return ((float)atan((double)_X)); }
-inline float atan2f(_In_ float _Y, _In_ float _X)
+inline float atan2f( float _Y,  float _X)
         {return ((float)atan2((double)_Y, (double)_X)); }
-inline float ceilf(_In_ float _X)
+inline float ceilf( float _X)
         {return ((float)ceil((double)_X)); }
-inline float cosf(_In_ float _X)
+inline float cosf( float _X)
         {return ((float)cos((double)_X)); }
-inline float coshf(_In_ float _X)
+inline float coshf( float _X)
         {return ((float)cosh((double)_X)); }
-inline float expf(_In_ float _X)
+inline float expf( float _X)
         {return ((float)exp((double)_X)); }
-inline float floorf(_In_ float _X)
+inline float floorf( float _X)
         {return ((float)floor((double)_X)); }
-inline float fmodf(_In_ float _X, _In_ float _Y)
+inline float fmodf( float _X,  float _Y)
         {return ((float)fmod((double)_X, (double)_Y)); }
-inline float logf(_In_ float _X)
+inline float logf( float _X)
         {return ((float)log((double)_X)); }
-inline float log10f(_In_ float _X)
+inline float log10f( float _X)
         {return ((float)log10((double)_X)); }
-inline float modff(_In_ float _X, _Out_ float *_Y)
+inline float modff( float _X, _Out_ float *_Y)
         { double _Di, _Df = modf((double)_X, &_Di);
         *_Y = (float)_Di;
         return ((float)_Df); }
-inline float powf(_In_ float _X, _In_ float _Y)
+inline float powf( float _X,  float _Y)
         {return ((float)pow((double)_X, (double)_Y)); }
-inline float sinf(_In_ float _X)
+inline float sinf( float _X)
         {return ((float)sin((double)_X)); }
-inline float sinhf(_In_ float _X)
+inline float sinhf( float _X)
         {return ((float)sinh((double)_X)); }
-inline float sqrtf(_In_ float _X)
+inline float sqrtf( float _X)
         {return ((float)sqrt((double)_X)); }
-inline float tanf(_In_ float _X)
+inline float tanf( float _X)
         {return ((float)tan((double)_X)); }
-inline float tanhf(_In_ float _X)
+inline float tanhf( float _X)
         {return ((float)tanh((double)_X)); }
 #endif  /* !defined (_M_AMD64) */
 #endif  /* !defined (_M_IA64) */
@@ -447,13 +447,13 @@ _CRTIMP extern double HUGE;
     const double HUGE = _HUGE;
 #endif  /* !defined (_M_CEE_PURE) */
 
-_CRT_NONSTDC_DEPRECATE(_cabs) _CRTIMP double  __cdecl cabs(_In_ struct _complex _X);
-_CRT_NONSTDC_DEPRECATE(_j0) _CRTIMP double  __cdecl j0(_In_ double _X);
-_CRT_NONSTDC_DEPRECATE(_j1) _CRTIMP double  __cdecl j1(_In_ double _X);
-_CRT_NONSTDC_DEPRECATE(_jn) _CRTIMP double  __cdecl jn(_In_ int _X, _In_ double _Y);
-_CRT_NONSTDC_DEPRECATE(_y0) _CRTIMP double  __cdecl y0(_In_ double _X);
-_CRT_NONSTDC_DEPRECATE(_y1) _CRTIMP double  __cdecl y1(_In_ double _X);
-_CRT_NONSTDC_DEPRECATE(_yn) _CRTIMP double  __cdecl yn(_In_ int _X, _In_ double _Y);
+_CRT_NONSTDC_DEPRECATE(_cabs) _CRTIMP double  __cdecl cabs( struct _complex _X);
+_CRT_NONSTDC_DEPRECATE(_j0) _CRTIMP double  __cdecl j0( double _X);
+_CRT_NONSTDC_DEPRECATE(_j1) _CRTIMP double  __cdecl j1( double _X);
+_CRT_NONSTDC_DEPRECATE(_jn) _CRTIMP double  __cdecl jn( int _X,  double _Y);
+_CRT_NONSTDC_DEPRECATE(_y0) _CRTIMP double  __cdecl y0( double _X);
+_CRT_NONSTDC_DEPRECATE(_y1) _CRTIMP double  __cdecl y1( double _X);
+_CRT_NONSTDC_DEPRECATE(_yn) _CRTIMP double  __cdecl yn( int _X,  double _Y);
 
 #endif  /* __assembler */
 
@@ -477,105 +477,105 @@ template<class _Ty> inline
                 if ((_N >>= 1) == 0)
                         return (_Y < 0 ? _Ty(1) / _Z : _Z); }}
 
-inline double __CRTDECL abs(_In_ double _X)
+inline double __CRTDECL abs( double _X)
         {return (fabs(_X)); }
-inline double __CRTDECL pow(_In_ double _X, _In_ int _Y)
+inline double __CRTDECL pow( double _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline float __CRTDECL abs(_In_ float _X)
+inline float __CRTDECL abs( float _X)
         {return (fabsf(_X)); }
-inline float __CRTDECL acos(_In_ float _X)
+inline float __CRTDECL acos( float _X)
         {return (acosf(_X)); }
-inline float __CRTDECL asin(_In_ float _X)
+inline float __CRTDECL asin( float _X)
         {return (asinf(_X)); }
-inline float __CRTDECL atan(_In_ float _X)
+inline float __CRTDECL atan( float _X)
         {return (atanf(_X)); }
-inline float __CRTDECL atan2(_In_ float _Y, _In_ float _X)
+inline float __CRTDECL atan2( float _Y,  float _X)
         {return (atan2f(_Y, _X)); }
-inline float __CRTDECL ceil(_In_ float _X)
+inline float __CRTDECL ceil( float _X)
         {return (ceilf(_X)); }
-inline float __CRTDECL cos(_In_ float _X)
+inline float __CRTDECL cos( float _X)
         {return (cosf(_X)); }
-inline float __CRTDECL cosh(_In_ float _X)
+inline float __CRTDECL cosh( float _X)
         {return (coshf(_X)); }
-inline float __CRTDECL exp(_In_ float _X)
+inline float __CRTDECL exp( float _X)
         {return (expf(_X)); }
-inline float __CRTDECL fabs(_In_ float _X)
+inline float __CRTDECL fabs( float _X)
         {return (fabsf(_X)); }
-inline float __CRTDECL floor(_In_ float _X)
+inline float __CRTDECL floor( float _X)
         {return (floorf(_X)); }
-inline float __CRTDECL fmod(_In_ float _X, _In_ float _Y)
+inline float __CRTDECL fmod( float _X,  float _Y)
         {return (fmodf(_X, _Y)); }
-inline float __CRTDECL frexp(_In_ float _X, _Out_ int * _Y)
+inline float __CRTDECL frexp( float _X, _Out_ int * _Y)
         {return (frexpf(_X, _Y)); }
-inline float __CRTDECL ldexp(_In_ float _X, _In_ int _Y)
+inline float __CRTDECL ldexp( float _X,  int _Y)
         {return (ldexpf(_X, _Y)); }
-inline float __CRTDECL log(_In_ float _X)
+inline float __CRTDECL log( float _X)
         {return (logf(_X)); }
-inline float __CRTDECL log10(_In_ float _X)
+inline float __CRTDECL log10( float _X)
         {return (log10f(_X)); }
-inline float __CRTDECL modf(_In_ float _X, _Out_ float * _Y)
+inline float __CRTDECL modf( float _X, _Out_ float * _Y)
         {return (modff(_X, _Y)); }
-inline float __CRTDECL pow(_In_ float _X, _In_ float _Y)
+inline float __CRTDECL pow( float _X,  float _Y)
         {return (powf(_X, _Y)); }
-inline float __CRTDECL pow(_In_ float _X, _In_ int _Y)
+inline float __CRTDECL pow( float _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline float __CRTDECL sin(_In_ float _X)
+inline float __CRTDECL sin( float _X)
         {return (sinf(_X)); }
-inline float __CRTDECL sinh(_In_ float _X)
+inline float __CRTDECL sinh( float _X)
         {return (sinhf(_X)); }
-inline float __CRTDECL sqrt(_In_ float _X)
+inline float __CRTDECL sqrt( float _X)
         {return (sqrtf(_X)); }
-inline float __CRTDECL tan(_In_ float _X)
+inline float __CRTDECL tan( float _X)
         {return (tanf(_X)); }
-inline float __CRTDECL tanh(_In_ float _X)
+inline float __CRTDECL tanh( float _X)
         {return (tanhf(_X)); }
-inline long double __CRTDECL abs(_In_ long double _X)
+inline long double __CRTDECL abs( long double _X)
         {return (fabsl(_X)); }
-inline long double __CRTDECL acos(_In_ long double _X)
+inline long double __CRTDECL acos( long double _X)
         {return (acosl(_X)); }
-inline long double __CRTDECL asin(_In_ long double _X)
+inline long double __CRTDECL asin( long double _X)
         {return (asinl(_X)); }
-inline long double __CRTDECL atan(_In_ long double _X)
+inline long double __CRTDECL atan( long double _X)
         {return (atanl(_X)); }
-inline long double __CRTDECL atan2(_In_ long double _Y, _In_ long double _X)
+inline long double __CRTDECL atan2( long double _Y,  long double _X)
         {return (atan2l(_Y, _X)); }
-inline long double __CRTDECL ceil(_In_ long double _X)
+inline long double __CRTDECL ceil( long double _X)
         {return (ceill(_X)); }
-inline long double __CRTDECL cos(_In_ long double _X)
+inline long double __CRTDECL cos( long double _X)
         {return (cosl(_X)); }
-inline long double __CRTDECL cosh(_In_ long double _X)
+inline long double __CRTDECL cosh( long double _X)
         {return (coshl(_X)); }
-inline long double __CRTDECL exp(_In_ long double _X)
+inline long double __CRTDECL exp( long double _X)
         {return (expl(_X)); }
-inline long double __CRTDECL fabs(_In_ long double _X)
+inline long double __CRTDECL fabs( long double _X)
         {return (fabsl(_X)); }
-inline long double __CRTDECL floor(_In_ long double _X)
+inline long double __CRTDECL floor( long double _X)
         {return (floorl(_X)); }
-inline long double __CRTDECL fmod(_In_ long double _X, _In_ long double _Y)
+inline long double __CRTDECL fmod( long double _X,  long double _Y)
         {return (fmodl(_X, _Y)); }
-inline long double __CRTDECL frexp(_In_ long double _X, _Out_ int * _Y)
+inline long double __CRTDECL frexp( long double _X, _Out_ int * _Y)
         {return (frexpl(_X, _Y)); }
-inline long double __CRTDECL ldexp(_In_ long double _X, _In_ int _Y)
+inline long double __CRTDECL ldexp( long double _X,  int _Y)
         {return (ldexpl(_X, _Y)); }
-inline long double __CRTDECL log(_In_ long double _X)
+inline long double __CRTDECL log( long double _X)
         {return (logl(_X)); }
-inline long double __CRTDECL log10(_In_ long double _X)
+inline long double __CRTDECL log10( long double _X)
         {return (log10l(_X)); }
-inline long double __CRTDECL modf(_In_ long double _X, _Out_ long double * _Y)
+inline long double __CRTDECL modf( long double _X, _Out_ long double * _Y)
         {return (modfl(_X, _Y)); }
-inline long double __CRTDECL pow(_In_ long double _X, _In_ long double _Y)
+inline long double __CRTDECL pow( long double _X,  long double _Y)
         {return (powl(_X, _Y)); }
-inline long double __CRTDECL pow(_In_ long double _X, _In_ int _Y)
+inline long double __CRTDECL pow( long double _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline long double __CRTDECL sin(_In_ long double _X)
+inline long double __CRTDECL sin( long double _X)
         {return (sinl(_X)); }
-inline long double __CRTDECL sinh(_In_ long double _X)
+inline long double __CRTDECL sinh( long double _X)
         {return (sinhl(_X)); }
-inline long double __CRTDECL sqrt(_In_ long double _X)
+inline long double __CRTDECL sqrt( long double _X)
         {return (sqrtl(_X)); }
-inline long double __CRTDECL tan(_In_ long double _X)
+inline long double __CRTDECL tan( long double _X)
         {return (tanl(_X)); }
-inline long double __CRTDECL tanh(_In_ long double _X)
+inline long double __CRTDECL tanh( long double _X)
         {return (tanhl(_X)); }
 
 }

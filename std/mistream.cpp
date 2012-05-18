@@ -6,6 +6,7 @@
 #include <ostream>
 #include <string>
 #include <algorithm>
+#include <sstream>
 
 namespace std {
 
@@ -79,7 +80,7 @@ void ostream::align (size_type grain)
 #else
     assert (remaining() >= nb && "Buffer overrun. Check your stream size calculations.");
 #endif
-    memset (ip, '\x0', nb);
+    memset (const_cast<void *>(reinterpret_cast<const void *>(ip)), '\x0', nb);
     m_Pos += nb;
 }
 

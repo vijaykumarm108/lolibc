@@ -8,6 +8,7 @@
 #include <memory>
 #include <fstream>
 #include <errno.h>
+#include <new>
 
 using namespace std;
 
@@ -59,7 +60,7 @@ void memblock::manage (void* p, size_type n)
 /// "Instantiate" a linked block by allocating and copying the linked data.
 void memblock::copy_link (void)
 {
-    const pointer p (begin());
+    const pointer p ((pointer)begin());
     const size_t sz (size());
     if (is_linked())
 	unlink();
@@ -94,7 +95,7 @@ void memblock::reserve (size_type newSize, bool bExact)
 	newSize = alignedSize;
     pointer newBlock = (pointer) realloc (oldBlock, newSize);
     if (!newBlock)
-	throw bad_alloc (newSize);
+		throw std::bad_alloc (newSize);
     if (!oldBlock & (cdata() != NULL))
 	copy_n (cdata(), minV (size() + 1, newSize), newBlock);
     link (newBlock, size());

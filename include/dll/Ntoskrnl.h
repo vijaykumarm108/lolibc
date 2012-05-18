@@ -1,4 +1,5 @@
 #pragma once
+#include "lolibbase.h"
 #include <stdint.h>
 #include <dll.h>
 

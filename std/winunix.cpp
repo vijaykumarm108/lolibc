@@ -1,8 +1,7 @@
 // winunix.cpp - Unix functions on windows
 #include <stdafx.h>
-#include <intrin.h>
-#include <io.h>
-#include <winunix.h>
+#include "io.h"
+#include "winunix.h"
 #include <windows.h>
 
 /* Initialize critical section */
@@ -28,13 +27,15 @@ static int g_cs_initialized;
 static CRITICAL_SECTION g_cs;
 
 /* Wait for spin lock */
-int slwait (int *sl) {
+int slwait (int *sl)
+{
     while (InterlockedCompareExchange ((__drv_interlocked unsigned *) sl, 1, 0) != 0) 
 	Sleep (0);
     return 0;
 }
 /* Release spin lock */
-int slrelease (int *sl) {
+int slrelease (int *sl)
+{
 	::InterlockedExchange((volatile unsigned int *)sl,0);
     return 0;
 }
@@ -42,7 +43,8 @@ int slrelease (int *sl) {
 static int g_sl;
 
 /* getpagesize for windows */
-long getpagesize (void) {
+long getpagesize (void)
+{
     static long g_pagesize = 0;
     if (! g_pagesize) {
         SYSTEM_INFO system_info;
@@ -51,7 +53,8 @@ long getpagesize (void) {
     }
     return g_pagesize;
 }
-long getregionsize (void) {
+long getregionsize (void)
+{
     static long g_regionsize = 0;
     if (! g_regionsize) {
         SYSTEM_INFO system_info;
@@ -71,7 +74,8 @@ typedef struct _region_list_entry {
 } region_list_entry;
 
 /* Allocate and link a region entry in the region list */
-static int region_list_append (region_list_entry **last, void *base_reserved, long reserve_size) {
+static int region_list_append (region_list_entry **last, void *base_reserved, long reserve_size)
+{
     region_list_entry *next = (region_list_entry *)HeapAlloc (GetProcessHeap (), 0, sizeof (region_list_entry));
     if (! next)
         return FALSE;
@@ -84,7 +88,8 @@ static int region_list_append (region_list_entry **last, void *base_reserved, lo
     return TRUE;
 }
 /* Free and unlink the last region entry from the region list */
-static int region_list_remove (region_list_entry **last) {
+static int region_list_remove (region_list_entry **last)
+{
     region_list_entry *previous = (*last)->previous;
     if (! HeapFree (GetProcessHeap (), sizeof (region_list_entry), *last))
         return FALSE;
@@ -93,7 +98,8 @@ static int region_list_remove (region_list_entry **last) {
 }
 
 /* mmap for windows */
-void *mmap (void *ptr, long size, long prot, long type, long handle, long arg) {
+void *mmap (void *ptr, long size, long prot, long type, long handle, long arg)
+{
     static long g_pagesize;
     static long g_regionsize;
     /* Wait for spin lock */

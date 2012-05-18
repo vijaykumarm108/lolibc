@@ -1,11 +1,11 @@
-
+/* stdarg.h -- C standard says this is deprecated and instead should use cstdarg, which just includes this. */
 
 #pragma once
 
 #ifndef _INC_STDARG
 #define _INC_STDARG
 
-#include <lolibbase.h>
+#include "lolibbase.h"
 
 /* Currently, all MS C compilers for Win32 platforms default to 8 byte alignment. */
 #ifdef _WIN32
@@ -63,10 +63,8 @@ extern void __cdecl __va_start(va_list*, ...);
 extern void * __cdecl __va_arg(va_list*, ...);
 extern void __cdecl __va_end(va_list*);
 
-#define _crt_va_start(ap,v)  ( __va_start(&ap, _ADDRESSOF(v), _SLOTSIZEOF(v), \
-                                __alignof(v), _ADDRESSOF(v)) )
-#define _crt_va_arg(ap,t)    ( *(t *)__va_arg(&ap, _SLOTSIZEOF(t), \
-                                _APALIGN(t,ap), (t *)0) )
+#define _crt_va_start(ap,v)  ( __va_start(&ap, _ADDRESSOF(v), _SLOTSIZEOF(v), __alignof(v), _ADDRESSOF(v)) )
+#define _crt_va_arg(ap,t)    ( *(t *)__va_arg(&ap, _SLOTSIZEOF(t), _APALIGN(t,ap), (t *)0) )
 #define _crt_va_end(ap)      ( __va_end(&ap) )
 
 #elif defined (_M_IX86)
@@ -81,19 +79,15 @@ extern void __cdecl __va_end(va_list*);
 
 #ifdef __cplusplus
 extern void __cdecl __va_start(va_list*, ...);
-#define _crt_va_start(ap,v)  ( __va_start(&ap, _ADDRESSOF(v), _SLOTSIZEOF(v), \
-                          _ADDRESSOF(v)) )
+#define _crt_va_start(ap,v)  ( __va_start(&ap, _ADDRESSOF(v), _SLOTSIZEOF(v), _ADDRESSOF(v)) )
 #else  /* __cplusplus */
 #define _crt_va_start(ap,v)  ( ap = (va_list)_ADDRESSOF(v) + _SLOTSIZEOF(v) )
 #endif  /* __cplusplus */
 
-#define _crt_va_arg(ap,t)    (*(t *)((ap += _SLOTSIZEOF(t)+ _APALIGN(t,ap)) \
-                                                     -_SLOTSIZEOF(t)))
-
+#define _crt_va_arg(ap,t)    (*(t *)((ap += _SLOTSIZEOF(t)+ _APALIGN(t,ap)) - _SLOTSIZEOF(t)))
 #define _crt_va_end(ap)      ( ap = (va_list)0 )
 
 #elif defined (_M_AMD64)
-
 
 extern void __cdecl __va_start(va_list *, ...);
 
@@ -125,5 +119,13 @@ extern void __cdecl __va_start(va_list *, ...);
 #define va_start _crt_va_start
 #define va_arg _crt_va_arg
 #define va_end _crt_va_end
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif  /* _INC_VADEFS */

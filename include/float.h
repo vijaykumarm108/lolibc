@@ -2,9 +2,7 @@
 
 #ifndef _INC_FLOAT
 #define _INC_FLOAT
-
-#include <crtdefs.h>
-#include <crtwrn.h>
+#include "lolibbase.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,14 +53,14 @@ extern "C" {
 _CRTIMP unsigned int __cdecl _clearfp(void);
 #pragma warning(push)
 #pragma warning(disable: 4141)
-_CRTIMP unsigned int __cdecl _controlfp(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
+_CRTIMP unsigned int __cdecl _controlfp( unsigned int _NewValue, unsigned int _Mask);
 #pragma warning(pop)
-_CRTIMP errno_t __cdecl _controlfp_s(_Out_opt_ unsigned int *_CurrentState, _In_ unsigned int _NewValue, _In_ unsigned int _Mask);
+_CRTIMP errno_t __cdecl _controlfp_s( unsigned int *_CurrentState, unsigned int _NewValue, unsigned int _Mask);
 _CRTIMP unsigned int __cdecl _statusfp(void);
 _CRTIMP void __cdecl _fpreset(void);
 
 #if defined (_M_IX86)
-_CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ unsigned int *_SSE2_status);
+_CRTIMP void __cdecl _statusfp2( unsigned int *_X86_status, unsigned int *_SSE2_status);
 #endif  /* defined (_M_IX86) */
 
 #define _clear87        _clearfp
@@ -72,12 +70,12 @@ _CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ u
  * Abstract User Status Word bit definitions
  */
 
-#define _SW_INEXACT     0x00000001              /* inexact (precision) */
-#define _SW_UNDERFLOW   0x00000002              /* underflow */
-#define _SW_OVERFLOW    0x00000004              /* overflow */
-#define _SW_ZERODIVIDE  0x00000008              /* zero divide */
-#define _SW_INVALID     0x00000010              /* invalid */
-#define _SW_DENORMAL    0x00080000              /* denormal status bit */
+#define _SW_INEXACT     0x00000001				/* inexact (precision) */
+#define _SW_UNDERFLOW   0x00000002				/* underflow */
+#define _SW_OVERFLOW    0x00000004				/* overflow */
+#define _SW_ZERODIVIDE  0x00000008				/* zero divide */
+#define _SW_INVALID     0x00000010				/* invalid */
+#define _SW_DENORMAL    0x00080000				/* denormal status bit */
 
 /*
  * New Control Bit that specifies the ambiguity in control word.
@@ -88,41 +86,41 @@ _CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ u
 /*
  * Abstract User Control Word Mask and bit definitions
  */
-#define _MCW_EM         0x0008001f              /* interrupt Exception Masks */
-#define _EM_INEXACT     0x00000001              /*   inexact (precision) */
-#define _EM_UNDERFLOW   0x00000002              /*   underflow */
-#define _EM_OVERFLOW    0x00000004              /*   overflow */
-#define _EM_ZERODIVIDE  0x00000008              /*   zero divide */
-#define _EM_INVALID     0x00000010              /*   invalid */
-#define _EM_DENORMAL    0x00080000              /* denormal exception mask (_control87 only) */
+#define _MCW_EM         0x0008001f				/* interrupt Exception Masks */
+#define _EM_INEXACT     0x00000001				/*   inexact (precision) */
+#define _EM_UNDERFLOW   0x00000002				/*   underflow */
+#define _EM_OVERFLOW    0x00000004				/*   overflow */
+#define _EM_ZERODIVIDE  0x00000008				/*   zero divide */
+#define _EM_INVALID     0x00000010				/*   invalid */
+#define _EM_DENORMAL    0x00080000				/* denormal exception mask (_control87 only) */
 
-#define _MCW_RC         0x00000300              /* Rounding Control */
-#define _RC_NEAR        0x00000000              /*   near */
-#define _RC_DOWN        0x00000100              /*   down */
-#define _RC_UP          0x00000200              /*   up */
-#define _RC_CHOP        0x00000300              /*   chop */
+#define _MCW_RC         0x00000300				/* Rounding Control */
+#define _RC_NEAR        0x00000000				/*   near */
+#define _RC_DOWN        0x00000100				/*   down */
+#define _RC_UP          0x00000200				/*   up */
+#define _RC_CHOP        0x00000300				/*   chop */
 
 /*
  * i386 specific definitions
  */
-#define _MCW_PC         0x00030000              /* Precision Control */
-#define _PC_64          0x00000000              /*    64 bits */
-#define _PC_53          0x00010000              /*    53 bits */
-#define _PC_24          0x00020000              /*    24 bits */
+#define _MCW_PC         0x00030000				/* Precision Control */
+#define _PC_64          0x00000000				/*    64 bits */
+#define _PC_53          0x00010000				/*    53 bits */
+#define _PC_24          0x00020000				/*    24 bits */
 
-#define _MCW_IC         0x00040000              /* Infinity Control */
-#define _IC_AFFINE      0x00040000              /*   affine */
-#define _IC_PROJECTIVE  0x00000000              /*   projective */
+#define _MCW_IC         0x00040000				/* Infinity Control */
+#define _IC_AFFINE      0x00040000				/*   affine */
+#define _IC_PROJECTIVE  0x00000000				/*   projective */
 
 /*
  * RISC specific definitions
  */
 
-#define _MCW_DN         0x03000000              /* Denormal Control */
-#define _DN_SAVE        0x00000000              /*   save denormal results and operands */
-#define _DN_FLUSH       0x01000000              /*   flush denormal results and operands to zero */
-#define _DN_FLUSH_OPERANDS_SAVE_RESULTS 0x02000000  /*   flush operands to zero and save results */
-#define _DN_SAVE_OPERANDS_FLUSH_RESULTS 0x03000000  /*   save operands and flush results to zero */
+#define _MCW_DN         0x03000000					/* Denormal Control */
+#define _DN_SAVE        0x00000000					/* save denormal results and operands */
+#define _DN_FLUSH       0x01000000					/* flush denormal results and operands to zero */
+#define _DN_FLUSH_OPERANDS_SAVE_RESULTS 0x02000000	/* flush operands to zero and save results */
+#define _DN_SAVE_OPERANDS_FLUSH_RESULTS 0x03000000	/* save operands and flush results to zero */
 
 /* initial Control Word value */
 
@@ -140,15 +138,15 @@ _CRTIMP void __cdecl _statusfp2(_Out_opt_ unsigned int *_X86_status, _Out_opt_ u
 
 #endif  /* defined (_M_AMD64) */
 
-_CRTIMP unsigned int __cdecl _control87(_In_ unsigned int _NewValue,_In_ unsigned int _Mask);
+_CRTIMP unsigned int __cdecl _control87( unsigned int _NewValue, unsigned int _Mask);
 #if defined (_M_IX86)
-_CRTIMP int __cdecl __control87_2(_In_ unsigned int _NewValue, _In_ unsigned int _Mask,
-                                  _Out_opt_ unsigned int* _X86_cw, _Out_opt_ unsigned int* _Sse2_cw);
+_CRTIMP int __cdecl __control87_2( unsigned int _NewValue,  unsigned int _Mask,
+                                   unsigned int* _X86_cw,  unsigned int* _Sse2_cw);
 #endif  /* defined (_M_IX86) */
 
 /* Global variable holding floating point error code */
 
-_Check_return_ _CRTIMP extern int * __cdecl __fpecode(void);
+_CRTIMP extern int * __cdecl __fpecode(void);
 #define _fpecode        (*__fpecode())
 
 /* invalid sub-conditions (_SW_INVALID also set) */
@@ -180,19 +178,19 @@ _Check_return_ _CRTIMP extern int * __cdecl __fpecode(void);
 /* IEEE recommended functions */
 
 #ifndef _SIGN_DEFINED
-_Check_return_ _CRTIMP double __cdecl _copysign (_In_ double _Number, _In_ double _Sign);
-_Check_return_ _CRTIMP double __cdecl _chgsign (_In_ double _X);
+_CRTIMP double __cdecl _copysign ( double _Number,  double _Sign);
+_CRTIMP double __cdecl _chgsign ( double _X);
 #define _SIGN_DEFINED
 #endif  /* _SIGN_DEFINED */
-_Check_return_ _CRTIMP double __cdecl _scalb(_In_ double _X, _In_ long _Y);
-_Check_return_ _CRTIMP double __cdecl _logb(_In_ double _X);
-_Check_return_ _CRTIMP double __cdecl _nextafter(_In_ double _X, _In_ double _Y);
-_Check_return_ _CRTIMP int    __cdecl _finite(_In_ double _X);
-_Check_return_ _CRTIMP int    __cdecl _isnan(_In_ double _X);
-_Check_return_ _CRTIMP int    __cdecl _fpclass(_In_ double _X);
+_CRTIMP double __cdecl _scalb( double _X,  long _Y);
+_CRTIMP double __cdecl _logb( double _X);
+_CRTIMP double __cdecl _nextafter(double _X,  double _Y);
+_CRTIMP int    __cdecl _finite(double _X);
+_CRTIMP int    __cdecl _isnan( double _X);
+_CRTIMP int    __cdecl _fpclass(double _X);
 
 #ifdef _M_AMD64
-_Check_return_ _CRTIMP float __cdecl _scalbf(_In_ float _X, _In_ long _Y);
+_CRTIMP float __cdecl _scalbf(float _X,  long _Y);
 #endif  /* _M_AMD64 */
 
 #define _FPCLASS_SNAN   0x0001  /* signaling NaN */

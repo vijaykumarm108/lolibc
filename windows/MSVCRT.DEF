@@ -403,7 +403,7 @@ EXPORTS
 	_msize
 	_nextafter
 	_onexit
-	_open
+	; _open
 	_open_osfhandle	
 	__open_osfhandle=_open_osfhandle
 	_osplatform

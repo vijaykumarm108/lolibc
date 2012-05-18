@@ -1,9 +1,9 @@
 #if     _MSC_VER > 1000
 #pragma once
 #endif
-
 #ifndef _INC_STRING
 #define _INC_STRING
+#include "lolibbase.h"
 
 #ifdef  __cplusplus
 extern "C" {
@@ -144,7 +144,7 @@ _CRTIMP int __cdecl			wcscoll(const wchar_t *, const wchar_t *);
 _CRTIMP int __cdecl			_wcsicoll(const wchar_t *, const wchar_t *);
 _CRTIMP int __cdecl			_wcsncoll(const wchar_t *, const wchar_t *, size_t);
 _CRTIMP int __cdecl			_wcsnicoll(const wchar_t *, const wchar_t *, size_t);
-inline	wchar_t * __cdecl	wcswcs(const wchar_t *s1, const wchar_t *s2)	{ return wcsstr(s1,s2); }
+static	wchar_t * __cdecl	wcswcs(const wchar_t *s1, const wchar_t *s2)	{ return wcsstr(s1,s2); }
 _CRTIMP int __cdecl			wcsicmp(const wchar_t *, const wchar_t *);
 _CRTIMP int __cdecl			wcsnicmp(const wchar_t *, const wchar_t *, size_t);
 _CRTIMP wchar_t * __cdecl	wcsnset(wchar_t *, wchar_t, size_t);

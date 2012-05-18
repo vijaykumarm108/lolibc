@@ -11,8 +11,9 @@
 #include "functional"
 #include "lo_uctrstrm.h"
 #include "istream"
-#include <tuple>
-#include <ctype.h>
+#include "tuple"
+#include "ctype.h"
+#include "lo_matrix.h"
 
 namespace std {
 
@@ -155,7 +156,7 @@ inline ostringstream& container_element_text_write (ostringstream& os, const int
 
 /// Writes tuple \p v into stream \p os.
 template <size_t NX, size_t NY, typename T>
-ostringstream& operator<< (ostringstream& os, const matrix<NX,NY,T>& v)
+ostringstream& operator<< (ostringstream& os, const lo::matrix<NX,NY,T>& v)
 {
     os << '(';
     for (uoff_t row = 0; row < NY; ++ row) {
@@ -228,7 +229,7 @@ template <typename T> inline const T* const& ptr4grain (const T* const& p) { ret
 
 //----------------------------------------------------------------------
 
-} }  // namespace lo::std
+} // namespace std
 
 // This is here because there really is no other place to put it.
 #if SIZE_OF_BOOL != SIZE_OF_CHAR

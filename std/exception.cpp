@@ -9,9 +9,6 @@
 #include <errno.h>
 #include <new>
 
-#if HAVE_CXXABI_H && WANT_NAME_DEMANGLING
-extern "C" char* __cxa_demangle (const char* mangled_name, char* output_buffer, size_t* length, int* status);
-#endif
 
 namespace std {
 

@@ -96,11 +96,11 @@ void istringstream::iread (wchar_t& v)
     if (!(v = skip_delimiters()))
 	return;
     ungetc();
-    size_t cs = Utf8SequenceBytes (v);
+    size_t cs = lo::Utf8SequenceBytes (v);
     if (remaining() < cs && underflow(cs) < cs)
 	verify_remaining ("read", "wchar_t", cs);
     else {
-	v = *utf8in (ipos());
+	v = *lo::utf8in (ipos());
 	skip (cs);
     }
 }

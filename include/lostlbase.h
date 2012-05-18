@@ -165,7 +165,7 @@ namespace lo
 	class cmemlink {
 	public:
 		typedef char				value_type;
-		typedef const value_type*	pointer;
+		typedef value_type*			pointer;
 		typedef const value_type*	const_pointer;
 		typedef value_type			reference;
 		typedef value_type			const_reference;

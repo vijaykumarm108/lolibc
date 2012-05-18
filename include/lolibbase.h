@@ -30,24 +30,82 @@ that would be reported if you were compiling with a 64-bit compiler. */
 typedef unsigned mode_t;
 typedef long ssize_t;
 #define DLL_LOCAL
-#define PATH_MAX	260
-#define STDIN_FILENO 0
-#define STDOUT_FILENO 1
-#define STDERR_FILENO 2
-#define WITHOUT_LIBSTDCPP 0
+#define PATH_MAX			260
+#define STDIN_FILENO		0
+#define STDOUT_FILENO		1
+#define STDERR_FILENO		2
+#define WITHOUT_LIBSTDCPP	0
 #define __builtin_constant_p(dvs) (false)
-#define HAVE_INT64_T	1
+#define HAVE_INT64_T		1
 #else
 #error unsupported platform
+#endif // platform
+
+#ifndef _CRTIMP
+#ifdef CRTDLL
+#define _CRTIMP __declspec(dllexport)
+#else  /* CRTDLL */
+#ifdef _DLL
+#define _CRTIMP __declspec(dllimport)
+#else  /* _DLL */
+#define _CRTIMP
+#endif  /* _DLL */
+#endif  /* CRTDLL */
+#endif  /* _CRTIMP */
+
+/* preprocessor string helpers */
+#ifndef _CRT_STRINGIZE
+#define __CRT_STRINGIZE(_Value) #_Value
+#define _CRT_STRINGIZE(_Value) __CRT_STRINGIZE(_Value)
+#endif  /* _CRT_STRINGIZE */
+
+#ifndef _ERRNO_T_DEFINED
+#define _ERRNO_T_DEFINED
+typedef int errno_t;
+#endif  /* _ERRNO_T_DEFINED */
+
+#if !defined(UNALIGNED)
+#if defined(_M_IA64) || defined(_M_AMD64)
+#define UNALIGNED __unaligned
+#else
+#define UNALIGNED
+#endif
 #endif
 
-#include <stdint.h>
-#include <sys/types.h>
-#include <stddef.h>		// For ptrdiff_t, size_t
-#include <limits.h>
-#include <float.h>
-#include <string.h>
-#include <stdlib.h>
+#ifndef _PTRDIFF_T_DEFINED
+#ifdef _WIN64
+typedef __int64             ptrdiff_t;
+#else  /* _WIN64 */
+typedef _W64 int            ptrdiff_t;
+#endif  /* _WIN64 */
+#define _PTRDIFF_T_DEFINED
+#endif  /* _PTRDIFF_T_DEFINED */
+
+#ifndef _INTPTR_T_DEFINED
+#define _INTPTR_T_DEFINED
+#ifdef _WIN64
+typedef __int64 intptr_t;
+#else /* _WIN64 */
+typedef _W64 int intptr_t;
+#endif /* _WIN64 */
+#endif /* _INTPTR_T_DEFINED */
+
+#ifndef _UINTPTR_T_DEFINED
+#define _UINTPTR_T_DEFINED
+#ifdef _WIN64
+typedef unsigned __int64 uintptr_t;
+#else /* _WIN64 */
+typedef _W64 unsigned int uintptr_t;
+#endif /* _WIN64 */
+#endif /* _UINTPTR_T_DEFINED */
+
+#include "stdint.h"
+#include "sys/types.h"
+#include "stddef.h"
+#include "limits.h"
+#include "float.h"
+#include "string.h"
+#include "stdlib.h"
 
 #ifndef SIZE_MAX
     #define SIZE_MAX		UINT_MAX
@@ -80,9 +138,5 @@ typedef size_t		uoff_t;			///< A type for storing offsets into blocks measured b
 typedef uint32_t	hashvalue_t;	///< Value type returned by the hash functions.
 typedef size_t		streamsize;		///< Size of stream data
 typedef uoff_t		streamoff;		///< Offset into a stream
-
-#if !defined(UINTPTR_MAX) || !defined(UINT32_C)
-    #error "If you include stdint.h before std.h, define __STDC_LIMIT_MACROS and __STDC_CONSTANT_MACROS first"
-#endif
 
 #endif // _INC_LOLIBBASE_
