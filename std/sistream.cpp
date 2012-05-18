@@ -3,8 +3,9 @@
 
 #include <stdafx.h>
 #include <istream>
-#include <ostream.h>
+#include <ostream>
 #include <string>
+#include <sstream>
 
 namespace std {
 
@@ -40,7 +41,7 @@ istringstream::istringstream (const cmemlink& source)
 
 inline bool istringstream::is_delimiter (char c) const
 {
-    return (memchr (m_Delimiters, c, VectorSize(m_Delimiters)-1)) != 0;
+    return (memchr (m_Delimiters, c, _countof(m_Delimiters)-1)) != 0;
 }
 
 char istringstream::skip_delimiters (void)
@@ -184,7 +185,7 @@ istringstream& istringstream::get (char* p, size_type n, char delim)
 /// Reads characters into \p s until \p delim is extracted (but not stored)
 istringstream& istringstream::getline (string& s, char delim)
 {
-    auto oldDelim = new char [VectorSize(m_Delimiters)];
+    auto oldDelim = new char [_countof(m_Delimiters)];
     copy (VectorRange (m_Delimiters), oldDelim);
     fill (VectorRange (m_Delimiters), '\0');
     m_Delimiters[0] = delim;

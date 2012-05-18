@@ -31,6 +31,15 @@
     <Filter Include="Header Files\stdc">
       <UniqueIdentifier>{4f4b1dda-672a-4c7b-b32f-8786235c699b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\bvt">
+      <UniqueIdentifier>{c0f8d1a1-234c-4cb0-ab1a-08487e639b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sys">
+      <UniqueIdentifier>{8cc8403d-fdea-4388-9189-41112d4bf814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\windows">
+      <UniqueIdentifier>{f119e847-2040-4745-b8c9-a6fd21a4f110}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -81,13 +90,7 @@
     <ClInclude Include="include\functional">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\ios">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
     <ClInclude Include="include\istream">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_cmemlink.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
     <ClInclude Include="include\winunix.h">
@@ -102,13 +105,7 @@
     <ClInclude Include="include\lo_memlink.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\lo_mostream.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
     <ClInclude Include="include\lo_simd.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_strmsize.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
     <ClInclude Include="include\lo_traits.h">
@@ -123,25 +120,7 @@
     <ClInclude Include="include\lo_uctrstrm.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\lo_uheap.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_ulaalgo.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_upredalgo.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
     <ClInclude Include="include\lo_uspecial.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_utf8.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_utypes.h">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_uutility.h">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
     <ClInclude Include="include\vector">
@@ -205,13 +184,7 @@
       <Filter>Header Files\stl</Filter>
     </ClInclude>
     <ClInclude Include="include\map">
-      <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\map">
       <Filter>Header Files\STL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lo_matrix.h">
-      <Filter>Header Files\stl</Filter>
     </ClInclude>
     <ClInclude Include="include\map" />
     <ClInclude Include="include\stdafx.h">
@@ -222,9 +195,6 @@
     </ClInclude>
     <ClInclude Include="include\sstream">
       <Filter>Header Files\stl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\config.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\stack">
       <Filter>Header Files\stl</Filter>
@@ -245,41 +215,38 @@
     <ClInclude Include="include\stdio.h">
       <Filter>Header Files\stdc</Filter>
     </ClInclude>
+    <ClInclude Include="include\string.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\xutility">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ios">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ios_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdlib.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\types.h">
+      <Filter>Header Files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lolibbase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_utf8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdarg.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="std\winunix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\_dbgrpt.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\Stdlib2010.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\_initterm_e.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\DllMain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\StdLibC.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\WinMain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\wmain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\wWinMain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="std\algobase.cpp">
       <Filter>Source Files\stl</Filter>
     </ClCompile>
@@ -331,60 +298,102 @@
     <ClCompile Include="std\stdxept.cpp">
       <Filter>Source Files\stl</Filter>
     </ClCompile>
+    <ClCompile Include="bvt\bvt_kernel32.cpp">
+      <Filter>Source Files\bvt</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ios.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\_dbgrpt.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\DllMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\_initterm_e.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\main.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\wWinMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\Stdlib2010.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\StdLibC.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\WinMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="std\winunix.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\wmain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loexcept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="windows\MSVCRT.DEF">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\libcpmt.bat">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="windows\_error_.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
     <CustomBuild Include="windows\_init_.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\_userapi_.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
     <CustomBuild Include="windows\_pdblkup_.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
     <CustomBuild Include="windows\_stack_.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\_userapi_.rsp">
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
     <CustomBuild Include="windows\ehprolg3.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\ehvecctr.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\ehvecdtr.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\sehprolg.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\sehprolg4.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\sehprolg4gs.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\sehsupp.rsp">
-      <Filter>Source Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="windows\libcpmt9.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
     <CustomBuild Include="windows\loadcfg.rsp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\ehvecctr.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\ehvecdtr.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\libcpmt.bat">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\libcpmt9.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\MSVCRT.DEF">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg4.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg4gs.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehsupp.rsp">
+      <Filter>Source Files\windows</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="windows\StdLibX86.asm">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\windows</Filter>
     </MASM>
   </ItemGroup>
 </Project>

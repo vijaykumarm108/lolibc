@@ -5,11 +5,14 @@
  */
 #pragma once
 
-#include "lo_utypes.h"
+#include "lostlbase.h"
+#include "ios_base.h"
 
 namespace std {
 
-class file_exception;
+	class istream;
+	class ostream;
+	class ostringstream;
 
 #ifdef WIN32
 #define endl	"\r\n"
@@ -18,160 +21,145 @@ const char endl = '\n';		///< End of line character.
 #endif
 const char ends = '\0';		///< End of string character.
 
-/// Defines types and constants used by all stream classes.
-class ios_base {
-public:
-    /// Used to set parameters for stringstreams
-    enum fmtflags {
-	boolalpha	= (1 << 0),	///< Boolean values printed as text.
-	dec		= (1 << 1),	///< Decimal number output.
-	fixed		= (1 << 2),	///< Fixed-point float output.
-	hex		= (1 << 3),	///< Hexadecimal number output.
-	internal	= (1 << 4),
-	left		= (1 << 5),	///< Left alignment.
-	oct		= (1 << 6),	///< Octal number output.
-	right		= (1 << 7),	///< Right alignment.
-	scientific	= (1 << 8),	///< Scientific float format.
-	showbase	= (1 << 9),	///< Add 0x or 0 prefixes on hex and octal numbers.
-	showpoint	= (1 << 10),	///< Print decimal point.
-	showpos		= (1 << 11),
-	skipws		= (1 << 12),	///< Skip whitespace when reading.
-	unitbuf		= (1 << 13),
-	uppercase	= (1 << 14),
-	adjustfield	= (1 << 15),
-	basefield	= (1 << 16),
-	floatfield	= (1 << 17)
-    };
-    /// For file-based streams, specifies fd mode.
-    enum openmode_bits {
-	in	= (1 << 0),
-	out	= (1 << 1),
-	app	= (1 << 2),
-	ate	= (1 << 3),
-	binary	= (1 << 4),
-	trunc	= (1 << 5),
-	#ifndef DOXYGEN_SHOULD_SKIP_THIS
-	nonblock= (1 << 6),
-	nocreate= (1 << 7),
-	noctty	= (1 << 8),
-	nombits	= 9
-	#endif
-    };
-    /// Seek directions, equivalent to SEEK_SET, SEEK_CUR, and SEEK_END.
-    enum seekdir {
-	beg,
-	cur,
-	end
-    };
-    /// I/O state bitmasks.
-    enum iostate_bits {
-	goodbit	= 0,
-	badbit	= (1 << 0),
-	eofbit	= (1 << 1),
-	failbit	= (1 << 2),
-	#ifndef DOXYGEN_SHOULD_SKIP_THIS
-	nbadbits = 3,
-	allbadbits = 0x7
-	#endif
-    };
-
-    typedef uint32_t		openmode;	///< Holds openmode_bits.
-    typedef uint32_t		iostate;	///< Holds iostate_bits for a file stream.
-    typedef file_exception	failure;	///< Thrown by fstream on errors.
-
-    static const char c_DefaultDelimiters [16];	///< Default word delimiters for stringstreams.
-public:
-    inline		ios_base (void)			: m_State (goodbit), m_Exceptions (allbadbits) {}
-    inline iostate	rdstate (void) const		{ return (m_State); }
-    inline bool		bad (void) const		{ return (rdstate() & badbit); }
-    inline bool		good (void) const		{ return (rdstate() == goodbit); }
-    inline bool		fail (void) const		{ return (rdstate() & (badbit | failbit)) != 0; }
-    inline bool		eof (void) const		{ return (rdstate() & eofbit) != 0; }
-    inline bool		operator! (void) const		{ return (fail()); }
-    inline		operator void* (void) const	{ return ((void*)(!fail())); }
-    inline void		clear (iostate v = goodbit)	{ m_State = v; }
-    inline void		setstate (iostate v)		{ m_State |= v; }
-    inline iostate	exceptions (void) const		{ return (m_Exceptions); }
-    inline iostate	exceptions (iostate v)		{ return (m_Exceptions = v); }
-protected:
-    inline bool		set_and_throw (iostate v)	{ setstate(v); return (exceptions() & v) != 0; }
-    void		overrun (const char* op, const char* type, uint32_t n, uint32_t p, uint32_t rem);
-private:
-    uint16_t		m_State;	///< Open state, using ios::iostate_bits.
-    uint16_t		m_Exceptions;	///< Exception flags, using ios::iostate_bits.
-};
-
-class ios : public ios_base {
-public:
-	/// \brief Stream functor to allow inline align() calls.
-	///
-	/// Example: os << ios::align(sizeof(uint16_t));
-	///
-	class align {
+	class ios : public ios_base {
 	public:
-		inline explicit		align (size_t grain = c_DefaultAlignment) : m_Grain(grain) {}
-		inline istream&		apply (istream& is) const { is.align (m_Grain); return (is); }
-		inline ostream&		apply (ostream& os) const { os.align (m_Grain); return (os); }
-		inline void		read (istream& is) const  { apply (is); }
-		inline void		write (ostream& os) const { apply (os); }
-		inline size_t		stream_size (void) const  { return (m_Grain - 1); }
-	private:
-		const size_t		m_Grain;
+		/// \brief Stream functor to allow inline align() calls.
+		///
+		/// Example: os << ios::align(sizeof(uint16_t));
+		///
+		class align {
+		public:
+			inline explicit	align (size_t grain = lo::c_DefaultAlignment) : m_Grain(grain) {}
+			istream&		apply (istream& is) const;
+			ostream&		apply (ostream& os) const;
+			void			read (istream& is) const;
+			void			write (ostream& os) const;
+			inline size_t	stream_size (void) const  { return (m_Grain - 1); }
+		private:
+			const size_t	m_Grain;
+		};
+
+		/// \ingroup StreamFunctors
+		/// \brief Stream functor to allow type-based alignment.
+		template <typename T>
+		class talign : public align {
+		public:
+			inline explicit		talign (void) : align (alignof (NullValue<T>())) {}
+		};
+
+		/// \brief Stream functor to allow inline skip() calls.
+		///
+		/// Example: os << ios::skip(sizeof(uint16_t));
+		///
+		class skip {
+		public:
+			inline explicit	skip (size_t nBytes) : m_nBytes(nBytes) {}
+			istream&		apply (istream& is) const;
+			ostream&		apply (ostream& os) const;
+			void			read (istream& is) const;
+			void			write (ostream& os) const;
+			inline size_t	stream_size (void) const  { return (m_nBytes); }
+		private:
+			const size_t		m_nBytes;
+		};
+
+		/// \brief Stream functor to allow inline set_width() calls.
+		///
+		/// Example: os << ios::width(15);
+		///
+		class width {
+		public:
+			inline explicit	width (size_t nBytes) : m_nBytes(nBytes) {}
+			ostringstream&	apply (ostringstream& os) const;
+			void			text_write (ostringstream& os) const;
+		private:
+			const size_t	m_nBytes;
+		};
+
+		/// \brief Stream functor to allow inline set_base() calls.
+		///
+		/// Example: os << ios::base(15);
+		///
+		class base {
+		public:
+			inline explicit		base (size_t n) : m_Base(n) {}
+			ostringstream&		apply (ostringstream& os) const;
+			void				text_write (ostringstream& os) const;
+		private:
+			const size_t		m_Base;
+		};
 	};
 
-	/// \ingroup StreamFunctors
-	/// \brief Stream functor to allow type-based alignment.
+	/// Object stream size
+	template <typename T> struct object_stream_size
+	{
+		inline streamsize operator()(const T& v) const { return (v.stream_size()); }
+	};
+	/// Integral object stream size
+	template <typename T> struct integral_object_stream_size
+	{
+		inline streamsize operator()(const T& v) const { return (sizeof(v)); }
+	};
+	/// Returns the size of the given object. Overloads for standard types are available.
 	template <typename T>
-	class talign : public align {
-	public:
-		inline explicit		talign (void) : align (alignof (NullValue<T>())) {}
-	};
-
-	/// \brief Stream functor to allow inline skip() calls.
-	///
-	/// Example: os << ios::skip(sizeof(uint16_t));
-	///
-	class skip {
-	public:
-		inline explicit 	skip (size_t nBytes) : m_nBytes(nBytes) {}
-		inline istream&		apply (istream& is) const { is.skip (m_nBytes); return (is); }
-		inline ostream&		apply (ostream& os) const { os.skip (m_nBytes); return (os); }
-		inline void		read (istream& is) const  { apply (is); }
-		inline void		write (ostream& os) const { apply (os); }
-		inline size_t		stream_size (void) const  { return (m_nBytes); }
-	private:
-		const size_t		m_nBytes;
-	};
-
-	/// \brief Stream functor to allow inline set_width() calls.
-	///
-	/// Example: os << ios::width(15);
-	///
-	class width {
-	public:
-		inline explicit		width (size_t nBytes) : m_nBytes(nBytes) {}
-		inline ostringstream&	apply (ostringstream& os) const { os.set_width ((uint16_t)m_nBytes); return (os); }
-		inline void		text_write (ostringstream& os) const { apply (os); }
-	private:
-		const size_t		m_nBytes;
-	};
-
-	/// \brief Stream functor to allow inline set_base() calls.
-	///
-	/// Example: os << ios::base(15);
-	///
-	class base {
-	public:
-		inline explicit		base (size_t n) : m_Base(n) {}
-		inline ostringstream&	apply (ostringstream& os) const { os.set_base ((uint16_t)m_Base); return (os); }
-		inline void		text_write (ostringstream& os) const { apply (os); }
-	private:
-		const size_t		m_Base;
-	};
-};
+	inline streamsize stream_size_of (const T& v)
+	{
+		typedef typename tm::Select <numeric_limits<T>::is_integral,
+		integral_object_stream_size<T>, object_stream_size<T> >::Result stream_sizer_t;
+		return (stream_sizer_t()(v));
+	}
 
 } // namespace std
 
 
-CAST_STREAMABLE(lo::std::ios::fmtflags, uint32_t)
-NUMERIC_LIMITS(lo::std::ios::fmtflags, lo::std::ios::boolalpha, lo::std::ios::floatfield, false, true, true)
+//
+// Extra overloads in this macro are needed because it is the one used for
+// marshalling pointers. Passing a pointer to stream_size_of creates a
+// conversion ambiguity between converting to const pointer& and converting
+// to bool; the compiler always chooses the bool conversion (because it
+// requires 1 conversion instead of 2 for the other choice). There is little
+// point in adding the overloads to other macros, since they are never used
+// for pointers.
+//
+/// Declares that T is to be written as is into binary streams.
+#define INTEGRAL_STREAMABLE(T)	\
+    namespace std {		\
+	inline istream& operator>> (istream& is, T& v)				{ is.iread(v);  return (is); }	\
+	inline ostream& operator<< (ostream& os, const T& v)		{ os.iwrite(v); return (os); }	\
+	inline ostream& operator<< (ostream& os, T& v)				{ os.iwrite(v); return (os); }	\
+	template <> inline streamsize stream_size_of (const T& v)	{ return (sizeof(v)); }		\
+}
+
+/// Declares that T contains read, write, and stream_size methods. This is no longer needed and is deprecated.
+#define STD_STREAMABLE(T)
+
+/// Declares \p T to be writable to text streams. This is no longer needed and is deprecated.
+#define TEXT_STREAMABLE(T)
+
+/// Declares that T is to be cast into TSUB for streaming.
+#define CAST_STREAMABLE(T,TSUB)	\
+namespace std {	\
+	inline istream& operator>> (istream& is, T& v)				{ TSUB sv; is >> sv; v = (T)(sv); return (is); }	\
+	inline ostream& operator<< (ostream& os, const T& v)		{ os << TSUB(v); return (os); }						\
+	template <> inline streamsize stream_size_of (const T& v)	{ return (stream_size_of (TSUB(v))); }				\
+}
+
+/// Placed into a class it declares the methods required by STD_STREAMABLE. Syntactic sugar.
+#define DECLARE_STD_STREAMABLE			\
+    public:								\
+	void		read (istream& is);			\
+	void		write (ostream& os) const;	\
+	streamsize	stream_size (void) const
+
+/// Specifies that \p T is printed by using it as an index into \p Names string array.
+#define LOOKUP_TEXT_STREAMABLE(T,Names,nNames)	\
+    namespace std {		\
+	inline ostringstream& operator<< (ostringstream& os, const T& v)	\
+	{				\
+	    os << Names[min(uoff_t(v),uoff_t(nNames-1))];	\
+	    return (os);		\
+	}				\
+}
+
+//CAST_STREAMABLE(ios::fmtflags, uint32_t)
+//NUMERIC_LIMITS(ios::fmtflags, ios::boolalpha, ios::floatfield, false, true, true)

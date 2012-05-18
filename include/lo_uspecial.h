@@ -4,32 +4,19 @@
 
 #include "vector"
 #include "string"
+#include "sstream"
 #include "set"
-#include "lo_umultiset.h"
 #include "bitset"
-#include "lo_ulaalgo.h"
-#include "lo_uctralgo.h"
+#include "algorithm"
 #include "functional"
 #include "lo_uctrstrm.h"
-#include "lo_sistream.h"
+#include "istream"
+#include <tuple>
 #include <ctype.h>
 
-namespace lo { namespace std {
+namespace std {
 
-//----------------------------------------------------------------------
-// Algorithm specializations not in use by the library code.
-//----------------------------------------------------------------------
-
-template <> inline void swap (cmemlink& a, cmemlink& b)			{ a.swap (b); }
-template <> inline void swap (memlink& a, memlink& b)			{ a.swap (b); }
-template <> inline void swap (memblock& a, memblock& b)			{ a.swap (b); }
-template <> inline void swap (string& a, string& b)			{ a.swap (b); }
-#define TEMPLATE_SWAP_PSPEC(type, template_decl)	\
-template_decl inline void swap (type& a, type& b) { a.swap (b); }
-TEMPLATE_SWAP_PSPEC (TEMPLATE_TYPE1 (vector,T),		TEMPLATE_DECL1 (T))
-TEMPLATE_SWAP_PSPEC (TEMPLATE_TYPE1 (set,T),		TEMPLATE_DECL1 (T))
-TEMPLATE_SWAP_PSPEC (TEMPLATE_TYPE1 (multiset,T),	TEMPLATE_DECL1 (T))
-TEMPLATE_SWAP_PSPEC (TEMPLATE_TYPE2 (tuple,N,T),	TEMPLATE_FULL_DECL2 (size_t,N,typename,T))
+#define TEMPLATE_SWAP_PSPEC(type, template_decl)	template_decl inline void swap (type& a, type& b) { a.swap (b); }
 
 //----------------------------------------------------------------------
 // Streamable definitions. Not used in the library and require streams.

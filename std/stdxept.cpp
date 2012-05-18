@@ -12,7 +12,7 @@ namespace std {
 error_message::error_message (const char* arg) throw() : m_Arg ()
 {
     try { m_Arg = arg; } catch (...) {}
-    set_format (xfmt_ErrorMessage);
+    //set_format (xfmt_ErrorMessage);
 }
 
 /// Virtual destructor
@@ -30,21 +30,20 @@ void error_message::info (string& msgbuf, const char* fmt) const throw()
 /// Reads the object from stream \p is.
 void error_message::read (istream& is)
 {
-    exception::read (is);
+    //exception::read (is);
     is >> m_Arg >> ios::align();
 }
 
 /// Writes the object to stream \p os.
 void error_message::write (ostream& os) const
 {
-    exception::write (os);
-    os << m_Arg << ios::align();
+     os << what() << m_Arg << ios::align();
 }
 
 /// Returns the size of the written object.
 size_t error_message::stream_size (void) const
 {
-    return (exception::stream_size() + Align (stream_size_of (m_Arg)));
+    return (strlen(exception::what()) + lo::Align (stream_size_of (m_Arg)));
 }
 
 }  // namespace std

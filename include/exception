@@ -9,7 +9,7 @@
 #endif
 #ifndef _EXCEPTION_
 #define _EXCEPTION_
-#include "config.h"
+#include "lostlbase.h"
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
@@ -39,49 +39,100 @@ public:
 	exception(const exception&);
 	exception& operator= (const exception&);
 	virtual ~exception();
-	virtual __exString what() const;
+	virtual const char * what() const;
 private:
-	__exString _m_what;
+	const char * _m_what;
 	int _m_doFree;
 };
 
 namespace std {
 
-		// CLASS bad_exception
-class _CRTIMP bad_exception
-	: public ::exception {
-public:
-	bad_exception(const char *_S = "bad exception") throw()
-		: exception(_S) {}
-	virtual ~bad_exception() throw()
-		{}
-protected:
-	virtual void _Doraise() const
-		{throw(*this); }
-};
+	typedef ::exception exception;
 
-/// Returns true when the caught exception violates the throw specification.
-_CRTIMP bool __cdecl uncaught_exception();
-/// If you write a replacement terminate handler, it must be of this type.
-typedef void (*terminate_handler) (void);
-/// If you write a replacement unexpected handler, it must be of this type.
-typedef void (*unexpected_handler) (void);
-/// Takes a new handler function as an argument, returns the old function.
-terminate_handler set_terminate (terminate_handler pHandler) throw();
-/// The runtime will call this function if exception handling must be
-/// abandoned for any reason.  It can also be called by the user.
-void terminate (void) throw() __attribute__ ((__noreturn__));
-/// Takes a new handler function as an argument, returns the old function.
-unexpected_handler set_unexpected (unexpected_handler pHandler) throw();
-/// The runtime will call this function if an exception is thrown which
-/// violates the function's exception specification.
-void unexpected (void) __attribute__ ((__noreturn__));
+	class _CRTIMP bad_exception	: public exception {
+	public:
+		bad_exception(const char *_S = "bad exception") throw()	: exception(_S) {}
+		virtual ~bad_exception() throw() {}
+	protected:
+		virtual void _Doraise() const
+			{throw(*this); }
+	};
+
+	/// Returns true when the caught exception violates the throw specification.
+	_CRTIMP bool __cdecl uncaught_exception();
+	/// If you write a replacement terminate handler, it must be of this type.
+	typedef void (*terminate_handler) (void);
+	/// If you write a replacement unexpected handler, it must be of this type.
+	typedef void (*unexpected_handler) (void);
+	/// Takes a new handler function as an argument, returns the old function.
+	terminate_handler set_terminate (terminate_handler pHandler) throw();
+	/// The runtime will call this function if exception handling must be
+	/// abandoned for any reason.  It can also be called by the user.
+	void terminate (void) throw() __attribute__ ((__noreturn__));
+	/// Takes a new handler function as an argument, returns the old function.
+	unexpected_handler set_unexpected (unexpected_handler pHandler) throw();
+	/// The runtime will call this function if an exception is thrown which
+	/// violates the function's exception specification.
+	void unexpected (void) __attribute__ ((__noreturn__));
 
 } // end namespace std
 
-#ifdef __RTTI_OLDNAMES
-typedef exception xmsg;        // A synonym for folks using older standard
-#endif
+namespace lo {  	// Extended exception definitions
+	
+	/// \class libc_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief Thrown when a libc function returns an error.
+	///
+	/// Contains an errno and description. This is a std extension.
+	///
+	class libc_exception : public exception {
+	public:
+		explicit				libc_exception (const char* operation) throw();
+								libc_exception (const libc_exception& v) throw();
+		const libc_exception&	operator= (const libc_exception& v);
+		virtual const char*		what (void) const throw();
+	protected:
+		intptr_t		m_Errno;			///< Error code returned by the failed operation.
+		const char*		m_Operation;		///< Name of the failed operation.
+	};
+
+	/// \class file_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief File-related exceptions.
+	///
+	/// Contains the file name. This is a std extension.
+	///
+	class file_exception : public libc_exception {
+	public:
+							file_exception (const char* operation, const char* filename) throw();
+							~file_exception();
+		virtual const char*	what (void) const throw();
+	protected:
+		char		m_Filename [PATH_MAX];	///< Name of the file causing the error.
+	};
+
+	/// \class stream_bounds_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief Stream bounds checking.
+	///
+	/// Only thrown in debug builds unless you say otherwise in config.h
+	/// This is a std extension.
+	///
+	class stream_bounds_exception : public libc_exception {
+	public:
+		stream_bounds_exception (const char* operation, const char* type, uoff_t offset, size_t expected, size_t remaining) throw();
+		virtual const char*	what (void) const throw();
+	protected:
+		const char*	m_TypeName;
+		uoff_t		m_Offset;
+		size_t		m_Expected;
+		size_t		m_Remaining;
+	};
+
+}
 
 #ifdef  _MSC_VER
 #pragma pack(pop)

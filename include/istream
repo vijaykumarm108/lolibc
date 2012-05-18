@@ -4,15 +4,16 @@
  * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
  */
 #pragma once
-#include "ostream"
+#include "ios"
+#include <assert.h>
+#include "lo_utf8.h"
 
 namespace std {
 
 class ostream;
-class memlink;
 class string;
 
-/// \class istream LoMistream.h std.h
+/// \class istream
 /// \ingroup BinaryStreams
 ///
 /// \brief Helper class to read packed binary streams.
@@ -53,10 +54,10 @@ class string;
 ///     is.align();
 /// \endcode
 ///
-class istream : public cmemlink, public ios_base {
+class istream : public lo::cmemlink, public ios_base {
 public:
-    inline		istream (void);
-    inline		istream (const void* p, streamsize n);
+    inline			istream (void);
+    inline			istream (const void* p, streamsize n);
     inline explicit	istream (const cmemlink& source);
     explicit		istream (const ostream& source);
     inline iterator	end (void) const			{ return (cmemlink::end()); }
@@ -73,18 +74,18 @@ public:
     inline void		seek (uoff_t newPos);
     inline void		iseek (const_iterator newPos);
     inline void		skip (streamsize nBytes);
-    inline bool		aligned (streamsize grain = c_DefaultAlignment) const;
+    inline bool		aligned (streamsize grain = lo::c_DefaultAlignment) const;
     inline bool		verify_remaining (const char* op, const char* type, streamsize n);
-    inline streamsize	align_size (streamsize grain = c_DefaultAlignment) const;
-    inline void		align (streamsize grain = c_DefaultAlignment);
+    inline streamsize	align_size (streamsize grain = lo::c_DefaultAlignment) const;
+    inline void		align (streamsize grain = lo::c_DefaultAlignment);
     inline void		swap (istream& is);
     inline void		read (void* buffer, streamsize size);
-    inline void		read (memlink& buf)	{ read (buf.begin(), buf.writable_size()); }
-    void		read_strz (string& str);
+    inline void		read (lo::memlink& buf)	{ read (const_cast<void *>(reinterpret_cast<const void *>(buf.begin())), buf.writable_size()); }
+    void			read_strz (string& str);
     streamsize		readsome (void* s, streamsize n);
     inline void		read (istream&)			{ }
-    void		write (ostream& os) const;
-    void		text_write (ostringstream& os) const;
+    void			write (ostream& os) const;
+    void			text_write (ostringstream& os) const;
     inline streamsize	stream_size (void) const	{ return (remaining()); }
     template <typename T>
     inline void		iread (T& v);
@@ -227,7 +228,7 @@ inline void istream::skip (streamsize nBytes)
 /// Returns the number of bytes to skip to be aligned on \p grain.
 inline streamsize istream::align_size (streamsize grain) const
 {
-    return (Align (pos(), grain) - pos());
+    return (lo::Align (pos(), grain) - pos());
 }
 
 /// Returns \c true if the read position is aligned on \p grain
@@ -240,7 +241,7 @@ inline bool istream::aligned (streamsize grain) const
 /// aligns the read position on \p grain
 inline void istream::align (streamsize grain)
 {
-    seek (Align (pos(), grain));
+    seek (lo::Align (pos(), grain));
 }
 
 /// Reads type T from the stream via a direct pointer cast.
@@ -262,7 +263,7 @@ inline void istream::iread (T& v)
 inline void istream::swap (istream& is)
 {
     cmemlink::swap (is);
-    ::lo::std::swap (m_Pos, is.m_Pos);
+    ::std::swap (m_Pos, is.m_Pos);
 }
 
 /// Reads \p n bytes into \p buffer.
@@ -306,8 +307,8 @@ inline istream& operator>> (istream& is, const T& v)
 
 //----------------------------------------------------------------------
 
-typedef istream_iterator<utf8subchar_t> istream_iterator_for_utf8;
-typedef utf8in_iterator<istream_iterator_for_utf8> utf8istream_iterator;
+typedef istream_iterator<lo::utf8subchar_t> istream_iterator_for_utf8;
+typedef lo::utf8in_iterator<istream_iterator_for_utf8> utf8istream_iterator;
 
 /// Returns a UTF-8 adaptor reading from \p is.
 inline utf8istream_iterator utf8in (istream& is)

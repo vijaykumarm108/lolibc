@@ -1,8 +1,5 @@
 // Lo-Overhead STL library - Lostl
 //
-
-
-//
 // This file contains stream iterators that read and write UTF-8 encoded
 // characters. The encoding is defined as follows:
 //
@@ -18,12 +15,9 @@
 
 #include "iterator"
 
-namespace std {
+namespace lo {
 
 //----------------------------------------------------------------------
-
-typedef uint8_t utf8subchar_t;	///< Type for the encoding subcharacters.
-
 //----------------------------------------------------------------------
 
 inline size_t Utf8Bytes (wchar_t v) __attribute__((const));
@@ -98,24 +92,24 @@ inline size_t Utf8SequenceBytes (wchar_t c)	// a wchar_t to keep c in a full reg
 template <typename Iterator, typename WChar = wchar_t>
 class utf8in_iterator {
 public:
-    typedef typename iterator_traits<Iterator>::value_type	value_type;
-    typedef typename iterator_traits<Iterator>::difference_type	difference_type;
-    typedef typename iterator_traits<Iterator>::pointer		pointer;
-    typedef typename iterator_traits<Iterator>::reference	reference;
+    typedef typename std::iterator_traits<Iterator>::value_type	value_type;
+    typedef typename std::iterator_traits<Iterator>::difference_type	difference_type;
+    typedef typename std::iterator_traits<Iterator>::pointer		pointer;
+    typedef typename std::iterator_traits<Iterator>::reference	reference;
 public:
     explicit			utf8in_iterator (const Iterator& is)		: m_i (is), m_v (0) { Read(); }
 				utf8in_iterator (const utf8in_iterator& i)	: m_i (i.m_i), m_v (i.m_v) {} 
     inline const utf8in_iterator& operator= (const utf8in_iterator& i)		{ m_i = i.m_i; m_v = i.m_v; return (*this); }
     inline Iterator		base (void) const	{ return (m_i - (Utf8Bytes(m_v) - 1)); }
     /// Reads and returns the next value.
-    inline WChar		operator* (void) const	{ return (m_v); }
+    inline WChar			operator* (void) const	{ return (m_v); }
     inline utf8in_iterator&	operator++ (void)	{ ++m_i; Read(); return (*this); }
     inline utf8in_iterator	operator++ (int)	{ utf8in_iterator old (*this); operator++(); return (old); }
     inline utf8in_iterator&	operator+= (uoff_t n)	{ while (n--) operator++(); return (*this); }
     inline utf8in_iterator	operator+ (uoff_t n)	{ utf8in_iterator v (*this); return (v += n); }
-    inline bool			operator== (const utf8in_iterator& i) const	{ return (m_i == i.m_i); }
-    inline bool			operator< (const utf8in_iterator& i) const	{ return (m_i < i.m_i); }
-    difference_type		operator- (const utf8in_iterator& i) const;
+    inline bool				operator== (const utf8in_iterator& i) const	{ return (m_i == i.m_i); }
+    inline bool				operator< (const utf8in_iterator& i) const	{ return (m_i < i.m_i); }
+    difference_type			operator- (const utf8in_iterator& i) const;
 private:
     void			Read (void);
 private:
@@ -155,10 +149,10 @@ utf8in_iterator<Iterator,WChar>::operator- (const utf8in_iterator<Iterator,WChar
 template <typename Iterator, typename WChar = wchar_t>
 class utf8out_iterator {
 public:
-    typedef typename iterator_traits<Iterator>::value_type	value_type;
-    typedef typename iterator_traits<Iterator>::difference_type	difference_type;
-    typedef typename iterator_traits<Iterator>::pointer		pointer;
-    typedef typename iterator_traits<Iterator>::reference	reference;
+    typedef typename std::iterator_traits<Iterator>::value_type			value_type;
+    typedef typename std::iterator_traits<Iterator>::difference_type	difference_type;
+    typedef typename std::iterator_traits<Iterator>::pointer			pointer;
+    typedef typename std::iterator_traits<Iterator>::reference			reference;
 public:
     explicit			utf8out_iterator (const Iterator& os) : m_i (os) {}
 				utf8out_iterator (const utf8out_iterator& i) : m_i (i.m_i) {} 

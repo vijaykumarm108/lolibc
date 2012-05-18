@@ -25,7 +25,7 @@ $License: $
 #include <stdafx.h>
 #include <stdio.h>
 #include <string.h>
-#include <typeinfo.h>
+#include <typeinfo>
 //#pragma comment(lib,"msvcrt6.lib")
 
 #if 0
@@ -53,8 +53,6 @@ type_info::~type_info()
 }
 #endif
 
-
-
 /*
 * The purpose of defining these two dummy functions is to generate the
 * type_info::'vftable' ["const type_info::`vftable'" (??_7type_info@@6B@)].
@@ -74,83 +72,7 @@ type_info& __CLR_OR_THIS_CALL type_info::operator=(const type_info& rhs)
 
 #include <exception>
 
-_STD_BEGIN
-
-	
-_EXCEPTION_INLINE __CLR_OR_THIS_CALL exception::exception()
-    : _Mywhat(NULL), _Mydofree(false) { }
-
-_EXCEPTION_INLINE __CLR_OR_THIS_CALL exception::exception(const char * const & _What)
-    : _Mywhat(NULL), _Mydofree(false)
-    {
-    _Copy_str(_What);
-    }
-
-_EXCEPTION_INLINE __CLR_OR_THIS_CALL exception::exception(const char * const & _What, int)
-    : _Mywhat(_What), _Mydofree(false) { }
-
-_EXCEPTION_INLINE __CLR_OR_THIS_CALL exception::exception(const exception& _That)
-    : _Mywhat(NULL), _Mydofree(false)
-    {
-    *this = _That;
-    }
-
-_EXCEPTION_INLINE exception& __CLR_OR_THIS_CALL exception::operator=(const exception& _That)
-    {
-    if (this != &_That)
-        {
-        _Tidy();
-
-        if (_That._Mydofree)
-            {
-            _Copy_str(_That._Mywhat);
-            }
-        else
-            {
-            _Mywhat = _That._Mywhat;
-            }
-        }
-
-    return *this;
-    }
-
-_EXCEPTION_INLINE __CLR_OR_THIS_CALL exception::~exception()
-    {
-    _Tidy();
-    }
-
-_EXCEPTION_INLINE const char * __CLR_OR_THIS_CALL exception::what() const
-    {
-    return _Mywhat ? _Mywhat : "Unknown exception";
-    }
-
-// _Copy_str() assumes that *this is already tidy.
-_EXCEPTION_INLINE void __CLR_OR_THIS_CALL exception::_Copy_str(const char * _What)
-    {
-    if (_What != NULL)
-        {
-        const size_t _Buf_size = strlen(_What) + 1;
-        
-        _Mywhat = static_cast<char *>(malloc(_Buf_size));
-        
-        if (_Mywhat != NULL)
-            {
-            _CRT_SECURE_STRCPY(const_cast<char *>(_Mywhat), _Buf_size, _What);
-            _Mydofree = true;
-            }
-        }
-    }
-
-_EXCEPTION_INLINE void __CLR_OR_THIS_CALL exception::_Tidy()
-    {
-    if (_Mydofree)
-        {
-        free(const_cast<char *>(_Mywhat));
-        }
-
-    _Mywhat = NULL;
-    _Mydofree = false;
-    }
+namespace std {
 
 _CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xinvalid_argument(_In_z_ const char *)
 {
@@ -172,7 +94,6 @@ _CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xruntime_error(
 {
 }
 
-_STD_END
-
+} // namespace std
 
 /*! @} */

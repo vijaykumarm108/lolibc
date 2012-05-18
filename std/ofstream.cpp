@@ -4,13 +4,14 @@
 #include <stdafx.h>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <exception>
 //#include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdarg.h>
 
-namespace lo { namespace std {
+namespace std {
 
 //----------------------------------------------------------------------
 
@@ -21,17 +22,13 @@ ofstream cerr (STDERR_FILENO);
 //----------------------------------------------------------------------
 
 /// Default constructor.
-ofstream::ofstream (void)
-: ostringstream (),
-  m_File ()
+ofstream::ofstream (void) : ostringstream (), m_File ()
 {
     reserve (255);
 }
 
 /// Constructs a stream for writing to \p Fd.
-ofstream::ofstream (int Fd)
-: ostringstream (),
-  m_File (Fd)
+ofstream::ofstream (int Fd) : ostringstream (),  m_File (Fd)
 {
     clear (m_File.rdstate());
     reserve (255);
@@ -120,7 +117,7 @@ ifstream::size_type ifstream::underflow (size_type n)
 
     const ssize_t freeSpace = (ssize_t)(m_Buffer.size() - pos());
     const ssize_t neededFreeSpace = (ssize_t)maxV (n, m_Buffer.size() / 2);
-    const size_t oughtToErase = Align (maxV (0, neededFreeSpace - freeSpace));
+    const size_t oughtToErase = lo::Align (maxV (0, neededFreeSpace - freeSpace));
     const size_type nToErase = minV (pos(), oughtToErase);
     m_Buffer.memlink::erase (m_Buffer.begin(), nToErase);
     const uoff_t oldPos (pos() - nToErase);

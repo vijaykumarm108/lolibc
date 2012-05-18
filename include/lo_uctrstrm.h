@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "lo_mistream.h"
-#include "lo_sostream.h"
-#include "lo_uiosfunc.h"
+#include "istream"
+#include "ostream"
+#include "functional"
 #include "typeinfo.h"
 
 namespace std {

@@ -7,6 +7,7 @@
 #include <string>
 #include <limits>
 #include <stdio.h>
+#include <varargs.h>
 
 namespace std {
 

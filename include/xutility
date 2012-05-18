@@ -1,14 +1,16 @@
 
 #pragma once
 
-#include "lo_utypes.h"
+#include "lostlbase.h"
 #include "lo_traits.h"
 #include "limits"
 #include <assert.h>
 
+
+
 #ifdef __cplusplus
 
-namespace lo { namespace std {
+namespace std {
 
 #ifdef __GNUC__
     /// Returns the number of elements in a static vector
@@ -16,7 +18,7 @@ namespace lo { namespace std {
 #else
     // Old compilers will not be able to evaluate *v on an empty vector.
     // The tradeoff here is that VectorSize will not be able to measure arrays of local structs.
-    #define VectorSize(v)	(sizeof(v) / ::lo::std::size_of_elements(1, v))
+    #define VectorSize(v)	(sizeof(v) / std::size_of_elements(1, v))
 #endif
 
 /// Expands into a ptr,size expression for the given static vector; useful as link arguments.
@@ -73,28 +75,15 @@ inline T1 maxV (const T1& a, const T2& b)
     return (b < a ? a : b);
 }
 
-/// The alignment performed by default.
-const size_t c_DefaultAlignment = __alignof__(void*);
-
-/// \brief Rounds \p n up to be divisible by \p grain
-template <typename T>
-inline T Align (T n, size_t grain = c_DefaultAlignment)
-{
-    n += (T)(grain - 1);
-    return (n - n % grain);
-}
-
 /// Returns a NULL pointer cast to T.
-template <typename T>
-inline T* NullPointer (void)
-    { return ((T*) NULL); }
+template <typename T> inline T* NullPointer (void)
+{ return ((T*) NULL); }
 
 /// \brief Returns a non-dereferentiable value reference.
 /// This is useful for passing to alignof or the like which need a value but
 /// don't need to actually use it.
-template <typename T>
-inline T& NullValue (void)
-    { return (*NullPointer<T>()); }
+template <typename T> inline T& NullValue (void)
+{ return (*NullPointer<T>()); }
 
 /// Offsets an iterator
 template <typename T>
@@ -120,13 +109,6 @@ inline void* advance (void* p, ssize_t offset)
     return (reinterpret_cast<uint8_t*>(p) + offset);
 }
 #endif
-
-/// Returns the difference \p p1 - \p p2
-template <typename T1, typename T2>
-inline ptrdiff_t distance (T1 i1, T2 i2)
-{
-    return (i2 - i1);
-}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define UNVOID_DISTANCE(T1const,T2const)				   \
@@ -433,6 +415,6 @@ namespace simd {
     inline void reset_mmx (void) {}
 #endif
 } // namespace simd
-} }  // namespace lo::std
+}  // namespace std
 
 #endif

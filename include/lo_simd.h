@@ -11,10 +11,7 @@
 
 #pragma once
 
-#include "lo_ulimits.h"
-#if HAVE_MATH_H
-    #include <math.h>
-#endif
+#include "limits"
 
 namespace std { namespace simd {
 

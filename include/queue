@@ -41,8 +41,7 @@ private:
 };
 
 /// Pushes \p v on the queue.
-template <typename T>
-inline void queue<T>::push (const value_type& v)
+template <typename T> inline void queue<T>::push (const value_type& v)
 {
     if (m_Front)
 	{
@@ -53,12 +52,42 @@ inline void queue<T>::push (const value_type& v)
 }
 
 /// Pops the topmost element from the queue.
-template <typename T>
-inline void queue<T>::pop (void)
+template <typename T> inline void queue<T>::pop (void)
 {
     if (++m_Front >= m_Storage.size())
 		m_Storage.resize (m_Front = 0);
 }
 
-}  // namespace lo::std
+/// \class priority_queue
+/// \ingroup Sequences
+///
+/// \brief Sorted queue adapter to std containers.
+///
+/// Acts just like the queue adapter, but keeps the elements sorted by priority
+/// specified by the given comparison operator.
+///
+template <typename T, typename Ctr = vector<T>, typename Comp = less<typename Ctr::value_type> >
+class priority_queue {
+public:
+    typedef Ctr					base_ctr;
+    typedef typename base_ctr::value_type	value_type;
+    typedef typename base_ctr::size_type	size_type;
+    typedef typename base_ctr::const_pointer	const_pointer;
+    typedef typename base_ctr::const_reference	reference;
+public:
+	priority_queue (const Comp& c = Comp()) : m_v(), m_c (c) {}
+	priority_queue (const_pointer f, const_pointer l, const Comp& c = Comp())
+			    : m_v (f, l), m_c (c) { make_heap (m_v.begin(), m_v.end(), m_c); }
+    inline size_type	size (void) const	{ return (m_v.size()); }
+    inline bool		empty (void) const	{ return (m_v.empty()); }
+    inline reference	top (void) const	{ return (m_v.at(0)); }
+    inline void		push (reference v)	{ m_v.push_back (v); make_heap (m_v.begin(), m_v.end(), m_c); }
+    inline void		pop (void)		{ pop_heap (m_v.begin(), m_v.end()); m_v.pop_back(); }
+private:
+    base_ctr		m_v;	///< Element container.
+    Comp		m_c;	///< Comparison functor by value.
+};
+
+
+}  // namespace std
 

@@ -9,7 +9,9 @@
 #include <fstream>
 #include <errno.h>
 
-namespace lo { namespace std {
+using namespace std;
+
+namespace lo {
 
 memblock::memblock (void)			: memlink (), m_Capacity (0) { }
 memblock::memblock (const void* p, size_type n) : memlink (), m_Capacity (0) { assign (p, n); }
@@ -146,4 +148,4 @@ void memblock::read_file (const char* filename)
 
 memblock::size_type memblock::minimumFreeCapacity (void) const throw() { return (0); }
 
-} } // namespace stl
+} // namespace std

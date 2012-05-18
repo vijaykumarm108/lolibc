@@ -2,26 +2,26 @@
 
 #include "stdafx.h"
 #include "string"
-#include "lo_mistream.h"
-#include "lo_mostream.h"
-#include "lo_ualgo.h"
+#include "sstream"
+#include "algorithm"
+#include <stdarg.h>
+#include "dll/kernel32.h"
+
+using namespace lo;
 
 namespace std {
-//----------------------------------------------------------------------
-
 //const uoff_t string::npos;
-
-//----------------------------------------------------------------------
 
 /// Assigns itself the value of string \p s
 string::string (const string& s)
 : memblock ((s.size()+1) & (s.is_linked()-1))	// Allocate with terminator if not linked (can't call virtuals from base ctor)
 {
     if (s.is_linked())
-	relink (s.c_str(), s.size());
-    else {
-	copy_n (s.begin(), size(), begin());
-	relink (begin(), size()-1);	// --m_Size
+		relink (s.c_str(), s.size());
+    else
+	{
+		copy_n (s.begin(), size(), begin());
+		relink (begin(), size()-1);	// --m_Size
     }
 }
 
@@ -47,9 +47,9 @@ string::string (size_type n, value_type c)
     at(n) = 0;
 }
 
-string::string (const_wpointer s ) : memblock (::WideCharToMultiByte(CP_UTF8,0,s,-1,NULL,0,NULL,NULL))
+string::string (const_wpointer s ) : memblock (kernel32().WideCharToMultiByte(kernel32::CP_UTF8,0,s,-1,NULL,0,NULL,NULL))
 {
-	::WideCharToMultiByte(CP_UTF8,0,s,-1,begin(),(int)size(),NULL,NULL);
+	kernel32().WideCharToMultiByte(kernel32::CP_UTF8,0,s,-1,begin(),(int)size(),NULL,NULL);
 	relink(begin(),size()-1);
 }
 
@@ -204,7 +204,7 @@ string::iterator string::insert (iterator start, const_pointer first, const_poin
 /// Erases \p size bytes at \p ep.
 string::iterator string::erase (iterator ep, size_type n)
 {
-    string::iterator rv = memblock::erase (memblock::iterator(ep), n);
+    string::iterator rv = (string::iterator)memblock::erase (memblock::iterator(ep), n);
     *end() = 0;
     return (rv);
 }
@@ -241,7 +241,7 @@ void string::replace (iterator first, iterator last, const_pointer i1, const_poi
 /// Returns the offset of the first occurence of \p c after \p pos.
 uoff_t string::find (const_reference c, uoff_t pos) const
 {
-    const_iterator found = ::lo::std::find (iat(pos), end(), c);
+    const_iterator found = ::std::find (iat(pos), end(), c);
     return (found < end() ? (uoff_t) distance(begin(),found) : npos);
 }
 
@@ -256,7 +256,7 @@ uoff_t string::find (const string& s, uoff_t pos) const
     while (lastPos-- && s[lastPos] != endchar) ;
     const size_type skip = endi - lastPos;
     const_iterator i = iat(pos) + endi;
-    for (; i < end() && (i = ::lo::std::find (i, end(), endchar)) < end(); i += skip)
+    for (; i < end() && (i = ::std::find (i, end(), endchar)) < end(); i += skip)
 	if (memcmp (i - endi, s.c_str(), s.size()) == 0)
 	    return (distance (begin(), i) - endi);
     return (npos);
@@ -331,99 +331,156 @@ uoff_t string::find_last_not_of (const string& s, uoff_t pos) const
     return (npos);
 }
 
-/// Equivalent to a vsprintf on the string.
-int string::vformat (const char* fmt, va_list args)
-{
-#if HAVE_VA_COPY
-    va_list args2;
-#else
-    #define args2 args
-    #undef __va_copy
-    #define __va_copy(x,y)
-#endif
-    size_t rv = size();
-    do {
-	reserve (rv);
-	__va_copy (args2, args);
-	//rv = vsnprintf (data(), memblock::capacity(), fmt, args2);
-	rv = vsprintf_s(data(), memblock::capacity(), fmt, args2);
-//	rv = wvsprintf(data(), fmt, args2);
-	rv = minV (rv, memblock::capacity());
-    } while (rv > capacity());
-    resize (minV (rv, capacity()));
-    return (int)(rv);
-}
+	/// Equivalent to a vsprintf on the string.
+	int string::vformat (const char* fmt, va_list args)
+	{
+	#if HAVE_VA_COPY
+		va_list args2;
+	#else
+		#define args2 args
+		#undef __va_copy
+		#define __va_copy(x,y)
+	#endif
+		size_t rv = size();
+		do {
+		reserve (rv);
+		__va_copy (args2, args);
+		//rv = vsnprintf (data(), memblock::capacity(), fmt, args2);
+		rv = vsprintf_s(data(), memblock::capacity(), fmt, args2);
+	//	rv = wvsprintf(data(), fmt, args2);
+		rv = minV (rv, memblock::capacity());
+		} while (rv > capacity());
+		resize (minV (rv, capacity()));
+		return (int)(rv);
+	}
 
-/// Equivalent to a sprintf on the string.
-int string::format (const char* fmt, ...)
-{
-    va_list args;
-    va_start (args, fmt);
-    const int rv = vformat (fmt, args);
-    va_end (args);
-    return (rv);
-}
+	/// Equivalent to a sprintf on the string.
+	int string::format (const char* fmt, ...)
+	{
+		va_list args;
+		va_start (args, fmt);
+		const int rv = vformat (fmt, args);
+		va_end (args);
+		return (rv);
+	}
 
-/// Returns the number of bytes required to write this object to a stream.
-size_t string::stream_size (void) const
-{
-    return (size_t)(Utf8Bytes((wchar_t)size()) + size());
-}
+	/// Returns the number of bytes required to write this object to a stream.
+	size_t string::stream_size (void) const
+	{
+		return (size_t)(Utf8Bytes((wchar_t)size()) + size());
+	}
 
-/// Reads the object from stream \p os
-void string::read (istream& is)
-{
-    char szbuf [8];
-    is >> szbuf[0];
-    size_t szsz (Utf8SequenceBytes (szbuf[0]) - 1), n = 0;
-    if (!is.verify_remaining ("read", "lo::std::string", szsz)) return;
-    is.read (szbuf + 1, szsz);
-    n = *utf8in(szbuf);
-    if (!is.verify_remaining ("read", "lo::std::string", n)) return;
-    resize (n);
-    is.read (data(), size());
-}
+	/// Reads the object from stream \p os
+	void string::read (istream& is)
+	{
+		char szbuf [8];
+		is >> szbuf[0];
+		size_t szsz (Utf8SequenceBytes (szbuf[0]) - 1), n = 0;
+		if (!is.verify_remaining ("read", "lo::std::string", szsz)) return;
+		is.read (szbuf + 1, szsz);
+		n = *utf8in(szbuf);
+		if (!is.verify_remaining ("read", "lo::std::string", n)) return;
+		resize (n);
+		is.read (data(), size());
+	}
 
-/// Writes the object to stream \p os
-void string::write (ostream& os) const
-{
-    const written_size_type sz ((written_size_type)size());
-    assert (sz == size() && "No support for writing strings larger than 4G");
+	/// Writes the object to stream \p os
+	void string::write (ostream& os) const
+	{
+		const written_size_type sz ((written_size_type)size());
+		assert (sz == size() && "No support for writing strings larger than 4G");
 
-    char szbuf [8];
-    utf8out_iterator<char*> szout (szbuf);
-    *szout = sz;
-    size_t szsz = distance (szbuf, szout.base());
+		char szbuf [8];
+		utf8out_iterator<char*> szout (szbuf);
+		*szout = sz;
+		size_t szsz = distance (szbuf, szout.base());
 
-    if (!os.verify_remaining ("write", "lo::std::string", szsz + sz)) return;
-    os.write (szbuf, szsz);
-    os.write (cdata(), sz);
-}
+		if (!os.verify_remaining ("write", "lo::std::string", szsz + sz)) return;
+		os.write (szbuf, szsz);
+		os.write (cdata(), sz);
+	}
 
-/// Returns a hash value for [first, last)
-/*static*/ hashvalue_t string::hash (const char* first, const char* last)
-{
-    hashvalue_t h = 0;
-    // This has the bits flowing into each other from both sides of the number
-    for (; first < last; ++ first)
-	h = *first + ((h << 7) | (h >> (BitsInType(hashvalue_t) - 7)));
-    return (h);
-}
+	/// Returns a hash value for [first, last)
+	/*static*/ hashvalue_t string::hash (const char* first, const char* last)
+	{
+		hashvalue_t h = 0;
+		// This has the bits flowing into each other from both sides of the number
+		for (; first < last; ++ first)
+		h = *first + ((h << 7) | (h >> (BitsInType(hashvalue_t) - 7)));
+		return (h);
+	}
+
+	/// Assigns itself the value of string \p s
+	string::string (const cmemlink& s) : memblock ()
+	{
+		assign (const_iterator (s.begin()), s.size());
+	}
+
+	/// Assigns itself a [o,o+n) substring of \p s.
+	string::string (const string& s, uoff_t o, size_type n) : memblock()
+	{
+		assign (s, o, n);
+	}
+
+	/// Copies the value of \p s of length \p len into itself.
+	string::string (const_pointer s, size_type len) : memblock ()
+	{
+		assign (s, len);
+	}
+
+	/// Copies into itself the string data between \p s1 and \p s2
+	string::string (const_pointer s1, const_pointer s2) : memblock ()
+	{
+		assert (s1 <= s2 && "Negative ranges result in memory allocation errors.");
+		assign (s1, s2);
+	}
+
+	/// Returns the pointer to the first character.
+	string::operator const string::value_type* (void) const
+	{
+		assert ((!end() || !*end()) && "This string is linked to data that is not 0-terminated. This may cause serious security problems. Please assign the data instead of linking.");
+		return (begin());
+	}
+
+	/// Returns the pointer to the first character.
+	string::operator string::value_type* (void)
+	{
+		assert ((end() && !*end()) && "This string is linked to data that is not 0-terminated. This may cause serious security problems. Please assign the data instead of linking.");
+		return (begin());
+	}
+
+	/// Concatenates itself with \p s
+	string string::operator+ (const string& s) const
+	{
+		string result (*this);
+		result += s;
+		return (result);
+	}
+
+	/// Resize to \p n and fill new entries with \p c
+	void string::resize (size_type n, value_type c)
+	{
+		const size_type oldn = size();
+		resize (n);
+		fill_n (iat(oldn), maxV(ssize_t(n-oldn),0), c);
+	}
 
 string::size_type string::minimumFreeCapacity (void) const throw() { return (1); }
 
 //------------------------------ wstring helper functions
 void wstring::init(const char *bufferIn)
 {
+	kernel32	dll;
+
 	if(bufferIn == nullptr)
 		buffer = nullptr;
 	else
 	{
-		int length = MultiByteToWideChar(CP_UTF8, 0, bufferIn, -1, NULL, 0 );
+		int length = dll.MultiByteToWideChar(kernel32::CP_UTF8, 0, bufferIn, -1, NULL, 0 );
 		if( length > 0 )
 		{
 			buffer = reinterpret_cast<wchar_t *>(malloc(length*sizeof(wchar_t)));
-			MultiByteToWideChar(CP_UTF8, 0, bufferIn, -1, buffer, length );
+			dll.MultiByteToWideChar(kernel32::CP_UTF8, 0, bufferIn, -1, buffer, length );
 		}
 		else
 			buffer = nullptr;
@@ -438,11 +495,12 @@ wstring::~wstring()
 
 void wstring::toString( string& text)
 {
-	int length = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, NULL, 0, NULL, NULL );
+	kernel32	dll;
+	int length = dll.WideCharToMultiByte(kernel32::CP_UTF8, 0, buffer, -1, NULL, 0, NULL, NULL );
 	if( length > 0 )
 	{
 		char *temp=reinterpret_cast<char *>(malloc(length));
-		WideCharToMultiByte(CP_UTF8, 0, buffer, -1, temp, length, NULL, NULL );
+		dll.WideCharToMultiByte(kernel32::CP_UTF8, 0, buffer, -1, temp, length, NULL, NULL );
 		text.assign(temp);
 		free( temp );
 	}

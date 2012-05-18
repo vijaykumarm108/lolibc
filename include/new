@@ -16,10 +16,6 @@ namespace std {
 	public:
 		explicit		bad_alloc (size_t nBytes = 0) throw();
 		inline virtual const char*	what (void) const throw() { return ("memory allocation failed"); }
-		virtual void	info (string& msgbuf, const char* fmt = NULL) const throw();
-		virtual void	read (istream& is);
-		virtual void	write (ostream& os) const;
-		virtual size_t	stream_size (void) const;
 	protected:
 		size_t		m_nBytesRequested;	///< Number of bytes requested by the failed allocation.
 	};

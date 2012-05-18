@@ -2,7 +2,7 @@
 #include <dll.h>
 #include <windows.h>
 
-namespace lolibc
+namespace lo
 {
 	void dll::_addref()
 	{

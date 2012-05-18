@@ -7,15 +7,16 @@
 #include <string>
 #include <algorithm>
 
-namespace lo { namespace std {
+namespace std {
 
 //--------------------------------------------------------------------
 
 /// Checks that \p n bytes are available in the stream, or else throws.
 void ios_base::overrun (const char* op, const char* type, uint32_t n, uint32_t pos, uint32_t rem)
 {
-    if (set_and_throw (rem ? failbit : (failbit | eofbit)))
-	throw stream_bounds_exception (op, type, pos, n, rem);
+   if (set_and_throw (rem ? failbit : (failbit | eofbit)))
+	   throw exception("stream_bounds_exception");
+//	throw stream_bounds_exception (op, type, pos, n, rem);
 }
 
 //--------------------------------------------------------------------
@@ -27,7 +28,7 @@ istream::istream (const ostream& source)
 {
 }
 
-void istream::unlink (void) throw()			{ cmemlink::unlink(); m_Pos = 0; }
+void istream::unlink (void) throw()		{ cmemlink::unlink(); m_Pos = 0; }
 void ostream::unlink (void) throw()		{ memlink::unlink(); m_Pos = 0; }
 
 /// Writes all unread bytes into \p os.

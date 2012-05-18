@@ -1,7 +1,8 @@
+#pragma once
 #include <stdint.h>
 #include <dll.h>
 
-namespace lolibc
+namespace lo
 {
 	class ntoskrnl : public dll
 	{
@@ -15,12 +16,12 @@ namespace lolibc
 
 		typedef struct _RTL_CRITICAL_SECTION_DEBUG {
 			uint16_t		Type;
-			uint16_t   CreatorBackTraceIndex;
+			uint16_t		CreatorBackTraceIndex;
 			struct _RTL_CRITICAL_SECTION *CriticalSection;
 			LIST_ENTRY		ProcessLocksList;
-			unsigned long	EntryCount;
-			unsigned long	ContentionCount;
-			unsigned long	Flags;
+			uint32_t		EntryCount;
+			uint32_t		ContentionCount;
+			uint32_t		Flags;
 			uint16_t		CreatorBackTraceIndexHigh;
 			uint16_t		SpareWORD;
 		} RTL_CRITICAL_SECTION_DEBUG, *PRTL_CRITICAL_SECTION_DEBUG, RTL_RESOURCE_DEBUG, *PRTL_RESOURCE_DEBUG;

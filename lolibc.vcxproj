@@ -203,8 +203,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bvt\bvt_kernel32.cpp" />
     <ClCompile Include="src\dll.cpp" />
     <ClCompile Include="src\kernel32.cpp" />
+    <ClCompile Include="src\loexcept.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -219,6 +221,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">./include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">./include;$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="std\ios.cpp" />
     <ClCompile Include="std\lo_string.cpp" />
     <ClCompile Include="std\algobase.cpp" />
     <ClCompile Include="std\bitset.cpp" />
@@ -481,6 +484,10 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\ios_base.h" />
+    <ClInclude Include="include\stdarg.h" />
+    <ClInclude Include="include\stdlib.h" />
+    <ClInclude Include="include\string.h" />
     <ClInclude Include="include\array" />
     <ClInclude Include="include\cassert" />
     <ClInclude Include="include\cctype" />
@@ -488,7 +495,6 @@
     <ClInclude Include="include\cfloat" />
     <ClInclude Include="include\clocale" />
     <ClInclude Include="include\cmath" />
-    <ClInclude Include="include\config.h" />
     <ClInclude Include="include\dll.h" />
     <ClInclude Include="include\dll\kernel32.h" />
     <ClInclude Include="include\dll\ntoskrnl.h" />
@@ -506,6 +512,7 @@
     <ClInclude Include="include\stdexcept" />
     <ClInclude Include="include\stdint.h" />
     <ClInclude Include="include\stdio.h" />
+    <ClInclude Include="include\sys\types.h" />
     <ClInclude Include="include\tuple" />
     <ClInclude Include="include\memory" />
     <ClInclude Include="include\utility" />
@@ -514,33 +521,25 @@
     <ClInclude Include="include\typeinfo" />
     <ClInclude Include="include\exception" />
     <ClInclude Include="include\list" />
-    <ClInclude Include="include\lo_cmemlink.h" />
     <ClInclude Include="include\fstream" />
     <ClInclude Include="include\lo_memblock.h" />
     <ClInclude Include="include\lo_memlink.h" />
-    <ClInclude Include="include\lo_mostream.h" />
     <ClInclude Include="include\lo_simd.h" />
     <ClInclude Include="include\sstream" />
-    <ClInclude Include="include\lo_strmsize.h" />
     <ClInclude Include="include\lo_traits.h" />
     <ClInclude Include="include\lo_typelist.h" />
     <ClInclude Include="include\lo_typet.h" />
     <ClInclude Include="include\bitset" />
     <ClInclude Include="include\lo_uctrstrm.h" />
-    <ClInclude Include="include\lo_uheap.h" />
-    <ClInclude Include="include\lo_ulaalgo.h" />
-    <ClInclude Include="include\map" />
     <ClInclude Include="include\lo_matrix.h" />
-    <ClInclude Include="include\map" />
     <ClInclude Include="include\new" />
-    <ClInclude Include="include\lo_upredalgo.h" />
     <ClInclude Include="include\queue" />
     <ClInclude Include="include\set" />
     <ClInclude Include="include\lo_uspecial.h" />
     <ClInclude Include="include\stack" />
     <ClInclude Include="include\lo_utf8.h" />
-    <ClInclude Include="include\lo_utypes.h" />
-    <ClInclude Include="include\lo_uutility.h" />
+    <ClInclude Include="include\lolibbase.h" />
+    <ClInclude Include="include\xutility" />
     <ClInclude Include="include\vector" />
     <ClInclude Include="lolibc.h" />
     <ClInclude Include="include\stdafx.h" />

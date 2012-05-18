@@ -5,7 +5,46 @@
 #include <istream>
 #include <stdexcept>
 
-namespace std {
+using namespace std;
+
+namespace lo {
+
+memlink::iterator	memlink::iat (size_type i)
+{
+	assert (i <= size());
+	return (begin() + i);
+}
+
+
+/// Shifts the data in the linked block from \p start to \p start + \p n.
+/// The contents of the uncovered bytes is undefined.
+void memlink::insert (iterator start, size_type n)
+{
+    assert (data() || !n);
+    assert (cmemlink::begin() || !n);
+    assert (start >= begin() && start + n <= end());
+    rotate (start, end() - n, end());
+}
+
+/// Shifts the data in the linked block from \p start + \p n to \p start.
+/// The contents of the uncovered bytes is undefined.
+void memlink::erase (iterator start, size_type n)
+{
+    assert (data() || !n);
+    assert (cmemlink::begin() || !n);
+    assert (start >= begin() && start + n <= end());
+    rotate (start, start + n, end());
+}
+
+void	memlink::link (const void* first, const void* last)
+{
+	link (first, std::distance (first, last));
+}
+
+void	memlink::link (void* first, void* last)
+{
+	link (first, std::distance (first, last));
+}
 
 /// Reads the object from stream \p s
 void memlink::read (istream& is)
@@ -38,4 +77,4 @@ void memlink::fill (iterator start, const void* p, size_type elSize, size_type e
 	start = copy_n (const_iterator(p), elSize, start);
 }
 
-}  // namespace std
+}  // namespace lo

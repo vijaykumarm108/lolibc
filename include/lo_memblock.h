@@ -3,7 +3,7 @@
 #pragma once
 #include "lo_memlink.h"
 
-namespace std {
+namespace lo {
 
 /** Managed memory block.
 
@@ -35,14 +35,14 @@ public:
     inline const memblock&	operator= (const cmemlink& l)	{ assign (l); return (*this); }
     inline const memblock&	operator= (const memlink& l)	{ assign (l); return (*this); }
     inline const memblock&	operator= (const memblock& l)	{ assign (l); return (*this); }
-    inline void				manage (memlink& l)				{ manage (l.begin(), l.size()); }
+    inline void				manage (memlink& l)				{ manage (const_cast<void *>(reinterpret_cast<const void *>(l.begin())), l.size()); }
     void					manage (void* p, size_type n);
 	inline size_type		max_size (void) const			{ return (is_linked() ? memlink::max_size() : SIZE_MAX); }
-    void					read (istream& is);
+    void					read (std::istream& is);
     void					read_file (const char* filename);
 	void					reserve (size_type newSize, bool bExact = true);
 	void					resize (size_type newSize, bool bExact = true);
-	inline void				swap (memblock& l)				{ memlink::swap (l); ::lo::std::swap (m_Capacity, l.m_Capacity); }
+	inline void				swap (memblock& l)				{ memlink::swap (l); ::std::swap (m_Capacity, l.m_Capacity); }
 	virtual void			unlink (void) throw();
 protected:
     virtual size_type		minimumFreeCapacity (void) const throw() __attribute__((const));
@@ -50,4 +50,13 @@ private:
     size_type				m_Capacity;	///< Number of bytes allocated by Resize.
 };
 
-} // namespace std
+
+} // namespace lo
+
+namespace std
+{
+	template <> inline void swap (lo::memblock& a, lo::memblock& b)
+	{
+		a.swap (b);
+	}
+}

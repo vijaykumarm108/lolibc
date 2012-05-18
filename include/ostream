@@ -5,7 +5,7 @@
 #include "lo_memlink.h"
 #include "exception"
 #include "lo_utf8.h"
-#include "ios"
+#include "ios_base.h"
 
 namespace std {
 
@@ -39,13 +39,13 @@ class string;
 ///     b.write_file ("test.file");
 /// \endcode
 ///
-class ostream : public memlink, public ios_base {
+class ostream : public lo::memlink, public ios_base {
 public:
     inline		ostream (void);
     inline		ostream (void* p, streamsize n);
     inline explicit	ostream (const memlink& source);
-    inline iterator	end (void)		{ return (memlink::end()); }
-    inline const_iterator end (void) const	{ return (memlink::end()); }
+    inline iterator	end (void)		{ return (lo::memlink::end()); }
+    inline const_iterator end (void) const	{ return (lo::memlink::end()); }
     inline void		seek (uoff_t newPos);
     inline void		iseek (const_iterator newPos);
     inline void		skip (streamsize nBytes);
@@ -53,10 +53,10 @@ public:
     inline iterator	ipos (void)		{ return (begin() + pos()); }
     inline const_iterator ipos (void) const	{ return (begin() + pos()); }
     inline streamsize	remaining (void) const;
-    inline bool		aligned (streamsize grain = c_DefaultAlignment) const;
+    inline bool		aligned (streamsize grain = lo::c_DefaultAlignment) const;
     bool			verify_remaining (const char* op, const char* type, size_t n);
-    inline streamsize	align_size (streamsize grain = c_DefaultAlignment) const;
-    void			align (streamsize grain = c_DefaultAlignment);
+    inline streamsize	align_size (streamsize grain = lo::c_DefaultAlignment) const;
+    void			align (streamsize grain = lo::c_DefaultAlignment);
     inline void		write (const void* buffer, streamsize size);
     inline void		write (const cmemlink& buf);
     void			write_strz (const char* str);
@@ -121,8 +121,8 @@ private:
 
 //----------------------------------------------------------------------
 
-typedef ostream_iterator<utf8subchar_t>				ostream_iterator_for_utf8;
-typedef utf8out_iterator<ostream_iterator_for_utf8>	utf8ostream_iterator;
+typedef ostream_iterator<lo::utf8subchar_t>				ostream_iterator_for_utf8;
+typedef lo::utf8out_iterator<ostream_iterator_for_utf8>	utf8ostream_iterator;
 
 /// Returns a UTF-8 adapter writing to \p os.
 inline utf8ostream_iterator utf8out (ostream& os)
@@ -216,7 +216,7 @@ inline bool ostream::aligned (streamsize grain) const
 /// Returns the number of bytes to skip to be aligned on \p grain.
 inline streamsize ostream::align_size (streamsize grain) const
 {
-    return (Align (pos(), grain) - pos());
+    return (lo::Align (pos(), grain) - pos());
 }
 
 /// Writes \p n bytes from \p buffer.
@@ -228,7 +228,7 @@ inline void ostream::write (const void* buffer, size_type n)
 #else
     assert (remaining() >= n && "Buffer overrun. Check your stream size calculations.");
 #endif
-    memcpy (ipos(), const_iterator(buffer), n);
+    memcpy (const_cast<void *>(reinterpret_cast<const void *>(ipos())), const_iterator(buffer), n);
     m_Pos += n;
 }
 
@@ -238,6 +238,7 @@ inline void ostream::write (const cmemlink& buf)
     write (buf.begin(), buf.size());
 }
 
+#if 0
 /// Writes type T into the stream via a direct pointer cast.
 template <typename T>
 inline void ostream::iwrite (const T& v)
@@ -252,6 +253,7 @@ inline void ostream::iwrite (const T& v)
     *reinterpret_cast<T*>(ipos()) = v;
     SetPos (pos() + sizeof(T));
 }
+#endif
 
 /// Swaps with \p os
 inline void ostream::swap (ostream& os)

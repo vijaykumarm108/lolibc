@@ -1,5 +1,6 @@
+#pragma once
 
-namespace lolibc
+namespace lo
 {
 	class dll
 	{

@@ -71,6 +71,10 @@ void set<T,TComp>::insert (const_iterator i1, const_iterator i2)
 	push_back (*i1);
 }
 
+template<typename T>	inline void swap (set<T>& a, set<T>& b)
+{
+	a.swap (b);
+}
 
 ///
 /// \brief Multiple sorted container.
@@ -145,6 +149,12 @@ void multiset<T,Comp>::erase (const_reference v)
 {
 	pair<iterator,iterator> epr = equal_range (begin(), end(), v, Comp());
 	erase (epr.first, epr.second);
+}
+
+template<typename T>
+inline void swap (multiset<T>& a, multiset<T>& b)
+{
+	a.swap (b);
 }
 
 }  // namespace std

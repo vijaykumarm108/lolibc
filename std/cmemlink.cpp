@@ -2,69 +2,98 @@
 //
 
 #include <stdafx.h>
-#include "lo_cmemlink.h"
+#include "lostlbase.h"
 #include "fstream"
-#include "lo_strmsize.h"
 #include "algorithm"
+#include "new"
+#include "ostream"
 
-namespace std {
+using namespace std;
 
-/// \brief Attaches the object to pointer \p p of size \p n.
-///
-/// If \p p is NULL and \p n is non-zero, bad_alloc is thrown and current
-/// state remains unchanged.
-///
-void cmemlink::link (const void* p, size_type n)
-{
-    if (!p && n)
-	throw bad_alloc (n);
-    unlink();
-    relink (p, n);
-}
+namespace lo {
 
-void cmemlink::unlink (void) throw()
-{
-    m_Data = NULL; m_Size = 0;
-}
+	cmemlink::cmemlink (const void* p, size_type n)	: m_Data (const_pointer(p)), m_Size (n)
+	{
+		assert (p || !n);
+	}
 
-/// Writes the object to stream \p os
-void cmemlink::write (ostream& os) const
-{
-    const written_size_type sz ((written_size_type)size());
-    assert (sz == size() && "No support for writing memblocks larger than 4G");
-    os << sz;
-    os.write (cdata(), sz);
-    os.align (alignof (sz));
-}
+	cmemlink::iterator		cmemlink::iat (size_type i) const
+	{
+		assert (i <= size());
+		return (begin() + i);
+	}
 
-/// Writes the object to stream \p os
-void cmemlink::text_write (ostringstream& os) const
-{
-    os.write (begin(), readable_size());
-}
+	/// \brief Attaches the object to pointer \p p of size \p n.
+	///
+	/// If \p p is NULL and \p n is non-zero, bad_alloc is thrown and current
+	/// state remains unchanged.
+	///
+	void cmemlink::link (const void* p, size_type n)
+	{
+		if (!p && n)
+		throw bad_alloc (n);
+		unlink();
+		relink (p, n);
+	}
 
-/// Returns the number of bytes required to write this object to a stream.
-cmemlink::size_type cmemlink::stream_size (void) const
-{
-    const written_size_type sz ((written_size_type)size());
-    return (Align (stream_size_of (sz) + sz, alignof(sz)));
-}
+	void cmemlink::link (const void* first, const void* last)
+	{
+		link (first, distance (first, last));
+	}
+	void cmemlink::read (std::istream& is)
+	{
+		assert (!"lo::std::cmemlink is a read-only object.");
+	}
 
-/// Writes the data to file \p "filename".
-void cmemlink::write_file (const char* filename, int mode) const
-{
-    fstream f;
-    f.exceptions (fstream::allbadbits);
-    f.open (filename, fstream::out | fstream::trunc, mode);
-    f.write (cdata(), (off_t)readable_size());
-    f.close();
-}
+	void cmemlink::unlink (void) throw()
+	{
+		m_Data = NULL; m_Size = 0;
+	}
 
-/// Compares to memory block pointed by l. Size is compared first.
-bool cmemlink::operator== (const cmemlink& l) const
-{
-    return (l.m_Size == m_Size &&
-	    (l.m_Data == m_Data || 0 == memcmp (l.m_Data, m_Data, m_Size)));
-}
+	void cmemlink::swap (cmemlink& l)
+	{
+		::std::swap (m_Data, l.m_Data);
+		::std::swap (m_Size, l.m_Size);
+	}
+
+	/// Writes the object to stream \p os
+	void cmemlink::write (ostream& os) const
+	{
+		const written_size_type sz ((written_size_type)size());
+		assert (sz == size() && "No support for writing memblocks larger than 4G");
+		os << sz;
+		os.write (cdata(), sz);
+		os.align (alignof (sz));
+	}
+
+	/// Writes the object to stream \p os
+	void cmemlink::text_write (ostringstream& os) const
+	{
+		os.write (begin(), readable_size());
+	}
+
+	/// Returns the number of bytes required to write this object to a stream.
+	cmemlink::size_type cmemlink::stream_size (void) const
+	{
+		const written_size_type sz ((written_size_type)size());
+		return (Align (stream_size_of (sz) + sz, alignof(sz)));
+	}
+
+	/// Writes the data to file \p "filename".
+	void cmemlink::write_file (const char* filename, int mode) const
+	{
+		fstream f;
+		f.exceptions (fstream::allbadbits);
+		f.open (filename, fstream::out | fstream::trunc, mode);
+		f.write (cdata(), (off_t)readable_size());
+		f.close();
+	}
+
+	/// Compares to memory block pointed by l. Size is compared first.
+	bool cmemlink::operator== (const cmemlink& l) const
+	{
+		return (l.m_Size == m_Size &&
+			(l.m_Data == m_Data || 0 == memcmp (l.m_Data, m_Data, m_Size)));
+	}
 
 } // namespace std

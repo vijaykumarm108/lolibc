@@ -12,8 +12,10 @@
 #include <Windows.h>
 #include <fstream>
 #include <exception>
-#include <lo_uutility.h>
+#include <xutility>
 #include <winunix.h>
+
+using namespace lo;
 
 namespace std {
 
@@ -96,7 +98,7 @@ void fstream::detach (void)
 	0 /*O_NOCTTY*/	// noctty
     };
     int flags = (m - 1) & O_ACCMODE;	// in and out
-    for (uoff_t i = 0; i < VectorSize(s_OMFlags); ++ i)
+    for (uoff_t i = 0; i < _countof(s_OMFlags); ++ i)
 	flags |= s_OMFlags[i] & (!(m & (1 << i)) - 1);
     if (m & nocreate)
 	flags &= ~O_CREAT;

@@ -6,28 +6,25 @@
 
 #ifdef __cplusplus
 
-namespace std {
-namespace tm {
-namespace {
+namespace std { namespace tm { namespace {
 
 //----------------------------------------------------------------------
 // Type classes and type modifiers
 //----------------------------------------------------------------------
 
-typedef tl::Seq<unsigned char, unsigned short, unsigned, unsigned long>::Type
-							StdUnsignedInts;
+typedef tl::Seq<unsigned char, unsigned short, unsigned, unsigned long>::Type	StdUnsignedInts;
 typedef tl::Seq<signed char, short, int, long>::Type	StdSignedInts;
-typedef tl::Seq<bool, char, wchar_t>::Type		StdOtherInts;
-typedef tl::Seq<float, double>::Type			StdFloats;
+typedef tl::Seq<bool, char, wchar_t>::Type				StdOtherInts;
+typedef tl::Seq<float, double>::Type					StdFloats;
 
-template <typename U> struct AddPointer		{ typedef U* Result; };
-template <typename U> struct AddPointer<U&>	{ typedef U* Result; };
-template <typename U> struct AddReference	{ typedef U& Result; };
-template <typename U> struct AddReference<U&>	{ typedef U& Result; };
-template <>           struct AddReference<void>	{ typedef NullType Result; };
-template <typename U> struct AddParameterType	{ typedef const U& Result; };
-template <typename U> struct AddParameterType<U&> { typedef U& Result; };
-template <>           struct AddParameterType<void> { typedef NullType Result; };
+template <typename U> struct AddPointer				{ typedef U* Result; };
+template <typename U> struct AddPointer<U&>			{ typedef U* Result; };
+template <typename U> struct AddReference			{ typedef U& Result; };
+template <typename U> struct AddReference<U&>		{ typedef U& Result; };
+template <>           struct AddReference<void>		{ typedef NullType Result; };
+template <typename U> struct AddParameterType		{ typedef const U& Result; };
+template <typename U> struct AddParameterType<U&>	{ typedef U& Result; };
+template <>           struct AddParameterType<void>	{ typedef NullType Result; };
 
 //----------------------------------------------------------------------
 // Function pointer testers
