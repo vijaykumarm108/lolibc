@@ -45,7 +45,7 @@ class string;
 /// 
 /// Example code:
 /// \code
-///     memblock b;
+///     block b;
 ///     b.read_file ("test.file");
 ///     ostream is (b);
 ///     is >> boolVar >> ios::talign<int>();
@@ -54,18 +54,18 @@ class string;
 ///     is.align();
 /// \endcode
 ///
-class istream : public lo::cmemlink, public ios_base {
+class istream : public lo::cblocklink, public ios_base {
 public:
     inline			istream (void);
     inline			istream (const void* p, streamsize n);
-    inline explicit	istream (const cmemlink& source);
+    inline explicit	istream (const cblocklink& source);
     explicit		istream (const ostream& source);
-    inline iterator	end (void) const			{ return (cmemlink::end()); }
-    inline void		link (const void* p, streamsize n)	{ cmemlink::link (p, n); }
-    inline void		link (const cmemlink& l)		{ cmemlink::link (l.cdata(), l.readable_size()); }
-    inline void		link (const void* f, const void* l)	{ cmemlink::link (f, l); }
-    inline void		relink (const void* p, streamsize n)	{ cmemlink::relink (p, n); m_Pos = 0; }
-    inline void		relink (const cmemlink& l)		{ relink (l.cdata(), l.readable_size()); }
+    inline iterator	end (void) const			{ return (cblocklink::end()); }
+    inline void		link (const void* p, streamsize n)	{ cblocklink::link (p, n); }
+    inline void		link (const cblocklink& l)		{ cblocklink::link (l.cdata(), l.readable_size()); }
+    inline void		link (const void* f, const void* l)	{ cblocklink::link (f, l); }
+    inline void		relink (const void* p, streamsize n)	{ cblocklink::relink (p, n); m_Pos = 0; }
+    inline void		relink (const cblocklink& l)		{ relink (l.cdata(), l.readable_size()); }
     virtual void	unlink (void) throw();
     inline virtual streamsize	underflow (streamsize = 1)	{ return (remaining()); }
     inline uoff_t	pos (void) const	{ return (m_Pos); }
@@ -80,7 +80,7 @@ public:
     inline void		align (streamsize grain = lo::c_DefaultAlignment);
     inline void		swap (istream& is);
     inline void		read (void* buffer, streamsize size);
-    inline void		read (lo::memlink& buf)	{ read (const_cast<void *>(reinterpret_cast<const void *>(buf.begin())), buf.writable_size()); }
+    inline void		read (lo::blocklink& buf)	{ read (const_cast<void *>(reinterpret_cast<const void *>(buf.begin())), buf.writable_size()); }
     void			read_strz (string& str);
     streamsize		readsome (void* s, streamsize n);
     inline void		read (istream&)			{ }
@@ -160,25 +160,19 @@ private:
 
 /// \brief Constructs a stream attached to nothing.
 /// A stream attached to nothing is not usable. Call Link() functions
-/// inherited from cmemlink to attach to some memory block.
+/// inherited from blocklink to attach to some memory block.
 ///
-inline istream::istream (void)
-: cmemlink (),
-  m_Pos (0)
+inline istream::istream (void) : cblocklink (), m_Pos (0)
 {
 }
 
 /// Attaches the stream to a block at \p p of size \p n.
-inline istream::istream (const void* p, streamsize n)
-: cmemlink (p, n),
-  m_Pos (0)
+inline istream::istream (const void* p, streamsize n) : cblocklink (p, n), m_Pos (0)
 {
 }
 
 /// Attaches to the block pointed to by \p source.
-inline istream::istream (const cmemlink& source)
-: cmemlink (source),
-  m_Pos (0)
+inline istream::istream (const cblocklink& source) : cblocklink (source), m_Pos (0)
 {
 }
 
@@ -262,7 +256,7 @@ inline void istream::iread (T& v)
 /// Swaps contents with \p is
 inline void istream::swap (istream& is)
 {
-    cmemlink::swap (is);
+    cblocklink::swap (is);
     ::std::swap (m_Pos, is.m_Pos);
 }
 
@@ -293,7 +287,7 @@ struct integral_object_reader
 template <typename T>
 inline istream& operator>> (istream& is, T& v)
 {
-    typedef typename tm::Select <numeric_limits<T>::is_integral,
+    typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 	integral_object_reader<T>, object_reader<T> >::Result object_reader_t;
     object_reader_t()(is, v);
     return (is);

@@ -81,8 +81,8 @@ EXPORTS
 	__RTDynamicCast
 	__RTtypeid
 	__STRINGTOLD
-	;__argc
-	;__argv
+	__argc
+	__argv
 	__badioinfo
 	__crtCompareStringA
 	__crtGetLocaleInfoW
@@ -403,7 +403,7 @@ EXPORTS
 	_msize
 	_nextafter
 	_onexit
-	; _open
+	_open
 	_open_osfhandle	
 	__open_osfhandle=_open_osfhandle
 	_osplatform

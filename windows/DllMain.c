@@ -30,7 +30,7 @@ point of the DLL with the same arguments that the entry point receives.
 #define _DLL
 #endif  /* _DLL */
 
-#include "mlac.h"
+#include "lomsvcrt.h"
 #include <stdlib.h>
 #include <windows.h>
 #define _DECL_DLLMAIN   /* enable prototypes for DllMain and _CRT_INIT */

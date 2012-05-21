@@ -1,4 +1,7 @@
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define MUNMAP_FAILURE -1
 #define MAP_FAILED nullptr
@@ -23,3 +26,7 @@ int ioctl(int fildes, int request, ... /* arg */);
 #define F_GETFL	0x08
 #define F_SETFL 0x10
 typedef size_t size_type;
+
+#ifdef __cplusplus
+};
+#endif

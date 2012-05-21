@@ -3,7 +3,7 @@
 #ifndef _INC_MATH
 #define _INC_MATH
 
-#include <crtdefs.h>
+#include "lolibbase.h"
 
 /* All MS C compilers for Win32 platforms default to 8 byte alignment. */
 #pragma pack(push,8)
@@ -20,13 +20,12 @@ extern "C" {
 
 #ifndef _EXCEPTION_DEFINED
 struct _exception {
-        int type;       /* exception type - see below */
-        char *name;     /* name of function where error occurred */
-        double arg1;    /* first argument to function */
-        double arg2;    /* second argument (if any) to function */
-        double retval;  /* value to be returned by function */
-        } ;
-
+	int type;		/* exception type - see below */
+	char *name;		/* name of function where error occurred */
+	double arg1;	/* first argument to function */
+	double arg2;	/* second argument (if any) to function */
+	double retval;	/* value to be returned by function */
+};
 #define _EXCEPTION_DEFINED
 #endif  /* _EXCEPTION_DEFINED */
 
@@ -37,8 +36,8 @@ struct _exception {
 
 #ifndef _COMPLEX_DEFINED
 struct _complex {
-        double x,y; /* real and imaginary parts */
-        } ;
+	double x,y; /* real and imaginary parts */
+};
 
 #if !__STDC__ && !defined (__cplusplus)
 /* Non-ANSI name for compatibility */
@@ -53,16 +52,15 @@ struct _complex {
 /* Constant definitions for the exception type passed in the _exception struct
  */
 
-#define _DOMAIN     1   /* argument domain error */
-#define _SING       2   /* argument singularity */
-#define _OVERFLOW   3   /* overflow range error */
-#define _UNDERFLOW  4   /* underflow range error */
-#define _TLOSS      5   /* total loss of precision */
-#define _PLOSS      6   /* partial loss of precision */
+#define _DOMAIN		1	/* argument domain error */
+#define _SING		2	/* argument singularity */
+#define _OVERFLOW	3	/* overflow range error */
+#define _UNDERFLOW	4	/* underflow range error */
+#define _TLOSS		5	/* total loss of precision */
+#define _PLOSS		6	/* partial loss of precision */
 
-#define EDOM        33
-#define ERANGE      34
-
+#define EDOM		33
+#define ERANGE		34
 
 /* Definitions of _HUGE and HUGE_VAL - respectively the XENIX and ANSI names
  * for a value returned in case of error by a number of the floating point
@@ -97,24 +95,20 @@ _CRTIMP double __cdecl _copysign ( double _Number,  double _Sign);
 _CRTIMP double __cdecl _chgsign ( double _X);
 #define _SIGN_DEFINED
 #endif  /* _SIGN_DEFINED */
-        double  __cdecl cos( double _X);
-        double  __cdecl cosh( double _X);
-        double  __cdecl exp( double _X);
-_CRT_JIT_INTRINSIC double  __cdecl fabs( double _X);
-        double  __cdecl fmod( double _X,  double _Y);
-        double  __cdecl log( double _X);
-        double  __cdecl log10( double _X);
-        double  __cdecl pow( double _X,  double _Y);
-        double  __cdecl sin( double _X);
-        double  __cdecl sinh( double _X);
-        double  __cdecl tan( double _X);
-        double  __cdecl tanh( double _X);
-        double  __cdecl sqrt( double _X);
-#ifndef _CRT_ATOF_DEFINED
-#define _CRT_ATOF_DEFINED
+	double  __cdecl cos( double _X);
+	double  __cdecl cosh( double _X);
+	double  __cdecl exp( double _X);
+	double  __cdecl fabs( double _X);
+	double  __cdecl fmod( double _X,  double _Y);
+	double  __cdecl log( double _X);
+	double  __cdecl log10( double _X);
+	double  __cdecl pow( double _X,  double _Y);
+	double  __cdecl sin( double _X);
+	double  __cdecl sinh( double _X);
+	double  __cdecl tan( double _X);
+	double  __cdecl tanh( double _X);
+	double  __cdecl sqrt( double _X);
 _CRTIMP double  __cdecl atof(_In_z_ const char *_String);
-_CRTIMP double  __cdecl _atof_l(_In_z_ const char *_String, _In_opt_ _locale_t _Locale);
-#endif  /* _CRT_ATOF_DEFINED */
 
 _CRTIMP double  __cdecl _cabs( struct _complex _Complex_value);
 _CRTIMP double  __cdecl ceil( double _X);
@@ -129,7 +123,7 @@ _CRTIMP double  __cdecl ldexp( double _X,  int _Y);
 #ifndef _CRT_MATHERR_DEFINED
 #define _CRT_MATHERR_DEFINED
 #if defined (MRTDLL) || defined (_M_CEE_PURE)
-        int     __CRTDECL _matherr(_Inout_ struct _exception * _Except);
+        int     __cdecl _matherr(_Inout_ struct _exception * _Except);
 #else  /* defined (MRTDLL) || defined (_M_CEE_PURE) */
         int     __cdecl _matherr(_Inout_ struct _exception * _Except);
 #endif  /* defined (MRTDLL) || defined (_M_CEE_PURE) */
@@ -143,12 +137,12 @@ _CRTIMP double  __cdecl _yn( int _X,  double _Y);
 /* hypot and hypotf are now part of the C99 Standard */
 #if !defined (RC_INVOKED) && !defined (__midl)
 
-static __inline double __CRTDECL hypot( double _X,  double _Y)
+static __inline double hypot( double _X,  double _Y)
 {
     return _hypot(_X, _Y);
 }
 
-static __inline float __CRTDECL hypotf( float _X,  float _Y)
+static __inline float hypotf( float _X,  float _Y)
 {
     return _hypotf(_X, _Y);
 }
@@ -192,7 +186,7 @@ _CRTIMP float  __cdecl sqrtf(  float  _X);
 
 /* 4.5.6 Nearest integer, absolute value, and remainder functions */
 _CRTIMP float  __cdecl ceilf(  float  _X);
-_CRT_JIT_INTRINSIC  _CRTIMP float  __cdecl fabsf(  float  _X);
+_CRTIMP float  __cdecl fabsf(  float  _X);
 _CRTIMP float  __cdecl floorf(  float  _X);
 _CRTIMP float  __cdecl fmodf(  float _X,  float _Y);
 
@@ -447,14 +441,6 @@ _CRTIMP extern double HUGE;
     const double HUGE = _HUGE;
 #endif  /* !defined (_M_CEE_PURE) */
 
-_CRT_NONSTDC_DEPRECATE(_cabs) _CRTIMP double  __cdecl cabs( struct _complex _X);
-_CRT_NONSTDC_DEPRECATE(_j0) _CRTIMP double  __cdecl j0( double _X);
-_CRT_NONSTDC_DEPRECATE(_j1) _CRTIMP double  __cdecl j1( double _X);
-_CRT_NONSTDC_DEPRECATE(_jn) _CRTIMP double  __cdecl jn( int _X,  double _Y);
-_CRT_NONSTDC_DEPRECATE(_y0) _CRTIMP double  __cdecl y0( double _X);
-_CRT_NONSTDC_DEPRECATE(_y1) _CRTIMP double  __cdecl y1( double _X);
-_CRT_NONSTDC_DEPRECATE(_yn) _CRTIMP double  __cdecl yn( int _X,  double _Y);
-
 #endif  /* __assembler */
 
 #endif  /* !__STDC__ */
@@ -477,105 +463,105 @@ template<class _Ty> inline
                 if ((_N >>= 1) == 0)
                         return (_Y < 0 ? _Ty(1) / _Z : _Z); }}
 
-inline double __CRTDECL abs( double _X)
+inline double __cdecl abs( double _X)
         {return (fabs(_X)); }
-inline double __CRTDECL pow( double _X,  int _Y)
+inline double __cdecl pow( double _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline float __CRTDECL abs( float _X)
+inline float __cdecl abs( float _X)
         {return (fabsf(_X)); }
-inline float __CRTDECL acos( float _X)
+inline float __cdecl acos( float _X)
         {return (acosf(_X)); }
-inline float __CRTDECL asin( float _X)
+inline float __cdecl asin( float _X)
         {return (asinf(_X)); }
-inline float __CRTDECL atan( float _X)
+inline float __cdecl atan( float _X)
         {return (atanf(_X)); }
-inline float __CRTDECL atan2( float _Y,  float _X)
+inline float __cdecl atan2( float _Y,  float _X)
         {return (atan2f(_Y, _X)); }
-inline float __CRTDECL ceil( float _X)
+inline float __cdecl ceil( float _X)
         {return (ceilf(_X)); }
-inline float __CRTDECL cos( float _X)
+inline float __cdecl cos( float _X)
         {return (cosf(_X)); }
-inline float __CRTDECL cosh( float _X)
+inline float __cdecl cosh( float _X)
         {return (coshf(_X)); }
-inline float __CRTDECL exp( float _X)
+inline float __cdecl exp( float _X)
         {return (expf(_X)); }
-inline float __CRTDECL fabs( float _X)
+inline float __cdecl fabs( float _X)
         {return (fabsf(_X)); }
-inline float __CRTDECL floor( float _X)
+inline float __cdecl floor( float _X)
         {return (floorf(_X)); }
-inline float __CRTDECL fmod( float _X,  float _Y)
+inline float __cdecl fmod( float _X,  float _Y)
         {return (fmodf(_X, _Y)); }
-inline float __CRTDECL frexp( float _X, _Out_ int * _Y)
+inline float __cdecl frexp( float _X, _Out_ int * _Y)
         {return (frexpf(_X, _Y)); }
-inline float __CRTDECL ldexp( float _X,  int _Y)
+inline float __cdecl ldexp( float _X,  int _Y)
         {return (ldexpf(_X, _Y)); }
-inline float __CRTDECL log( float _X)
+inline float __cdecl log( float _X)
         {return (logf(_X)); }
-inline float __CRTDECL log10( float _X)
+inline float __cdecl log10( float _X)
         {return (log10f(_X)); }
-inline float __CRTDECL modf( float _X, _Out_ float * _Y)
+inline float __cdecl modf( float _X, _Out_ float * _Y)
         {return (modff(_X, _Y)); }
-inline float __CRTDECL pow( float _X,  float _Y)
+inline float __cdecl pow( float _X,  float _Y)
         {return (powf(_X, _Y)); }
-inline float __CRTDECL pow( float _X,  int _Y)
+inline float __cdecl pow( float _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline float __CRTDECL sin( float _X)
+inline float __cdecl sin( float _X)
         {return (sinf(_X)); }
-inline float __CRTDECL sinh( float _X)
+inline float __cdecl sinh( float _X)
         {return (sinhf(_X)); }
-inline float __CRTDECL sqrt( float _X)
+inline float __cdecl sqrt( float _X)
         {return (sqrtf(_X)); }
-inline float __CRTDECL tan( float _X)
+inline float __cdecl tan( float _X)
         {return (tanf(_X)); }
-inline float __CRTDECL tanh( float _X)
+inline float __cdecl tanh( float _X)
         {return (tanhf(_X)); }
-inline long double __CRTDECL abs( long double _X)
+inline long double __cdecl abs( long double _X)
         {return (fabsl(_X)); }
-inline long double __CRTDECL acos( long double _X)
+inline long double __cdecl acos( long double _X)
         {return (acosl(_X)); }
-inline long double __CRTDECL asin( long double _X)
+inline long double __cdecl asin( long double _X)
         {return (asinl(_X)); }
-inline long double __CRTDECL atan( long double _X)
+inline long double __cdecl atan( long double _X)
         {return (atanl(_X)); }
-inline long double __CRTDECL atan2( long double _Y,  long double _X)
+inline long double __cdecl atan2( long double _Y,  long double _X)
         {return (atan2l(_Y, _X)); }
-inline long double __CRTDECL ceil( long double _X)
+inline long double __cdecl ceil( long double _X)
         {return (ceill(_X)); }
-inline long double __CRTDECL cos( long double _X)
+inline long double __cdecl cos( long double _X)
         {return (cosl(_X)); }
-inline long double __CRTDECL cosh( long double _X)
+inline long double __cdecl cosh( long double _X)
         {return (coshl(_X)); }
-inline long double __CRTDECL exp( long double _X)
+inline long double __cdecl exp( long double _X)
         {return (expl(_X)); }
-inline long double __CRTDECL fabs( long double _X)
+inline long double __cdecl fabs( long double _X)
         {return (fabsl(_X)); }
-inline long double __CRTDECL floor( long double _X)
+inline long double __cdecl floor( long double _X)
         {return (floorl(_X)); }
-inline long double __CRTDECL fmod( long double _X,  long double _Y)
+inline long double __cdecl fmod( long double _X,  long double _Y)
         {return (fmodl(_X, _Y)); }
-inline long double __CRTDECL frexp( long double _X, _Out_ int * _Y)
+inline long double __cdecl frexp( long double _X, _Out_ int * _Y)
         {return (frexpl(_X, _Y)); }
-inline long double __CRTDECL ldexp( long double _X,  int _Y)
+inline long double __cdecl ldexp( long double _X,  int _Y)
         {return (ldexpl(_X, _Y)); }
-inline long double __CRTDECL log( long double _X)
+inline long double __cdecl log( long double _X)
         {return (logl(_X)); }
-inline long double __CRTDECL log10( long double _X)
+inline long double __cdecl log10( long double _X)
         {return (log10l(_X)); }
-inline long double __CRTDECL modf( long double _X, _Out_ long double * _Y)
+inline long double __cdecl modf( long double _X, _Out_ long double * _Y)
         {return (modfl(_X, _Y)); }
-inline long double __CRTDECL pow( long double _X,  long double _Y)
+inline long double __cdecl pow( long double _X,  long double _Y)
         {return (powl(_X, _Y)); }
-inline long double __CRTDECL pow( long double _X,  int _Y)
+inline long double __cdecl pow( long double _X,  int _Y)
         {return (_Pow_int(_X, _Y)); }
-inline long double __CRTDECL sin( long double _X)
+inline long double __cdecl sin( long double _X)
         {return (sinl(_X)); }
-inline long double __CRTDECL sinh( long double _X)
+inline long double __cdecl sinh( long double _X)
         {return (sinhl(_X)); }
-inline long double __CRTDECL sqrt( long double _X)
+inline long double __cdecl sqrt( long double _X)
         {return (sqrtl(_X)); }
-inline long double __CRTDECL tan( long double _X)
+inline long double __cdecl tan( long double _X)
         {return (tanl(_X)); }
-inline long double __CRTDECL tanh( long double _X)
+inline long double __cdecl tanh( long double _X)
         {return (tanhl(_X)); }
 
 }

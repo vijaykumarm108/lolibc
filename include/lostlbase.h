@@ -10,6 +10,11 @@
 #pragma once
 #include "lolibbase.h"
 
+#ifndef __cplusplus
+#error This header requires a C++ compiler ...
+#endif
+
+
 namespace lo
 {
 	class object;
@@ -39,6 +44,9 @@ namespace lo
 	};
 
 	typedef uint8_t utf8subchar_t;	///< Type for the encoding subcharacters.
+
+	/// Creates an malloc sprintf string, which you *must* later free.
+	const char *dsprintf(const char *format,...);
 }
 
 namespace std
@@ -153,7 +161,7 @@ namespace lo
 	///
 	/// \code
 	///     void* p = malloc (46721);
-	///     cmemlink a, b;
+	///     cblocklink a, b;
 	///     a.link (p, 46721);
 	///     assert (a.size() == 46721));
 	///     b = a;
@@ -162,7 +170,7 @@ namespace lo
 	///     assert (0 == memcmp (a, b, 12));
 	/// \endcode
 	///
-	class cmemlink {
+	class cblocklink {
 	public:
 		typedef char				value_type;
 		typedef value_type*			pointer;
@@ -174,30 +182,30 @@ namespace lo
 		typedef ptrdiff_t			difference_type;
 		typedef const_pointer		const_iterator;
 		typedef const_iterator		iterator;
-		typedef const cmemlink&		rcself_t;
+		typedef const cblocklink&		rcself_t;
 	public:
-		inline				cmemlink (void)				: m_Data (NULL), m_Size (0) { }
-							cmemlink (const void* p, size_type n);
-		inline				cmemlink (const cmemlink& l)		: m_Data (l.m_Data), m_Size (l.m_Size) {}
-		inline virtual     ~cmemlink (void) throw()			{}
+		inline				cblocklink (void)				: m_Data (NULL), m_Size (0) { }
+							cblocklink (const void* p, size_type n);
+		inline				cblocklink (const cblocklink& l)		: m_Data (l.m_Data), m_Size (l.m_Size) {}
+		inline virtual     ~cblocklink (void) throw()			{}
 		inline iterator		begin (void) const			{ return (iterator (cdata())); }
 		inline const_pointer	cdata (void) const			{ return (m_Data); }
 		inline bool			empty (void) const			{ return (!size()); }
 		inline iterator		end (void) const			{ return (iat (size())); }
 		iterator			iat (size_type i) const;
 		void				link (const void* p, size_type n);
-		inline void			link (const cmemlink& l)	{ link (l.begin(), l.size()); }
+		inline void			link (const cblocklink& l)	{ link (l.begin(), l.size()); }
 		void				link (const void* first, const void* last);
 		inline size_type	max_size (void) const		{ return (size()); }
-		inline rcself_t		operator= (const cmemlink& l)	{ link (l); return (*this); }
-		bool				operator== (const cmemlink& l) const;
+		inline rcself_t		operator= (const cblocklink& l)	{ link (l); return (*this); }
+		bool				operator== (const cblocklink& l) const;
 		void				read (std::istream&);
 		inline void			relink (const void* p, size_type n);
 		inline size_type	readable_size (void) const	{ return (size()); }
 		inline void			resize (size_type n)		{ m_Size = n; }
 		inline size_type	size (void) const			{ return (m_Size); }
 		size_type			stream_size (void) const;
-		void				swap (cmemlink& l);
+		void				swap (cblocklink& l);
 		void				text_write (std::ostringstream& os) const;
 		virtual void		unlink (void) throw();
 		void				write (std::ostream& os) const;
@@ -210,13 +218,13 @@ namespace lo
 	//----------------------------------------------------------------------
 
 	/// A fast alternative to link which can be used when relinking to the same block (i.e. when it is resized)
-	inline void cmemlink::relink (const void* p, size_type n)
+	inline void cblocklink::relink (const void* p, size_type n)
 	{
 		m_Data = reinterpret_cast<const_pointer>(p);
 		m_Size = n;
 	}
 
-	//template <> inline void swap (cmemlink& a, cmemlink& b)
+	//template <> inline void swap (cblocklink& a, cblocklink& b)
 	//{
 	//	a.swap (b);
 	//}
@@ -229,7 +237,7 @@ namespace lo
 	Example usage:
 	\code
 		void* p = malloc (46721);
-		memlink a, b;
+		blocklink a, b;
 		a.link (p, 46721);
 		assert (a.size() == 46721));
 		b = a;
@@ -240,55 +248,55 @@ namespace lo
 		b.erase (87, 12);
 	\endcode
 	*/
-	class memlink : public cmemlink {
+	class blocklink : public cblocklink {
 	public:
-		typedef cmemlink::const_iterator	const_iterator;
-		typedef cmemlink::pointer			const_pointer;
+		typedef cblocklink::const_iterator	const_iterator;
+		typedef cblocklink::pointer			const_pointer;
 		typedef pointer						iterator;
 		typedef value_type*					pointer;
-		typedef const memlink&				rcself_t;
+		typedef const blocklink&				rcself_t;
 	public:
-		inline					memlink (void)				: cmemlink() {}
-		inline					memlink (void* p, size_type n)		: cmemlink (p, n) {}
-		inline					memlink (const void* p, size_type n)	: cmemlink (p, n) {}
-		inline					memlink (rcself_t l)			: cmemlink (l) {}
-		inline explicit			memlink (const cmemlink& l)		: cmemlink (l) {}
-		inline const_iterator	begin (void) const		{ return (cmemlink::begin()); }
+		inline					blocklink (void)				: cblocklink() {}
+		inline					blocklink (void* p, size_type n)		: cblocklink (p, n) {}
+		inline					blocklink (const void* p, size_type n)	: cblocklink (p, n) {}
+		inline					blocklink (rcself_t l)			: cblocklink (l) {}
+		inline explicit			blocklink (const cblocklink& l)		: cblocklink (l) {}
+		inline const_iterator	begin (void) const			{ return (cblocklink::begin()); }
 		inline iterator			begin (void)				{ return (iterator (data())); }
 		inline pointer			data (void)					{ return (const_cast<pointer>(cdata())); }
 		inline iterator			end (void)					{ return (iat (size())); }
-		inline const_iterator	end (void) const		{ return (cmemlink::end()); }
-		inline void				erase (iterator start, size_type size);
+		inline const_iterator	end (void) const			{ return (cblocklink::end()); }
+		void					erase (iterator start, size_type size);
 		void					fill (iterator start, const void* p, size_type elsize, size_type elCount = 1);
-		inline iterator			iat (size_type i);
-		inline const_iterator	iat (size_type i) const		{ return (cmemlink::iat (i)); }
-		inline void				insert (iterator start, size_type size);
-		inline void				link (const void* p, size_type n)	{ cmemlink::link (p, n); }
-		inline void				link (void* p, size_type n)			{ cmemlink::link (p, n); }
-		inline void				link (const cmemlink& l)			{ cmemlink::link (l); }
-		inline void				link (memlink& l)					{ cmemlink::link (l); }
+		iterator				iat (size_type i);
+		inline const_iterator	iat (size_type i) const		{ return (cblocklink::iat (i)); }
+		void					insert (iterator start, size_type size);
+		inline void				link (const void* p, size_type n)	{ cblocklink::link (p, n); }
+		inline void				link (void* p, size_type n)			{ cblocklink::link (p, n); }
+		inline void				link (const cblocklink& l)			{ cblocklink::link (l); }
+		inline void				link (blocklink& l)					{ cblocklink::link (l); }
 		void					link (const void* first, const void* last);
 		void					link (void* first, void* last);
-		inline rcself_t			operator= (const cmemlink& l)		{ cmemlink::operator= (l); return (*this); }
-		inline rcself_t			operator= (rcself_t l)				{ cmemlink::operator= (l); return (*this); }
-		inline void				relink (const void* p, size_type n)	{ cmemlink::relink (p, n); }
-		inline void				relink (void* p, size_type n)		{ cmemlink::relink (p, n); }
+		inline rcself_t			operator= (const cblocklink& l)		{ cblocklink::operator= (l); return (*this); }
+		inline rcself_t			operator= (rcself_t l)				{ cblocklink::operator= (l); return (*this); }
+		inline void				relink (const void* p, size_type n)	{ cblocklink::relink (p, n); }
+		inline void				relink (void* p, size_type n)		{ cblocklink::relink (p, n); }
 		void					read (std::istream& is);
-		inline void				swap (memlink& l)					{ cmemlink::swap (l); }
+		inline void				swap (blocklink& l)					{ cblocklink::swap (l); }
 		size_type				writable_size (void) const			{ return (size()); }
 	};
 
 	
 
-/// Use with memlink-derived classes to allocate and link to stack space.
+/// Use with blocklink-derived classes to allocate and link to stack space.
 #define alloca_link(m,n)	(m).link (alloca (n), (n))
 
-/// Use with cmemlink-derived classes to link to a static array
+/// Use with cblocklink-derived classes to link to a static array
 #define static_link(v)	link (VectorBlock(v))
 
 }
 
 namespace std
 {
-	template <> inline void swap (lo::memlink& a, lo::memlink& b)			{ a.swap (b); }
+	template <> inline void swap (lo::blocklink& a, lo::blocklink& b)			{ a.swap (b); }
 }

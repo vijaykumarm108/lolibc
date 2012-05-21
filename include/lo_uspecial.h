@@ -2,6 +2,8 @@
 //
 #pragma once
 
+#include "lostlbase.h"
+#include "ctype.h"
 #include "vector"
 #include "string"
 #include "sstream"
@@ -12,7 +14,6 @@
 #include "lo_uctrstrm.h"
 #include "istream"
 #include "tuple"
-#include "ctype.h"
 #include "lo_matrix.h"
 
 namespace std {

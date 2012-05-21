@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _INC_STDDEF
 #define _INC_STDDEF
-//#include <crtdefs.h>
+#include "lolibbase.h"
 
 #ifdef __cplusplus
 extern "C" {

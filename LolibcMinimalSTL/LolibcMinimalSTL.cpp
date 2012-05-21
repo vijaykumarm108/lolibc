@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[])
 {
-	printf("Hello world\n");
+	printf("Hello world.  Size of string=%d\n",sizeof(std::string));
 	std::string str = "Press any key to continue";
 	printf(str.c_str());
 	getchar();

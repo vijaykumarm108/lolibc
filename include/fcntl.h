@@ -62,11 +62,23 @@
 #define O_RANDOM        _O_RANDOM
 #endif  /* !__STDC__ */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 _CRTIMP int __cdecl _close(int _FileHandle);
-int __cdecl open( const char * _Filename, int _OpenFlag, ...);	// UTF8 version punts to _wopen
+int __cdecl _open( const char * _Filename, int _OpenFlag, ...);	// UTF8 version punts to _wopen
+inline int __cdecl open( const char * _Filename, int _OpenFlag, ...)
+{
+	return _open(_Filename,_OpenFlag);
+}
 _CRTIMP long __cdecl _lseek( int _FileHandle, long _Offset, int _Origin);
 _CRTIMP int __cdecl _read( int _FileHandle, void * _DstBuf, unsigned int _MaxCharCount);
 _CRTIMP int __cdecl _write( int _FileHandle, const void * _Buf, unsigned int _MaxCharCount);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
 

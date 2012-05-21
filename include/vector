@@ -1,5 +1,5 @@
 #pragma once
-#include "lo_memblock.h"
+#include "lo_block.h"
 #include "memory"
 #include "algorithm"
 #include "lo_uctrstrm.h"
@@ -19,16 +19,16 @@ namespace std {
 	template <typename T> class vector
 	{
 	public:
-		typedef T							value_type;
-		typedef value_type*					pointer;
-		typedef const value_type*			const_pointer;
-		typedef value_type&					reference;
-		typedef const value_type&			const_reference;
-		typedef pointer						iterator;
-		typedef const_pointer				const_iterator;
-		typedef lo::memblock::size_type			size_type;
-		typedef lo::memblock::written_size_type	written_size_type;
-		typedef lo::memblock::difference_type	difference_type;
+		typedef T								value_type;
+		typedef value_type*						pointer;
+		typedef const value_type*				const_pointer;
+		typedef value_type&						reference;
+		typedef const value_type&				const_reference;
+		typedef pointer							iterator;
+		typedef const_pointer					const_iterator;
+		typedef lo::block::size_type			size_type;
+		typedef lo::block::written_size_type	written_size_type;
+		typedef lo::block::difference_type		difference_type;
 		typedef ::std::reverse_iterator<iterator>		reverse_iterator;
 		typedef ::std::reverse_iterator<const_iterator>	const_reverse_iterator;
 	public:
@@ -40,9 +40,9 @@ namespace std {
 		inline			~vector (void) throw();
 		inline const vector<T>&	operator= (const vector<T>& v);
 		inline bool		operator== (const vector<T>& v) const	{ return (m_Data == v.m_Data); }
-		inline			operator lo::cmemlink (void) const		{ return (lo::cmemlink (m_Data)); }
-		inline			operator lo::cmemlink (void)			{ return (lo::cmemlink (m_Data)); }
-		inline			operator lo::memlink (void)				{ return (lo::memlink (m_Data)); }
+		inline			operator lo::blocklink (void) const		{ return (lo::blocklink (m_Data)); }
+		inline			operator lo::blocklink (void)			{ return (lo::blocklink (m_Data)); }
+		inline			operator lo::blocklink (void)				{ return (lo::blocklink (m_Data)); }
 		inline void				reserve (size_type n, bool bExact = true);
 		inline void				resize (size_type n, bool bExact = true);
 		inline size_type		capacity (void) const		{ return (m_Data.capacity() / sizeof(T));	}
@@ -68,7 +68,7 @@ namespace std {
 		inline reference		back (void)					{ assert (!empty()); return (end()[-1]); }
 		inline const_reference	back (void) const			{ assert (!empty()); return (end()[-1]); }
 		inline void			push_back (const T& v = T());
-		inline void			pop_back (void)			{ m_Data.memlink::resize (m_Data.size() - sizeof(T)); }
+		inline void			pop_back (void)			{ m_Data.blocklink::resize (m_Data.size() - sizeof(T)); }
 		inline void			clear (void)			{ m_Data.clear(); }
 		inline void			deallocate (void) throw();
 		inline void			assign (const_iterator i1, const_iterator i2);
@@ -79,24 +79,24 @@ namespace std {
 		inline iterator		insert (iterator ip, const_iterator i1, const_iterator i2);
 		inline iterator		erase (iterator ep, size_type n = 1);
 		inline iterator		erase (iterator ep1, iterator ep2);
-		inline void			manage (pointer p, size_type n)		{ m_Data.manage (p, n * sizeof(T)); }
-		inline bool			is_linked (void) const			{ return (m_Data.is_linked()); }
-		inline void			unlink (void)				{ m_Data.unlink(); }
-		inline void			copy_link (void)			{ m_Data.copy_link(); }
-		inline void			link (const_pointer p, size_type n)	{ m_Data.link (p, n * sizeof(T)); }
-		inline void			link (pointer p, size_type n)		{ m_Data.link (p, n * sizeof(T)); }
-		inline void			link (const vector<T>& v)		{ m_Data.link (v); }
-		inline void			link (vector<T>& v)			{ m_Data.link (v); }
+		inline void			manage (pointer p, size_type n)			{ m_Data.manage (p, n * sizeof(T)); }
+		inline bool			is_linked (void) const					{ return (m_Data.is_linked()); }
+		inline void			unlink (void)							{ m_Data.unlink(); }
+		inline void			copy_link (void)						{ m_Data.copy_link(); }
+		inline void			link (const_pointer p, size_type n)		{ m_Data.link (p, n * sizeof(T)); }
+		inline void			link (pointer p, size_type n)			{ m_Data.link (p, n * sizeof(T)); }
+		inline void			link (const vector<T>& v)				{ m_Data.link (v); }
+		inline void			link (vector<T>& v)						{ m_Data.link (v); }
 		inline void			link (const_pointer first, const_pointer last)	{ m_Data.link (first, last); }
 		inline void			link (pointer first, pointer last)		{ m_Data.link (first, last); }
-		inline void			read (istream& is)			{ container_read (is, *this); }
-		inline void			write (ostream& os) const		{ container_write (os, *this); }
+		inline void			read (istream& is)						{ container_read (is, *this); }
+		inline void			write (ostream& os) const				{ container_write (os, *this); }
 		inline void			text_write (ostringstream& os) const	{ container_text_write (os, *this); }
-		inline size_t		stream_size (void) const		{ return (container_stream_size (*this)); }
+		inline size_t		stream_size (void) const				{ return (container_stream_size (*this)); }
 	protected:
 		inline iterator		insert_space (iterator ip, size_type n);
 	private:
-		lo::memblock		m_Data;	///< Raw element data, consecutively stored.
+		lo::block			m_Data;	///< Raw element data, consecutively stored.
 	};
 
 /// Allocates space for at least \p n elements.
@@ -115,7 +115,7 @@ inline void vector<T>::resize (size_type n, bool bExact)
     const size_type nb = n * sizeof(T);
     if (m_Data.capacity() < nb)
 	reserve (n, bExact);
-    m_Data.memlink::resize (nb);
+    m_Data.blocklink::resize (nb);
 }
 
 /// Calls element destructors and frees storage.
@@ -204,7 +204,7 @@ inline const vector<T>& vector<T>::operator= (const vector<T>& v)
 template <typename T>
 inline typename vector<T>::iterator vector<T>::insert_space (iterator ip, size_type n)
 {
-    const uoff_t ipmi = distance (m_Data.begin(), memblock::iterator(ip));
+    const uoff_t ipmi = distance (m_Data.begin(), block::iterator(ip));
     reserve (size() + n, false);
     return (iterator (m_Data.insert (m_Data.iat(ipmi), n * sizeof(T))));
 }
@@ -240,7 +240,7 @@ inline typename vector<T>::iterator vector<T>::insert (iterator ip, const_iterat
 template <typename T>
 inline typename vector<T>::iterator vector<T>::erase (iterator ep, size_type n)
 {
-    return (iterator (m_Data.erase (memblock::iterator(ep), n * sizeof(T))));
+    return (iterator (m_Data.erase (block::iterator(ep), n * sizeof(T))));
 }
 
 /// Removes elements from \p ep1 to \p ep2.

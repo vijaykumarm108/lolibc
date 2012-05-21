@@ -98,10 +98,17 @@ typedef struct _iobuf FILE;
 extern "C" {
 #endif
 
-	_CRTIMP int vprintf(const char *format, va_list ap);
-	_CRTIMP int vsprintf(char *str, const char *format, va_list ap);
-	_CRTIMP int vsnprintf(char *str, size_t size, const char *format, va_list ap);
-	_CRTIMP int vfprintf(FILE *stream, const char *format, va_list ap);
+	_CRTIMP int getchar ( void );
+	_CRTIMP int printf( const char * format, ... );
+	_CRTIMP int sprintf( char *str, const char *format, ... );
+	_CRTIMP int vprintf( const char *format, va_list ap );
+	_CRTIMP int vsprintf( char *str, const char *format, va_list ap );
+	_CRTIMP int _vsnprintf( char *str, size_t size, const char *format, va_list ap );
+	inline int vsnprintf(char *str, size_t size, const char *format, va_list ap )
+	{
+		return _vsnprintf(str,size,format,ap);
+	}
+	_CRTIMP int vfprintf( FILE *stream, const char *format, va_list ap );
 
 #ifdef __cplusplus
 };

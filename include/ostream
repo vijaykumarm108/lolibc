@@ -2,7 +2,7 @@
 //
 
 #pragma once
-#include "lo_memlink.h"
+#include "lostlbase.h"
 #include "exception"
 #include "lo_utf8.h"
 #include "ios_base.h"
@@ -23,13 +23,11 @@ namespace std {
 	/// Therefore, all write functions have asserts to check alignment.
 	/// See \ref istream documentation for rules on designing your data format.
 	/// Overwriting the end of the stream will also cause a crash (an assert in
-	/// debug builds). Oh, and don't be intimidated by the size of the inlines
-	/// here. In the assembly code the compiler will usually chop everything down
-	/// to five instructions each.
+	/// debug builds).
 	///
 	/// Example code:
 	/// \code
-	///     memblock b;
+	///     block b;
 	///     ostream os (b);
 	///     os << boolVar << ios::talign<int>();
 	///     os << intVar << floatVar;
@@ -39,47 +37,54 @@ namespace std {
 	///     b.write_file ("test.file");
 	/// \endcode
 	///
-	class ostream : public lo::memlink, public ios_base {
+	class ostream : public lo::blocklink, public ios_base {
 	public:
-		inline					ostream (void);
-		inline					ostream (void* p, streamsize n);
-		inline explicit			ostream (const memlink& source);
-		inline streamsize		align_size (streamsize grain = lo::c_DefaultAlignment) const;
+		inline					ostream (void) : blocklink (), m_Pos (0) {}
+		inline					ostream (void* p, streamsize n)  : blocklink (p, n), m_Pos (0) {}
+		inline explicit			ostream (const blocklink& source) : blocklink (source), m_Pos (0) {}
+		streamsize				align_size (streamsize grain = lo::c_DefaultAlignment) const;
 		void					align (streamsize grain = lo::c_DefaultAlignment);
-		inline bool				aligned (streamsize grain = lo::c_DefaultAlignment) const;
-		inline iterator			end (void)						{ return (lo::memlink::end()); }
-		inline const_iterator	end (void) const				{ return (lo::memlink::end()); }
+		bool					aligned (streamsize grain = lo::c_DefaultAlignment) const;
+		inline iterator			end (void)						{ return (lo::blocklink::end()); }
+		inline const_iterator	end (void) const				{ return (lo::blocklink::end()); }
 		void					erase (iterator start, streamsize size);
 		void					insert (iterator start, streamsize size);
 		inline iterator			ipos (void)						{ return (begin() + pos()); }
 		inline const_iterator	ipos (void) const				{ return (begin() + pos()); }
-		inline void				iseek (const_iterator newPos);
+		void					iseek (const_iterator newPos);
+		/// Writes type T into the stream via a direct pointer cast.
 		template <typename T>
-		inline void				iwrite (const T& v);
-		inline void				link (void* p, streamsize n)	{ memlink::link (p, n); }
-		inline void				link (memlink& l)				{ memlink::link (l.data(), l.writable_size()); }
-		inline void				link (void* f, void* l)			{ memlink::link (f, l); }
+		inline void				iwrite (const T& v)
+		{
+			assert (aligned (alignof (v)));
+			assert (remaining() >= sizeof(T));
+			*reinterpret_cast<T*>(ipos()) = v;
+			SetPos (pos() + sizeof(T));
+		}
+		inline void				link (void* p, streamsize n)	{ blocklink::link (p, n); }
+		inline void				link (blocklink& l)				{ blocklink::link (l.data(), l.writable_size()); }
+		inline void				link (void* f, void* l)			{ blocklink::link (f, l); }
 		inline virtual streamsize	overflow (streamsize = 1)	{ return (remaining()); }
-		inline uoff_t			pos (void) const	{ return (m_Pos); }
+		inline uoff_t			pos (void) const				{ return (m_Pos); }
 		void					read (istream& is);
-		inline void				relink (void* p, streamsize n)	{ memlink::relink (p, n); m_Pos = 0; }
-		inline void				relink (memlink& l)		{ relink (l.data(), l.writable_size()); }
-		inline streamsize		remaining (void) const;
-		inline void				seek (uoff_t newPos);
-		inline void				seekp (off_t p, seekdir d = beg);
-		inline void				skip (streamsize nBytes);
-		inline void				swap (ostream& os);
-		inline size_t			stream_size (void) const	{ return (pos()); }
+		inline void				relink (void* p, streamsize n)	{ blocklink::relink (p, n); m_Pos = 0; }
+		inline void				relink (blocklink& l)				{ relink (l.data(), l.writable_size()); }
+		streamsize				remaining (void) const;
+		void					seek (uoff_t newPos);
+		void					seekp (off_t p, seekdir d = beg);
+		void					skip (streamsize nBytes);
+		void					swap (ostream& os);
+		inline size_t			stream_size (void) const		{ return (this->pos()); }
 		void					text_write (ostringstream& os) const;
-		inline off_t			tellp (void) const		{ return (off_t)(pos()); }
+		inline off_t			tellp (void) const				{ return (off_t)(pos()); }
 		virtual void			unlink (void) throw();
 		bool					verify_remaining (const char* op, const char* type, size_t n);
-		inline void				write (ostream& os) const	{ os.write (begin(), pos()); }
-		inline void				write (const void* buffer, streamsize size);
-		inline void				write (const cmemlink& buf);
+		inline void				write (ostream& os) const		{ os.write (begin(), pos()); }
+		void					write (const void* buffer, streamsize size);
+		void					write (const cblocklink& buf);
 		void					write_strz (const char* str);
 	protected:
-		inline void				SetPos (uoff_t newPos)		{ m_Pos = newPos; }
+		inline void				SetPos (uoff_t newPos)			{ m_Pos = newPos; }
 	private:
 		streamoff				m_Pos;	///< Current write position.
 	};
@@ -116,130 +121,6 @@ namespace std {
 		Stream&	m_Os;
 	};
 
-
-	/// \brief Constructs a stream attached to nothing.
-	/// A stream attached to nothing is not usable. Call Link() functions
-	/// inherited from memlink to attach to some memory block.
-	///
-	inline ostream::ostream (void) : memlink (), m_Pos (0)
-	{
-	}
-
-	/// Attaches the stream to a block at \p p of size \p n.
-	inline ostream::ostream (void* p, streamsize n) : memlink (p, n), m_Pos (0)
-	{
-	}
-
-	/// Attaches to the block pointed to by \p source.
-	inline ostream::ostream (const memlink& source) : memlink (source), m_Pos (0)
-	{
-	}
-
-	/// Checks that \p n bytes are available in the stream, or else throws.
-	inline bool ostream::verify_remaining (const char* op, const char* type, size_t n)
-	{
-		const size_t rem = remaining();
-		bool enough = n <= rem;
-		if (!enough) overrun (op, type, (uint32_t)n, (uint32_t)pos(), (uint32_t)rem);
-		return (enough);
-	}
-
-	/// Move the write pointer to \p newPos
-	inline void ostream::seek (uoff_t newPos)
-	{
-	#if WANT_STREAM_BOUNDS_CHECKING
-		if (newPos > size())
-			throw stream_bounds_exception ("seekp", "byte", pos(), newPos - pos(), size());
-	#else
-		assert (newPos <= size());
-	#endif
-		SetPos (newPos);
-	}
-
-	/// Sets the current write position to \p newPos
-	inline void ostream::iseek (const_iterator newPos)
-	{
-		seek (distance (begin(), const_cast<iterator>(newPos)));
-	}
-
-	/// Sets the current write position to \p p based on \p d.
-	inline void ostream::seekp (off_t p, seekdir d)
-	{
-		switch (d) {
-		case beg:	seek (p); break;
-		case cur:	seek (pos() + p); break;
-		case ios_base::end:	seek (size() - p); break;
-		}
-	}
-
-	/// Skips \p nBytes without writing anything.
-	inline void ostream::skip (streamsize nBytes)
-	{
-		seek (pos() + nBytes);
-	}
-
-	/// Returns number of bytes remaining in the write buffer.
-	inline streamsize ostream::remaining (void) const
-	{
-		return (size() - pos());
-	}
-
-	/// Returns \c true if the write pointer is aligned on \p grain
-	inline bool ostream::aligned (streamsize grain) const
-	{
-		assert (uintptr_t(begin()) % grain == 0 && "Streams should be attached aligned at the maximum element grain to avoid bus errors.");
-		return (pos() % grain == 0);
-	}
-
-	/// Returns the number of bytes to skip to be aligned on \p grain.
-	inline streamsize ostream::align_size (streamsize grain) const
-	{
-		return (lo::Align (pos(), grain) - pos());
-	}
-
-	/// Writes \p n bytes from \p buffer.
-	inline void ostream::write (const void* buffer, size_type n)
-	{
-	#if WANT_STREAM_BOUNDS_CHECKING
-		if (!verify_remaining ("write", "binary data", n))
-		return;
-	#else
-		assert (remaining() >= n && "Buffer overrun. Check your stream size calculations.");
-	#endif
-		memcpy (const_cast<void *>(reinterpret_cast<const void *>(ipos())), const_iterator(buffer), n);
-		m_Pos += n;
-	}
-
-	/// Writes the contents of \p buf into the stream as a raw dump.
-	inline void ostream::write (const cmemlink& buf)
-	{
-		write (buf.begin(), buf.size());
-	}
-
-#if 0
-/// Writes type T into the stream via a direct pointer cast.
-template <typename T>
-inline void ostream::iwrite (const T& v)
-{
-    assert (aligned (alignof (v)));
-#if WANT_STREAM_BOUNDS_CHECKING
-    if (!verify_remaining ("write", typeid(v).name(), sizeof(T)))
-	return;
-#else
-    assert (remaining() >= sizeof(T));
-#endif
-    *reinterpret_cast<T*>(ipos()) = v;
-    SetPos (pos() + sizeof(T));
-}
-#endif
-
-	/// Swaps with \p os
-	inline void ostream::swap (ostream& os)
-	{
-		memlink::swap (os);
-		::std::swap (m_Pos, os.m_Pos);
-	}
-
 	template <typename T> struct object_writer
 	{
 		inline void operator()(ostream& os, const T& v) const { v.write (os); }
@@ -253,7 +134,7 @@ inline void ostream::iwrite (const T& v)
 	template <typename T>
 	inline ostream& operator<< (ostream& os, const T& v)
 	{
-		typedef typename tm::Select <numeric_limits<T>::is_integral,
+		typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 			integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
 		object_writer_t()(os, v);
 		return (os);
@@ -262,7 +143,7 @@ inline void ostream::iwrite (const T& v)
 	template <typename T>
 	inline ostream& operator<< (ostream& os, size_t& i )
 	{
-		typedef typename tm::Select <numeric_limits<T>::is_integral,
+		typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 			integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
 		integral_object_writer()(os, i);
 		return (os);
@@ -270,7 +151,8 @@ inline void ostream::iwrite (const T& v)
 
 } // namespace std
 
-namespace lo {	// extensions to the spec
+namespace lo {	// utf8 extensions to the spec
+
 	typedef std::ostream_iterator<lo::utf8subchar_t>	ostream_iterator_for_utf8;
 	typedef utf8out_iterator<ostream_iterator_for_utf8>	utf8ostream_iterator;
 

@@ -2,7 +2,7 @@
 #pragma once
 #ifndef _INC_ERRNO
 #define _INC_ERRNO
-#include <crtdefs.h>
+#include "lolibbase.h"
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */

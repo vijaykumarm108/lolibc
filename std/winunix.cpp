@@ -4,6 +4,8 @@
 #include "winunix.h"
 #include <windows.h>
 
+extern "C" {
+
 /* Initialize critical section */
 void csinitialize (CRITICAL_SECTION *cs) {
     InitializeCriticalSection (cs);
@@ -150,6 +152,8 @@ int msync ( void *data, long size, long flags )
 	return FlushViewOfFile( data, size ) != FALSE ? 0 : -1;
 }
 
+extern "C" _CRTIMP int _commit( int fd );
+
 int fsync( int fd )
 {
 	if (fd > 2 )
@@ -163,3 +167,5 @@ int ioctl(int fildes, int request, ... /* arg */)
 {
 	return 0;
 }
+
+} // extern "C"

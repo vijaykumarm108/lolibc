@@ -3,7 +3,7 @@
 #pragma once
 
 #include "exception"
-#include <stdlib.h>
+#include "stdlib.h"
 
 /// Just like malloc, but throws on failure.
 void* tmalloc (size_t n) /*throw (lo::std::bad_alloc)*/ __attribute__((malloc));
@@ -15,9 +15,6 @@ namespace std {
 	class bad_alloc : public ::exception {
 	public:
 		explicit		bad_alloc (size_t nBytes = 0) throw();
-		inline virtual const char*	what (void) const throw() { return ("memory allocation failed"); }
-	protected:
-		size_t		m_nBytesRequested;	///< Number of bytes requested by the failed allocation.
 	};
 } // namespace std
 

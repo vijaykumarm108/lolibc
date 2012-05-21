@@ -9,24 +9,13 @@
 extern "C" {
 #endif
 
-/* Define _CRTIMP */
-
-#ifndef _CRTIMP
-#ifdef  _DLL
-#define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
-#define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
 
 /* Define __cdecl for non-Microsoft compilers */
-
-#if     ( !defined(_MSC_VER) && !defined(__cdecl) )
+#if ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 /* Define _CRTAPI1 (for compatibility with the NT SDK) */
-
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
 #define _CRTAPI1 __cdecl
@@ -64,29 +53,37 @@ typedef unsigned short wchar_t;
 
 /* Function prototypes  - Those without _CRTIMP can be intrinsic. */
 
-_CRTIMP void *  __cdecl		_memccpy(void *, const void *, int, unsigned int);
-_CRTIMP int     __cdecl		_memicmp(const void *, const void *, unsigned int);
-char *  __cdecl				_strset(char *, int);
-_CRTIMP void * __cdecl		memccpy(void *, const void *, int, unsigned int);
-int     __cdecl				memcmp(const void *, const void *, size_t);
-void *  __cdecl				memcpy(void *, const void *, size_t);
-_CRTIMP int __cdecl			memicmp(const void *, const void *, unsigned int);
-void *  __cdecl				memset(void *, int, size_t);
-char *  __cdecl				strcpy(char *, const char *);
-char *  __cdecl				strcat(char *, const char *);
-int     __cdecl				strcmp(const char *, const char *);
-size_t  __cdecl				strlen(const char *);             
-_CRTIMP void *  __cdecl		memchr(const void *, int, size_t);
-_CRTIMP void *  __cdecl		memmove(void *, const void *, size_t);
-_CRTIMP char *  __cdecl		strchr(const char *, int);
-_CRTIMP int     __cdecl		_strcmpi(const char *, const char *);
-_CRTIMP int     __cdecl		_stricmp(const char *, const char *);
-_CRTIMP int     __cdecl		strcoll(const char *, const char *);
-_CRTIMP int     __cdecl		_stricoll(const char *, const char *);
-_CRTIMP int     __cdecl		_strncoll(const char *, const char *, size_t);
-_CRTIMP int     __cdecl		_strnicoll(const char *, const char *, size_t);
-_CRTIMP size_t  __cdecl		strcspn(const char *, const char *);
-_CRTIMP char *  __cdecl		_strdup(const char *);
+	_CRTIMP void *  __cdecl		_memccpy(void *, const void *, int, unsigned int);
+	_CRTIMP int     __cdecl		_memicmp(const void *, const void *, unsigned int);
+	char *  __cdecl				_strset(char *, int);
+	_CRTIMP void * __cdecl		memccpy(void *, const void *, int, unsigned int);
+	int     __cdecl				memcmp(const void *, const void *, size_t);
+	void *  __cdecl				memcpy(void *, const void *, size_t);
+	inline wchar_t *			wmemcpy (wchar_t *wto, const wchar_t *wfrom, size_t size)
+	{
+		return (wchar_t *) memcpy (wto, wfrom, size * sizeof (wchar_t));
+	}
+	_CRTIMP int __cdecl			memicmp(const void *, const void *, unsigned int);
+	void *  __cdecl				memset(void *, int, size_t);
+	char *  __cdecl				strcpy(char *, const char *);
+	char *  __cdecl				strcat(char *, const char *);
+	int     __cdecl				strcmp(const char *, const char *);
+	size_t  __cdecl				strlen(const char *);             
+	_CRTIMP void *  __cdecl		memchr(const void *, int, size_t);
+	_CRTIMP void *  __cdecl		memmove(void *, const void *, size_t);
+	_CRTIMP char *  __cdecl		strchr(const char *, int);
+	_CRTIMP int     __cdecl		_strcmpi(const char *, const char *);
+	_CRTIMP int     __cdecl		_stricmp(const char *, const char *);
+	_CRTIMP int     __cdecl		strcoll(const char *, const char *);
+	_CRTIMP int     __cdecl		_stricoll(const char *, const char *);
+	_CRTIMP int     __cdecl		_strncoll(const char *, const char *, size_t);
+	_CRTIMP int     __cdecl		_strnicoll(const char *, const char *, size_t);
+	_CRTIMP size_t  __cdecl		strcspn(const char *, const char *);
+	_CRTIMP char *  __cdecl		_strdup(const char *);
+	inline char * __cdecl		strdup(const char *str)
+	{
+		return _strdup(str);
+	}
 _CRTIMP char *  __cdecl		_strerror(const char *);
 _CRTIMP char *  __cdecl		strerror(int);
 _CRTIMP char *  __cdecl		_strlwr(char *);
@@ -105,7 +102,6 @@ _CRTIMP char *  __cdecl		_strupr(char *);
 _CRTIMP size_t  __cdecl		strxfrm (char *, const char *, size_t);
 _CRTIMP int __cdecl			strcmpi(const char *, const char *);
 _CRTIMP int __cdecl			stricmp(const char *, const char *);
-_CRTIMP char * __cdecl		strdup(const char *);
 _CRTIMP char * __cdecl		strlwr(char *);
 _CRTIMP int __cdecl			strnicmp(const char *, const char *, size_t);
 _CRTIMP char * __cdecl		strnset(char *, int, size_t);

@@ -97,9 +97,9 @@ __int64 __cdecl _ftol2( float f )
 	return (__int64)_ftol(f);
 }
 
-void *_recalloc( void *memblock, size_t num, size_t size )
+void *_recalloc( void *block, size_t num, size_t size )
 {
-	return realloc( memblock, num*size );
+	return realloc( block, num*size );
 }
 
 void __declspec(naked) __fastcall __security_check_cookie(UINT_PTR cookie)

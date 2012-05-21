@@ -31,8 +31,16 @@
 
 typedef const char *__exString;
 
+namespace lo { class libc_exception; }
+
+namespace std { class bad_alloc; class logic_error; class runtime_error; }
+
 class _CRTIMP exception
 {
+	friend class lo::libc_exception;
+	friend class std::bad_alloc;
+	friend class std::logic_error;
+	friend class std::runtime_error;
 public:
 	exception();
 	exception(const __exString&);
@@ -88,13 +96,10 @@ namespace lo {  	// Extended exception definitions
 	///
 	class libc_exception : public exception {
 	public:
-		explicit				libc_exception (const char* operation) throw();
+		explicit				libc_exception (int m_Errno) throw();
+		explicit				libc_exception (const char* operation,bool doFree = false) throw();
 								libc_exception (const libc_exception& v) throw();
 		const libc_exception&	operator= (const libc_exception& v);
-		virtual const char*		what (void) const throw();
-	protected:
-		intptr_t		m_Errno;			///< Error code returned by the failed operation.
-		const char*		m_Operation;		///< Name of the failed operation.
 	};
 
 	/// \class file_exception
@@ -106,11 +111,7 @@ namespace lo {  	// Extended exception definitions
 	///
 	class file_exception : public libc_exception {
 	public:
-							file_exception (const char* operation, const char* filename) throw();
-							~file_exception();
-		virtual const char*	what (void) const throw();
-	protected:
-		char		m_Filename [PATH_MAX];	///< Name of the file causing the error.
+		file_exception (const char* operation, const char* filename) throw();
 	};
 
 	/// \class stream_bounds_exception
@@ -124,12 +125,6 @@ namespace lo {  	// Extended exception definitions
 	class stream_bounds_exception : public libc_exception {
 	public:
 		stream_bounds_exception (const char* operation, const char* type, uoff_t offset, size_t expected, size_t remaining) throw();
-		virtual const char*	what (void) const throw();
-	protected:
-		const char*	m_TypeName;
-		uoff_t		m_Offset;
-		size_t		m_Expected;
-		size_t		m_Remaining;
 	};
 
 }

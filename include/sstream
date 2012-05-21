@@ -22,7 +22,7 @@ public:
 public:
     				istringstream (void);
 					istringstream (const void* p, size_type n);
-    explicit		istringstream (const lo::cmemlink& source);
+    explicit		istringstream (const lo::cblocklink& source);
     void			iread (int8_t& v)	{ v = skip_delimiters(); }
 	void			iread (char& v)	{ int8_t vInt8t; iread(vInt8t); v = (char)vInt8t; }
     void			iread (int32_t& v);
@@ -53,7 +53,7 @@ public:
     inline void			set_decimal_separator (char)	{ }
     inline void			set_thousand_separator (char)	{ }
     istringstream&		read (void* buffer, size_type size);
-    inline istringstream&	read (lo::memlink& buf)		{ return (read (const_cast<void *>(reinterpret_cast<const void *>(buf.begin())), buf.size())); }
+    inline istringstream&	read (lo::blocklink& buf)		{ return (read (const_cast<void *>(reinterpret_cast<const void *>(buf.begin())), buf.size())); }
     inline istringstream&	seekg (off_t p, seekdir d =beg)	{ istream::seekg(p,d); return (*this); }
     inline int			sync (void)			{ skip (remaining()); return (0); }
 protected:
@@ -110,7 +110,7 @@ template <typename T> struct integral_text_object_reader {
 };
 template <typename T>
 inline istringstream& operator>> (istringstream& is, T& v) {
-    typedef typename tm::Select <numeric_limits<T>::is_integral,
+    typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 	integral_text_object_reader<T>, object_text_reader<T> >::Result object_reader_t;
     object_reader_t()(is, v);
     return (is);
@@ -182,11 +182,11 @@ public:
     inline void			set_thousand_separator (char)	{ }
     inline void			set_precision (uint16_t v)	{ m_Precision = (uint8_t)v; }
     void			link (void* p, size_type n);
-    inline void			link (memlink& l)		{ link (l.data(), l.writable_size()); }
+    inline void			link (blocklink& l)		{ link (l.data(), l.writable_size()); }
     inline const string&	str (void)			{ flush(); return (m_Buffer); }
     void			str (const string& s);
     ostringstream&		write (const void* buffer, size_type size);
-    inline ostringstream&	write (const cmemlink& buf)	{ return (write (buf.begin(), buf.size())); }
+    inline ostringstream&	write (const blocklink& buf)	{ return (write (buf.begin(), buf.size())); }
     inline ostringstream&	seekp (off_t p, seekdir d =beg)	{ ostream::seekp(p,d); return (*this); }
     ostringstream&		flush (void)			{ m_Buffer.resize (pos()); return (*this); }
     virtual size_type		overflow (size_type n = 1);
@@ -256,7 +256,7 @@ template <typename T> struct integral_text_object_writer {
 };
 template <typename T>
 inline ostringstream& operator<< (ostringstream& os, const T& v) {
-    typedef typename tm::Select <numeric_limits<T>::is_integral,
+    typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 	integral_text_object_writer<T>, object_text_writer<T> >::Result object_writer_t;
     object_writer_t()(os, v);
     return (os);

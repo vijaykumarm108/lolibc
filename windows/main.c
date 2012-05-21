@@ -36,7 +36,7 @@ If this file is not wrapped, then its default is MBCS(not UNICODE) for console a
 #endif  /* _DLL */
 
 #define SPECIAL_CRTEXE
-#include "mlac.h"
+#include "lomsvcrt.h"
 #include <process.h>
 #include <math.h>
 #include <float.h>
@@ -149,21 +149,28 @@ _PVFV *__onexitend;
 //extern int _argc;
 //extern _TSCHAR **_argv;
 #pragma warning(disable:4273)
-int __argc;   /* three standard arguments to main */
+//extern int __argc;   /* three standard arguments to main */
 #ifndef _UNICODE
-char **__argv;
+//extern char **__argv;
 char **envp;
 #else
-wchar_t **__wargv;
+//wchar_t **__wargv;
 wchar_t **envp;
 #endif
+
+_CRTIMP int* __cdecl __p___argc(void);
+_CRTIMP char*** __cdecl __p___argv(void);
+_CRTIMP wchar_t*** __cdecl __p___wargv(void);
+#define __argv (*__p___argv())
+#define __argc (*__p___argc())
+#define __wargv (*__p___wargv())
 
 static int argret;
 static int mainret=0;
 static _startupinfo    startinfo;
 
 _CRTIMP int* __cdecl __p__fmode();
-int __cdecl _XcptFilter( unsigned long _ExceptionNum,  struct _EXCEPTION_POINTERS * _ExceptionPtr);
+int __cdecl _XcptFilter(_In_ unsigned long _ExceptionNum, _In_ struct _EXCEPTION_POINTERS * _ExceptionPtr);
 
 /*!
 \brief The code in mainCRTStartup that was executed before executing C

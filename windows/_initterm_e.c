@@ -3,16 +3,8 @@
  * http://www.muthink.com
  * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
  */
-#include <stdafx.h>
 #define SPECIAL_CRTEXE
-#include "mlac.h"
-#include <process.h>
-#include <math.h>
-#include <float.h>
-#include <stdlib.h>
-#include <tchar.h>
-#include <rtcapi.h>
-#include <locale.h>
+#include "lomsvcrt.h"
 
 //#pragma comment(linker, "/include:__security_cookie")
 #pragma comment(linker, "/merge:.CRT=.rdata")

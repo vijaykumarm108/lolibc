@@ -2,12 +2,21 @@
 #pragma once
 #include "lolibbase.h"
 
-_CRTIMP void *malloc(size_t size);
-_CRTIMP void free(void *ptr);
-_CRTIMP void *realloc(void *ptr, size_t size);
-_CRTIMP void *calloc(size_t nmemb, size_t size);
-_CRTIMP double strtod ( const char * str, char ** endptr );
-_CRTIMP long int strtol ( const char * str, char ** endptr, int base );
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+_CRTIMP int __cdecl			atexit(void (__cdecl *)(void));
+_CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);
+_CRTIMP void __cdecl		free(void *ptr);
+_CRTIMP void * __cdecl		malloc(size_t size);
+_CRTIMP void * __cdecl		realloc(void *ptr, size_t size);
+_CRTIMP double __cdecl		strtod ( const char * str, char ** endptr );
+_CRTIMP long int __cdecl	strtol ( const char * str, char ** endptr, int base );
+
+#ifdef __cplusplus
+};
+#endif
 
 /* _countof helper */
 #if !defined(_countof)

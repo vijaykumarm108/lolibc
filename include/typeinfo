@@ -7,35 +7,11 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif
-
-#ifndef __cplusplus
-#error This header requires a C++ compiler ...
-#endif
-
 #ifndef _INC_TYPEINFO
 #define _INC_TYPEINFO
 
- #if !defined(_WIN32) && !defined(_MAC)
-  #error ERROR: Only Mac or Win32 targets supported!
- #endif
-
-/* Define _CRTIMP */
-
-#ifndef _CRTIMP
-#ifdef	_NTSDK
-/* definition compatible with NT SDK */
-#define _CRTIMP
-#else	/* ndef _NTSDK */
-/* current definition */
-#ifdef	_DLL
-#define _CRTIMP __declspec(dllimport)
-#else	/* ndef _DLL */
-#define _CRTIMP
-#endif	/* _DLL */
-#endif	/* _NTSDK */
-#endif	/* _CRTIMP */
-
-#include <xstddef>
+#include "lostlbase.h"
+//#include <xstddef>
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
@@ -43,17 +19,17 @@
 
 class type_info {
 public:
-    _CRTIMP virtual ~type_info();
-    _CRTIMP int operator==(const type_info& rhs) const;
-    _CRTIMP int operator!=(const type_info& rhs) const;
-    _CRTIMP int before(const type_info& rhs) const;
-    _CRTIMP const char* name() const;
-    _CRTIMP const char* raw_name() const;
+	_CRTIMP virtual ~type_info();
+	_CRTIMP int operator==(const type_info& rhs) const;
+	_CRTIMP int operator!=(const type_info& rhs) const;
+	_CRTIMP int before(const type_info& rhs) const;
+	_CRTIMP const char* name() const;
+	_CRTIMP const char* raw_name() const;
 private:
-    void *_m_data;
-    char _m_d_name[1];
-    type_info(const type_info& rhs);
-    type_info& operator=(const type_info& rhs);
+	void *_m_data;
+	char _m_d_name[1];
+	type_info(const type_info& rhs);
+	type_info& operator=(const type_info& rhs);
 };
 
 // This include must occur below the definition of class type_info
@@ -63,24 +39,23 @@ private:
 		// CLASS bad_cast
 	class _CRTIMP bad_cast : public exception {
 	public:
-		bad_cast(const char *_S = "bad cast") _THROW0()
+		bad_cast(const char *_S = "bad cast") throw()
 			: exception(_S) {}
-		virtual ~bad_cast() _THROW0()
+		virtual ~bad_cast() throw()
 			{}
 	protected:
 		virtual void _Doraise() const
-			{_RAISE(*this); }
+			{throw(*this); }
 	};
 		// CLASS bad_typeid
 	class _CRTIMP bad_typeid : public exception {
 	public:
-		bad_typeid(const char *_S = "bad typeid") _THROW0()
-			: exception(_S) {}
-		virtual ~bad_typeid() _THROW0()
+		bad_typeid(const char *_S = typeid(bad_typeid).name()) throw() : exception(_S) {}
+		virtual ~bad_typeid() throw()
 			{}
 	protected:
 		virtual void _Doraise() const
-			{_RAISE(*this); }
+			{throw(*this); }
 	};
 
 	class _CRTIMP __non_rtti_object : public bad_typeid {

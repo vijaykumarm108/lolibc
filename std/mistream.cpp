@@ -1,5 +1,3 @@
-// Lo-Overhead STL library - Lostl
-//
 
 #include <stdafx.h>
 #include <istream>
@@ -23,14 +21,13 @@ void ios_base::overrun (const char* op, const char* type, uint32_t n, uint32_t p
 //--------------------------------------------------------------------
 
 /// Attaches to the block pointed to by source of size source.pos()
-istream::istream (const ostream& source)
-: cmemlink (source.begin(), source.pos()),
+istream::istream (const ostream& source) : cblocklink (source.begin(), source.pos()),
   m_Pos (0)
 {
 }
 
-void istream::unlink (void) throw()		{ cmemlink::unlink(); m_Pos = 0; }
-void ostream::unlink (void) throw()		{ memlink::unlink(); m_Pos = 0; }
+void istream::unlink (void) throw()		{ cblocklink::unlink(); m_Pos = 0; }
+void ostream::unlink (void) throw()		{ blocklink::unlink(); m_Pos = 0; }
 
 /// Writes all unread bytes into \p os.
 void istream::write (ostream& os) const
@@ -107,14 +104,14 @@ void ostream::text_write (ostringstream& os) const
 void ostream::insert (iterator start, size_type s)
 {
     m_Pos += s;
-    memlink::insert (start, s);
+    blocklink::insert (start, s);
 }
 
 /// Erases an area of \p size, at \p start.
 void ostream::erase (iterator start, size_type s)
 {
     m_Pos -= s;
-    memlink::erase (start, s);
+    blocklink::erase (start, s);
 }
 
 //--------------------------------------------------------------------

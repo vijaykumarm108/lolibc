@@ -104,7 +104,7 @@ const char ends = '\0';		///< End of string character.
 	template <typename T>
 	inline streamsize stream_size_of (const T& v)
 	{
-		typedef typename tm::Select <numeric_limits<T>::is_integral,
+		typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
 		integral_object_stream_size<T>, object_stream_size<T> >::Result stream_sizer_t;
 		return (stream_sizer_t()(v));
 	}

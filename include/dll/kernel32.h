@@ -2,6 +2,8 @@
 #include <dll.h>
 #include "ntoskrnl.h"
 
+#ifdef __cplusplus
+
 namespace lo
 {
 	class kernel32 : public dll
@@ -29,3 +31,10 @@ namespace lo
 		int &counter();
 	};
 }
+
+#else
+
+typedef RTL_CRITICAL_SECTION CRITICAL_SECTION;
+typedef PRTL_CRITICAL_SECTION LPCRITICAL_SECTION;
+
+#endif

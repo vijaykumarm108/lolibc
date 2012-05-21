@@ -7,7 +7,7 @@
 
 #ifdef __cplusplus
 
-namespace std { namespace tm {
+namespace lo { namespace tm {
 
 /// The building block of typelists. Use it throught the Seq templates.
 template <typename T, typename U> struct Typelist
@@ -209,8 +209,6 @@ public:
     typedef Typelist<TheMostDerived, L> Result;
 };
 
-//----------------------------------------------------------------------
-
-} } } // namespace std::tm::tl
+} } } // namespace lo::tm::tl
 
 #endif

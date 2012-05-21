@@ -6,7 +6,7 @@
 
 #ifdef __cplusplus
 
-namespace std { namespace tm { namespace {
+namespace lo { namespace tm { namespace {
 
 //----------------------------------------------------------------------
 // Type classes and type modifiers
@@ -238,6 +238,5 @@ public:
 	ParameterType;
 };
 
-} // namespace tm
-} // namespace std
+} } // namespace lo::tm
 #endif

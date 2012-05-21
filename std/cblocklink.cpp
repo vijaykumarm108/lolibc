@@ -12,12 +12,12 @@ using namespace std;
 
 namespace lo {
 
-	cmemlink::cmemlink (const void* p, size_type n)	: m_Data (const_pointer(p)), m_Size (n)
+	cblocklink::cblocklink (const void* p, size_type n)	: m_Data (const_pointer(p)), m_Size (n)
 	{
 		assert (p || !n);
 	}
 
-	cmemlink::iterator		cmemlink::iat (size_type i) const
+	cblocklink::iterator		cblocklink::iat (size_type i) const
 	{
 		assert (i <= size());
 		return (begin() + i);
@@ -28,7 +28,7 @@ namespace lo {
 	/// If \p p is NULL and \p n is non-zero, bad_alloc is thrown and current
 	/// state remains unchanged.
 	///
-	void cmemlink::link (const void* p, size_type n)
+	void cblocklink::link (const void* p, size_type n)
 	{
 		if (!p && n)
 		throw bad_alloc (n);
@@ -36,28 +36,28 @@ namespace lo {
 		relink (p, n);
 	}
 
-	void cmemlink::link (const void* first, const void* last)
+	void cblocklink::link (const void* first, const void* last)
 	{
 		link (first, distance (first, last));
 	}
-	void cmemlink::read (std::istream& is)
+	void cblocklink::read (std::istream& is)
 	{
-		assert (!"lo::std::cmemlink is a read-only object.");
+		assert (!"lo::std::cblocklink is a read-only object.");
 	}
 
-	void cmemlink::unlink (void) throw()
+	void cblocklink::unlink (void) throw()
 	{
 		m_Data = NULL; m_Size = 0;
 	}
 
-	void cmemlink::swap (cmemlink& l)
+	void cblocklink::swap (cblocklink& l)
 	{
 		::std::swap (m_Data, l.m_Data);
 		::std::swap (m_Size, l.m_Size);
 	}
 
 	/// Writes the object to stream \p os
-	void cmemlink::write (ostream& os) const
+	void cblocklink::write (ostream& os) const
 	{
 		const written_size_type sz ((written_size_type)size());
 		assert (sz == size() && "No support for writing memblocks larger than 4G");
@@ -67,20 +67,20 @@ namespace lo {
 	}
 
 	/// Writes the object to stream \p os
-	void cmemlink::text_write (ostringstream& os) const
+	void cblocklink::text_write (ostringstream& os) const
 	{
 		os.write (begin(), readable_size());
 	}
 
 	/// Returns the number of bytes required to write this object to a stream.
-	cmemlink::size_type cmemlink::stream_size (void) const
+	cblocklink::size_type cblocklink::stream_size (void) const
 	{
 		const written_size_type sz ((written_size_type)size());
 		return (Align (stream_size_of (sz) + sz, alignof(sz)));
 	}
 
 	/// Writes the data to file \p "filename".
-	void cmemlink::write_file (const char* filename, int mode) const
+	void cblocklink::write_file (const char* filename, int mode) const
 	{
 		fstream f;
 		f.exceptions (fstream::allbadbits);
@@ -90,7 +90,7 @@ namespace lo {
 	}
 
 	/// Compares to memory block pointed by l. Size is compared first.
-	bool cmemlink::operator== (const cmemlink& l) const
+	bool cblocklink::operator== (const cblocklink& l) const
 	{
 		return (l.m_Size == m_Size &&
 			(l.m_Data == m_Data || 0 == memcmp (l.m_Data, m_Data, m_Size)));

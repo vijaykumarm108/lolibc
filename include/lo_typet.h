@@ -3,7 +3,7 @@
 #ifdef __cplusplus
 
 /// Template meta-programming tools
-namespace std { namespace tm {
+namespace lo { namespace tm {
 
 /// An empty type useful as a placeholder.
 class NullType { };
@@ -57,8 +57,8 @@ struct Conversion<void, void> { enum { exists = true, exists2Way = true, sameTyp
 /// SuperSubclass<T,U>::value is true when U is derived from T, or when U is T
 template <typename T, typename U>
 struct SuperSubclass {
-    enum { value = (::lo::std::tm::Conversion<const volatile U*, const volatile T*>::exists &&
-		    !::lo::std::tm::Conversion<const volatile T*, const volatile void*>::sameType) };
+    enum { value = (::lo::tm::Conversion<const volatile U*, const volatile T*>::exists &&
+		    !::lo::tm::Conversion<const volatile T*, const volatile void*>::sameType) };
     enum { dontUseWithIncompleteTypes = sizeof(T)==sizeof(U) };	// Dummy enum to make sure that both classes are fully defined.
 };
 template <>
@@ -78,14 +78,14 @@ struct SuperSubclass<T, void> {
 template <typename T, typename U>
 struct SuperSubclassStrict {
     enum { value = SuperSubclass<T,U>::value &&
-		    !::lo::std::tm::Conversion<const volatile T*, const volatile U*>::sameType };
+		    !::lo::tm::Conversion<const volatile T*, const volatile U*>::sameType };
 };
 
 // static assert support
 template <bool> struct CompileTimeError;
 template <> struct CompileTimeError<true> {};
-#define static_assert(cond,msg)	{ ::lo::std::tm::CompileTimeError<!!(cond)> ERROR_##msg; (void) ERROR_##msg; }
+#define static_assert(cond,msg)	{ ::lo::tm::CompileTimeError<!!(cond)> ERROR_##msg; (void) ERROR_##msg; }
 
-} } // namespace std::tm
+} } // namespace lo::tm
 
 #endif

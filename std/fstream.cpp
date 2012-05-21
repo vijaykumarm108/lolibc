@@ -227,16 +227,16 @@ int fstream::fcntl (const char* rname, int request, long argument)
 }
 
 /// Memory-maps the file and returns a link to it.
-memlink fstream::mmap (off_t n, off_t offset)
+blocklink fstream::mmap (off_t n, off_t offset)
 {
     void* result = ::mmap (NULL, n, PROT_READ | PROT_WRITE, MAP_SHARED, m_fd, offset);
     if (result == MAP_FAILED)
 	set_and_throw (failbit, "mmap");
-    return (memlink (result, n));
+    return (blocklink (result, n));
 }
 
 /// Unmaps a memory-mapped area.
-void fstream::munmap (memlink& l)
+void fstream::munmap (blocklink& l)
 {
     if (::munmap (l.data(), (long)l.size()))
 		set_and_throw (failbit, "munmap");
@@ -244,7 +244,7 @@ void fstream::munmap (memlink& l)
 }
 
 /// Synchronizes a memory-mapped area.
-void fstream::msync (memlink& l)
+void fstream::msync (blocklink& l)
 {
     if (::msync (l.data(), (long)l.size(), MS_ASYNC | MS_INVALIDATE))
 	{

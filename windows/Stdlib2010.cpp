@@ -65,7 +65,7 @@ type_info::type_info(const type_info& rhs)
 {
 }
 
-type_info& __CLR_OR_THIS_CALL type_info::operator=(const type_info& rhs)
+type_info& type_info::operator=(const type_info& rhs)
 {
 	return *this;
 }
@@ -74,23 +74,23 @@ type_info& __CLR_OR_THIS_CALL type_info::operator=(const type_info& rhs)
 
 namespace std {
 
-_CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xinvalid_argument(_In_z_ const char *)
+__declspec(noreturn) void __cdecl _Xinvalid_argument(_In_z_ const char *)
 {
 }
 
-_CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xlength_error(_In_z_ const char *)
+__declspec(noreturn) void __cdecl _Xlength_error(_In_z_ const char *)
 {
 }
 
-_CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xout_of_range(_In_z_ const char *)
+__declspec(noreturn) void __cdecl _Xout_of_range(_In_z_ const char *)
 {
 }
 
-_CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xoverflow_error(_In_z_ const char *)
+__declspec(noreturn) void __cdecl _Xoverflow_error(_In_z_ const char *)
 {
 }
 
-_CRTIMP2_PURE __declspec(noreturn) void __CLRCALL_PURE_OR_CDECL _Xruntime_error(_In_z_ const char *)
+__declspec(noreturn) void __cdecl _Xruntime_error(_In_z_ const char *)
 {
 }
 

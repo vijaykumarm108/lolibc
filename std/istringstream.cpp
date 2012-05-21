@@ -6,6 +6,7 @@
 #include <ostream>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 namespace std {
 
@@ -30,9 +31,7 @@ istringstream::istringstream (const void* p, size_type n)
     set_delimiters (DEFAULT_DELIMITERS);
 }
 
-istringstream::istringstream (const cmemlink& source)
-: istream (),
-  m_Base (0)
+istringstream::istringstream (const cblocklink& source) : istream (),  m_Base (0)
 {
     exceptions (goodbit);
     relink (source);

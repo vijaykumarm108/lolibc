@@ -6,8 +6,6 @@
 #include "limits"
 #include <assert.h>
 
-
-
 #ifdef __cplusplus
 
 namespace std {

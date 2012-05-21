@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef __cplusplus
+
 namespace lo
 {
 	class dll
@@ -16,3 +18,5 @@ namespace lo
 		void *m_handle;
 	};
 }
+
+#endif

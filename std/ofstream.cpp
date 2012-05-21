@@ -119,7 +119,7 @@ ifstream::size_type ifstream::underflow (size_type n)
     const ssize_t neededFreeSpace = (ssize_t)maxV (n, m_Buffer.size() / 2);
     const size_t oughtToErase = lo::Align (maxV (0, neededFreeSpace - freeSpace));
     const size_type nToErase = minV (pos(), oughtToErase);
-    m_Buffer.memlink::erase (m_Buffer.begin(), nToErase);
+    m_Buffer.blocklink::erase (m_Buffer.begin(), nToErase);
     const uoff_t oldPos (pos() - nToErase);
 
     size_type br = oldPos;
