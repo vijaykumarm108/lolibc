@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\dll">
+      <UniqueIdentifier>{79567cb0-7e38-4649-b98b-7f5e6e489179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\so">
+      <UniqueIdentifier>{f1b65c00-be93-47bd-9339-f78f6106bd38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dll">
+      <UniqueIdentifier>{1e4c9a23-4b22-4dfc-9140-f75756d64104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\stl">
+      <UniqueIdentifier>{485dff0a-cc86-4543-b317-2bd69ae3ddf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stl">
+      <UniqueIdentifier>{4a8b0e9f-9acd-4ad1-9966-6d93e1442aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\stdc">
+      <UniqueIdentifier>{4f4b1dda-672a-4c7b-b32f-8786235c699b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\bvt">
+      <UniqueIdentifier>{c0f8d1a1-234c-4cb0-ab1a-08487e639b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sys">
+      <UniqueIdentifier>{8cc8403d-fdea-4388-9189-41112d4bf814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\windows">
+      <UniqueIdentifier>{f119e847-2040-4745-b8c9-a6fd21a4f110}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="include\complex">
+      <Filter>Header Files\stl</Filter>
+    </None>
+    <None Include="include\initializer_list">
+      <Filter>Header Files\stl</Filter>
+    </None>
+    <None Include="include\limits">
+      <Filter>Header Files\stl</Filter>
+    </None>
+    <None Include="include\iterator">
+      <Filter>Header Files\stl</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ostream">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\numeric">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\memory">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdexcept">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tuple">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\typeinfo">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\algorithm">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exception">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\functional">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\istream">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\winunix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\list">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_uctrstrm.h">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_uspecial.h">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vector">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="lolibc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\array">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bitset">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdint.h">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\new">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cassert">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cctype">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cerrno">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cfloat">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\errno.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\float.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\clocale">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\locale.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\math.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cmath">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fstream">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lostlbase.h">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\queue">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\set">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sstream">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stack">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\kernel32.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\ntoskrnl.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\metamac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdio.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\string.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\xutility">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ios">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ios_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdlib.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\types.h">
+      <Filter>Header Files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lolibbase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_utf8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdarg.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stddef.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\limits.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\assert.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fcntl.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\stat.h">
+      <Filter>Header Files\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sys\malloc.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\process.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ctype.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tchar.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\internal.h">
+      <Filter>Source Files\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\sect_attribs.h">
+      <Filter>Source Files\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_typelist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lo_typet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="std\algobase.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\bitset.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\bvtstd.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\exception.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\fstream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\lo_string.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dll.cpp">
+      <Filter>Source Files\dll</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kernel32.cpp">
+      <Filter>Source Files\dll</Filter>
+    </ClCompile>
+    <ClCompile Include="std\memblock.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\mistream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ofstream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\new.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\stdxept.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="bvt\bvt_kernel32.cpp">
+      <Filter>Source Files\bvt</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ios.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\_dbgrpt.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\DllMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\_initterm_e.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\main.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\wWinMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\Stdlib2010.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\StdLibC.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\WinMain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="std\winunix.cpp">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\wmain.c">
+      <Filter>Source Files\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loexcept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loutf8.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ostringstream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\istringstream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\ostream.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\cblocklink.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="std\blocklink.cpp">
+      <Filter>Source Files\stl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="windows\_error_.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\_init_.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\_pdblkup_.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\_stack_.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\_userapi_.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\ehprolg3.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\loadcfg.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\ehvecctr.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\ehvecdtr.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\libcpmt.bat">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\libcpmt9.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\MSVCRT.DEF">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg4.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehprolg4gs.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\sehsupp.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="windows\StdLibX86.asm">
+      <Filter>Source Files\windows</Filter>
+    </MASM>
+  </ItemGroup>
+</Project>

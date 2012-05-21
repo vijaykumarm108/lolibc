@@ -1,0 +1,2104 @@
+/*
+ * Copyright © 2012, MuThink Inc, All rights reserved.
+ * http://www.muthink.com
+ * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
+ */
+#pragma once
+#include "lostlbase.h"
+#include "utility"
+#include "functional"
+#include "memory"
+#include "xutility"
+#include "string.h"
+#include "sys/types.h"
+
+namespace std {
+
+	/// Returns the first iterator such that p(*i, *(i + 1)) == true.
+	/// \ingroup SearchingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename ForwardIterator, typename BinaryPredicate>
+	inline ForwardIterator adjacent_find (ForwardIterator first, ForwardIterator last, BinaryPredicate p)
+	{
+		if (first != last)
+		for (ForwardIterator prev = first; ++first != last; ++ prev)
+			if (p (*prev, *first))
+			return (prev);
+		return (last);
+	}
+
+	/// Offsets an iterator
+	template <typename T>
+	inline T advance (T i, ssize_t offset)
+	{
+		return (i + offset);
+	}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+	/// Offsets a void pointer
+	template <>
+	inline const void* advance (const void* p, ssize_t offset)
+	{
+		assert (p || !offset);
+		return (reinterpret_cast<const uint8_t*>(p) + offset);
+	}
+
+	/// Offsets a void pointer
+	template <>
+	inline void* advance (void* p, ssize_t offset)
+	{
+		assert (p || !offset);
+		return (reinterpret_cast<uint8_t*>(p) + offset);
+	}
+#endif
+	
+	/// Copy copies elements from the range [first, last) to the range
+	/// [result, result + (last - first)). That is, it performs the assignments
+	/// *result = *first, *(result + 1) = *(first + 1), and so on. [1] Generally,
+	/// for every integer n from 0 to last - first, copy performs the assignment
+	/// *(result + n) = *(first + n). Assignments are performed in forward order,
+	/// i.e. in order of increasing n. 
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename InputIterator, typename OutputIterator>
+	inline OutputIterator copy (InputIterator first, InputIterator last, OutputIterator result)
+	{
+		for (; first != last; ++result, ++first)
+			*result = *first;
+		return (result);
+	}
+
+	/// \brief Copy copies elements from the range (last, first] to result.
+	/// \ingroup MutatingAlgorithms
+	/// Copies elements starting at last, decrementing both last and result.
+	///
+	template <typename InputIterator, typename OutputIterator>
+	inline OutputIterator copy_backward (InputIterator first, InputIterator last, OutputIterator result)
+	{
+		while (first != last)
+			*--result = *--last;
+		return (result);
+	}
+
+	/// Copy_n copies elements from the range [first, first + n) to the range
+	/// [result, result + n). That is, it performs the assignments
+	/// *result = *first, *(result + 1) = *(first + 1), and so on. Generally,
+	/// for every integer i from 0 up to (but not including) n, copy_n performs
+	/// the assignment *(result + i) = *(first + i). Assignments are performed
+	/// in forward order, i.e. in order of increasing n.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename InputIterator, typename OutputIterator>
+	inline OutputIterator copy_n (InputIterator first, size_t count, OutputIterator result)
+	{
+		for (; count; --count, ++result, ++first)
+			*result = *first;
+		return (result);
+	}
+	
+	/// Count_if finds the number of elements in [first, last) that satisfy the
+	/// predicate pred. More precisely, the first version of count_if returns the
+	/// number of iterators i in [first, last) such that pred(*i) is true.
+	/// \ingroup ConditionAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename InputIterator, typename Predicate>
+	inline size_t count_if (InputIterator first, InputIterator last, Predicate pred)
+	{
+		size_t total = 0;
+		for (; first != last; ++first)
+		if (pred (*first))
+			++ total;
+		return (total);
+	}
+
+	/// \brief Returns true if the given range is a heap under \p comp.
+	/// A heap is a sequentially encoded binary tree where for every node
+	/// comp(node,child1) is false and comp(node,child2) is false.
+	/// \ingroup HeapAlgorithms
+	/// \ingroup ConditionAlgorithms
+	///
+	template <typename RandomAccessIterator, typename Compare>
+	bool is_heap (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+	{
+		RandomAccessIterator iChild (first);
+		for (; ++iChild < last; ++first)
+		if (comp (*first, *iChild) || (++iChild < last && comp (*first, *iChild)))
+			return (false);
+		return (true);
+	}
+
+	/// \brief make_heap turns the range [first, last) into a heap
+	/// At completion, is_heap (first, last, comp) is true.
+	/// The algorithm is adapted from "Classic Data Structures in C++" by Timothy Budd.
+	/// \ingroup HeapAlgorithms
+	/// \ingroup SortingAlgorithms
+	///
+	template <typename RandomAccessIterator, typename Compare>
+	void make_heap (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+	{
+		typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+		const value_type v (*first);
+		uoff_t iChild, iHole = 0, iEnd (distance (first, last));
+		while ((iChild = 2 * iHole + 1) < iEnd) {
+		if (iChild + 1 < iEnd)	// Pick the greater child
+			iChild += comp (first[iChild], first[iChild + 1]);
+		if (comp (first[iChild], v))
+			break;		// Done when parent is greater than both children.
+		first[iHole] = first[iChild];
+		iHole = iChild;
+		}
+		if (iHole < iEnd)
+		first[iHole] = v;
+	}
+
+
+	/// Equivalent to swap (*a, *b)
+	/// \ingroup SwapAlgorithms
+	///
+	template <typename Iterator> 
+	inline void iter_swap (Iterator a, Iterator b)
+	{
+		swap (*a, *b);
+	}
+
+	/// For_each applies the function object f to each element in the range
+	/// [first, last); f's return value, if any, is ignored. Applications are
+	/// performed in forward order, i.e. from first to last. For_each returns
+	/// the function object after it has been applied to each element.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename InputIterator, typename UnaryFunction>
+	inline UnaryFunction for_each (InputIterator first, InputIterator last, UnaryFunction f)
+	{
+		for (; first != last; ++first)
+			f (*first);
+		return (f);
+	}
+
+	/// Fill assigns the value value to every element in the range [first, last).
+	/// That is, for every iterator i in [first, last),
+	/// it performs the assignment *i = value.
+	/// \ingroup GeneratorAlgorithms
+	///
+	template <typename ForwardIterator, typename T>
+	inline void fill (ForwardIterator first, ForwardIterator last, const T& value)
+	{
+#pragma warning(push)
+#pragma warning(disable:4244)
+		for (; first != last; ++first)
+		{
+			*first = value;
+		}
+#pragma warning(pop)
+	}
+
+	/// Fill_n assigns the value value to every element in the range
+	/// [first, first+count). That is, for every iterator i in [first, first+count),
+	/// it performs the assignment *i = value. The return value is first + count.
+	/// \ingroup GeneratorAlgorithms
+	///
+	template <typename OutputIterator, typename T>
+	inline OutputIterator fill_n (OutputIterator first, size_t count, const T& value)
+	{
+		for (; count; --count, ++first)
+		{
+#pragma warning(push)
+#pragma warning(disable:4244)
+			*first = value;
+#pragma warning(pop)
+		}
+		return (first);
+	}
+
+	// Generate some fill_n aliases - for automatic cases
+#define FILL_N_ALIAS_FUNC(type, alias_type, v_type)				\
+	template <> inline type* fill_n (type* first, size_t n, const v_type& value)	\
+	{ return ((type*) fill_n ((alias_type*) first, n, (const alias_type) value)); }
+	FILL_N_ALIAS_FUNC(void, uint8_t, char)
+	FILL_N_ALIAS_FUNC(void, uint8_t, uint8_t)
+	FILL_N_ALIAS_FUNC(char, uint8_t, char)
+	FILL_N_ALIAS_FUNC(char, uint8_t, uint8_t)
+	FILL_N_ALIAS_FUNC(int8_t, uint8_t, int8_t)
+	FILL_N_ALIAS_FUNC(int16_t, uint16_t, int16_t)
+	FILL_N_ALIAS_FUNC(int32_t, uint32_t, int32_t)
+#undef FILL_N_ALIAS_FUNC
+
+
+#if CPU_HAS_MMX
+	extern "C" void copy_n_fast (const void* src, size_t count, void* dest) throw();
+#else
+	inline void copy_n_fast (const void* src, size_t count, void* dest) throw()
+	{ memcpy (dest, src, count); }
+#endif
+#if __i386__ || __x86_64__
+	extern "C" void copy_backward_fast (const void* first, const void* last, void* result) throw();
+#else
+	inline void copy_backward_fast (const void* first, const void* last, void* result) throw()
+	{
+		const size_t nBytes (distance (first, last));
+		memmove (advance (result, -((ssize_t)nBytes)), first, nBytes);
+	}
+#endif
+	extern "C" void fill_n8_fast (uint8_t* dest, size_t count, uint8_t v) throw();
+	extern "C" void fill_n16_fast (uint16_t* dest, size_t count, uint16_t v) throw();
+	extern "C" void fill_n32_fast (uint32_t* dest, size_t count, uint32_t v) throw();
+	extern "C" void rotate_fast (void* first, void* middle, void* last) throw();
+
+#if __GNUC__ >= 4
+	/// \brief Computes the number of 1 bits in a number.
+	/// \ingroup ConditionAlgorithms
+	inline size_t popcount (uint32_t v)	{ return (__builtin_popcount (v)); }
+#if HAVE_INT64_T
+	inline size_t popcount (uint64_t v)	{ return (__builtin_popcountll (v)); }
+#endif
+#else
+	size_t popcount (uint32_t v);
+#if HAVE_INT64_T
+	size_t popcount (uint64_t v);
+#endif	// HAVE_INT64_T
+#endif	// __GNUC__
+
+	//----------------------------------------------------------------------
+	// Optimized versions for standard types
+	//----------------------------------------------------------------------
+
+#if WANT_UNROLLED_COPY
+
+	template <typename T>
+	inline T* unrolled_copy (const T* first, size_t count, T* result)
+	{
+		copy_n_fast (first, count * sizeof(T), result);
+		return (advance (result, count));
+	}
+
+	template <>
+	inline uint8_t* copy_backward (const uint8_t* first, const uint8_t* last, uint8_t* result)
+	{
+		copy_backward_fast (first, last, result);
+		return (result);
+	}
+
+	template <typename T>
+	inline T* unrolled_fill (T* result, size_t count, T value)
+	{
+		for (; count; --count, ++result)
+			*result = value;
+		return (result);
+	}
+	template <> inline uint8_t* unrolled_fill (uint8_t* result, size_t count, uint8_t value)
+	{ fill_n8_fast (result, count, value); return (advance (result, count)); }
+	template <> inline uint16_t* unrolled_fill (uint16_t* result, size_t count, uint16_t value)
+	{ fill_n16_fast (result, count, value); return (advance (result, count)); }
+	template <> inline uint32_t* unrolled_fill (uint32_t* result, size_t count, uint32_t value)
+	{ fill_n32_fast (result, count, value); return (advance (result, count)); }
+	template <> inline float* unrolled_fill (float* result, size_t count, float value)
+	{ fill_n32_fast ((uint32_t*) result, count, *noalias_cast<uint32_t*>(&value)); return (advance (result, count)); }
+
+#if CPU_HAS_MMX
+#define UNROLLED_COPY_SPECIALIZATION(type)						\
+	template <> inline type* copy (const type* first, const type* last, type* result)	\
+	{ return (unrolled_copy (first, distance (first, last), result)); }			\
+	template <> inline type* copy_n (const type* first, size_t count, type* result)		\
+	{ return (unrolled_copy (first, count, result)); }
+#define UNROLLED_FILL_SPECIALIZATION(type)						\
+	template <> inline void fill (type* first, type* last, const type& value)		\
+	{ unrolled_fill (first, distance (first, last), value); }				\
+	template <> inline type* fill_n (type* first, size_t count, const type& value)		\
+	{ return (unrolled_fill (first, count, value)); }
+	UNROLLED_COPY_SPECIALIZATION(uint8_t)
+		UNROLLED_FILL_SPECIALIZATION(uint8_t)
+		UNROLLED_COPY_SPECIALIZATION(uint16_t)
+		UNROLLED_FILL_SPECIALIZATION(uint16_t)
+		UNROLLED_COPY_SPECIALIZATION(uint32_t)
+		UNROLLED_FILL_SPECIALIZATION(uint32_t)
+		UNROLLED_COPY_SPECIALIZATION(float)
+		UNROLLED_FILL_SPECIALIZATION(float)
+#undef UNROLLED_FILL_SPECIALIZATION
+#undef UNROLLED_COPY_SPECIALIZATION
+#endif // WANT_UNROLLED_COPY
+#endif // CPU_HAS_MMX
+
+		// Specializations for void* and char*, aliasing the above optimized versions.
+		//
+		// All these need duplication with const and non-const arguments, since
+		// otherwise the compiler will default to the unoptimized version for
+		// pointers not const in the caller's context, such as local variables.
+		// These are all inline, but they sure slow down compilation... :(
+		//
+#define COPY_ALIAS_FUNC(ctype, type, alias_type)			\
+	template <> inline type* copy (ctype* first, ctype* last, type* result)	\
+	{ return ((type*) copy ((const alias_type*) first, (const alias_type*) last, (alias_type*) result)); }
+#if WANT_UNROLLED_COPY
+#if HAVE_THREE_CHAR_TYPES
+		COPY_ALIAS_FUNC(const char, char, uint8_t)
+		COPY_ALIAS_FUNC(char, char, uint8_t)
+#endif
+		COPY_ALIAS_FUNC(const int8_t, int8_t, uint8_t)
+		COPY_ALIAS_FUNC(int8_t, int8_t, uint8_t)
+		COPY_ALIAS_FUNC(uint8_t, uint8_t, uint8_t)
+		COPY_ALIAS_FUNC(const int16_t, int16_t, uint16_t)
+		COPY_ALIAS_FUNC(int16_t, int16_t, uint16_t)
+		COPY_ALIAS_FUNC(uint16_t, uint16_t, uint16_t)
+#if CPU_HAS_MMX || (SIZE_OF_LONG > 4)
+		COPY_ALIAS_FUNC(const int32_t, int32_t, uint32_t)
+		COPY_ALIAS_FUNC(int32_t, int32_t, uint32_t)
+		COPY_ALIAS_FUNC(uint32_t, uint32_t, uint32_t)
+#endif
+#endif
+		COPY_ALIAS_FUNC(const void, void, uint8_t)
+		COPY_ALIAS_FUNC(void, void, uint8_t)
+#undef COPY_ALIAS_FUNC
+#define COPY_BACKWARD_ALIAS_FUNC(ctype, type, alias_type)				\
+	template <> inline type* copy_backward (ctype* first, ctype* last, type* result)	\
+	{ return ((type*) copy_backward ((const alias_type*) first, (const alias_type*) last, (alias_type*) result)); }
+#if WANT_UNROLLED_COPY
+#if HAVE_THREE_CHAR_TYPES
+		COPY_BACKWARD_ALIAS_FUNC(char, char, uint8_t)
+#endif
+		COPY_BACKWARD_ALIAS_FUNC(uint8_t, uint8_t, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(int8_t, int8_t, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(uint16_t, uint16_t, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(const uint16_t, uint16_t, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(int16_t, int16_t, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(const int16_t, int16_t, uint8_t)
+#endif
+		COPY_BACKWARD_ALIAS_FUNC(void, void, uint8_t)
+		COPY_BACKWARD_ALIAS_FUNC(const void, void, uint8_t)
+#undef COPY_BACKWARD_ALIAS_FUNC
+#define FILL_ALIAS_FUNC(type, alias_type, v_type)				\
+	template <> inline void fill (type* first, type* last, const v_type& value)	\
+	{ fill ((alias_type*) first, (alias_type*) last, (const alias_type) value); }
+		FILL_ALIAS_FUNC(void, uint8_t, char)
+		FILL_ALIAS_FUNC(void, uint8_t, uint8_t)
+#if WANT_UNROLLED_COPY
+#if HAVE_THREE_CHAR_TYPES
+		FILL_ALIAS_FUNC(char, uint8_t, char)
+		FILL_ALIAS_FUNC(char, uint8_t, uint8_t)
+#endif
+		FILL_ALIAS_FUNC(int8_t, uint8_t, int8_t)
+		FILL_ALIAS_FUNC(int16_t, uint16_t, int16_t)
+#if CPU_HAS_MMX || (SIZE_OF_LONG > 4)
+		FILL_ALIAS_FUNC(int32_t, uint32_t, int32_t)
+#endif
+#endif
+#undef FILL_ALIAS_FUNC
+#define COPY_N_ALIAS_FUNC(ctype, type, alias_type)					\
+	template <> inline type* copy_n (ctype* first, size_t count, type* result)	\
+	{ return ((type*) copy_n ((const alias_type*) first, count, (alias_type*) result)); }
+		COPY_N_ALIAS_FUNC(const void, void, uint8_t)
+		COPY_N_ALIAS_FUNC(void, void, uint8_t)
+		COPY_N_ALIAS_FUNC(const char, char, uint8_t)
+		COPY_N_ALIAS_FUNC(char, char, uint8_t)
+//		COPY_N_ALIAS_FUNC(int8_t, int8_t, uint8_t)
+		COPY_N_ALIAS_FUNC(uint8_t, uint8_t, uint8_t)
+		COPY_N_ALIAS_FUNC(const int8_t, int8_t, uint8_t)
+//		COPY_N_ALIAS_FUNC(int16_t, int16_t, uint16_t)
+		COPY_N_ALIAS_FUNC(uint16_t, uint16_t, uint16_t)
+		COPY_N_ALIAS_FUNC(const int16_t, int16_t, uint16_t)
+		COPY_N_ALIAS_FUNC(int32_t, int32_t, uint32_t)
+		COPY_N_ALIAS_FUNC(uint32_t, uint32_t, uint32_t)
+#undef COPY_N_ALIAS_FUNC
+
+		extern const char _FmtPrtChr[2][8];
+
+
+	/// Copy copies elements from the range [first, last) to the range
+	/// [result, result + (last - first)). That is, it performs the assignments
+	/// *result = *first, *(result + 1) = *(first + 1), and so on. [1] Generally,
+	/// for every integer n from 0 to last - first, copy performs the assignment
+	/// *(result + n) = *(first + n). Assignments are performed in forward order,
+	/// i.e. in order of increasing n. 
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator>
+	inline OutputIterator copy (const Container& ctr, OutputIterator result)
+	{
+		return (copy (ctr.begin(), ctr.end(), result));
+	}
+
+	/// Copy_if copies elements from the range [first, last) to the range
+	/// [result, result + (last - first)) if pred(*i) returns true.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename Predicate>
+	inline OutputIterator copy_if (Container& ctr, OutputIterator result, Predicate pred)
+	{
+		return (copy_if (ctr.begin(), ctr.end(), result, pred));
+	}
+	
+	/// Copy_if copies elements from the range [first, last) to the range
+	/// [result, result + (last - first)) if pred(*i) returns true.
+	/// \ingroup MutatingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename InputIterator, typename OutputIterator, typename Predicate>
+	inline OutputIterator copy_if (InputIterator first, InputIterator last, OutputIterator result, Predicate pred)
+	{
+		for (; first != last; ++first)
+		{
+			if (pred(*first))
+			{
+				*result = *first;
+				++result;
+			}
+		}
+		return (result);
+	}
+	
+	/// Count finds the number of elements in [first, last) that are equal
+	/// to value. More precisely, the first version of count returns the
+	/// number of iterators i in [first, last) such that *i == value.
+	/// \ingroup ConditionAlgorithms
+	///
+	template <typename Container, typename EqualityComparable>
+	inline size_t count (const Container& ctr, const EqualityComparable& value)
+	{
+		return (count (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Count_if finds the number of elements in [first, last) that satisfy the
+	/// predicate pred. More precisely, the first version of count_if returns the
+	/// number of iterators i in [first, last) such that pred(*i) is true.
+	/// \ingroup ConditionAlgorithms
+	///
+	template <typename Container, typename Predicate>
+	inline size_t count_if (const Container& ctr, Predicate pred)
+	{
+		return (count_if (ctr.begin(), ctr.end(), pred));
+	}
+	
+	/// Returns true if two ranges are equal.
+	/// This is an extension, present in std and SGI STL.
+	/// \ingroup ConditionAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename InputIterator, typename BinaryPredicate>
+	inline bool equal (InputIterator first1, InputIterator last1, InputIterator first2, BinaryPredicate comp)
+	{
+		return (mismatch (first1, last1, first2, comp).first == last1);
+	}
+
+	/// Returns the first iterator i in the range [first, last) such that
+	/// *i == value. Returns last if no such iterator exists. 
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container, typename EqualityComparable>
+	inline typename Container::const_iterator find (const Container& ctr, const EqualityComparable& value)
+	{
+		return (find (ctr.begin(), ctr.end(), value));
+	}
+	template <typename Container, typename EqualityComparable>
+	inline typename Container::iterator find (Container& ctr, const EqualityComparable& value)
+	{
+		return (find (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Returns the first iterator i in the range [first, last) such that
+	/// pred(*i) is true. Returns last if no such iterator exists.
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container, typename Predicate>
+	inline typename Container::const_iterator find_if (const Container& ctr, Predicate pred)
+	{
+		return (find_if (ctr.begin(), ctr.end(), pred));
+	}
+
+	template <typename Container, typename Predicate>
+	inline typename Container::iterator find_if (Container& ctr, Predicate pred)
+	{
+		return (find_if (ctr.begin(), ctr.end(), pred));
+	}
+	
+	/// Returns the first iterator i in the range [first, last) such that
+	/// pred(*i) is true. Returns last if no such iterator exists.
+	/// \ingroup SearchingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename InputIterator, typename Predicate>
+	inline InputIterator find_if (InputIterator first, InputIterator last, Predicate pred)
+	{
+		while (first != last && !pred (*first))
+		++ first;
+		return (first);
+	}
+
+	/// For_each applies the function object f to each element in the range
+	/// [first, last); f's return value, if any, is ignored. Applications are
+	/// performed in forward order, i.e. from first to last. For_each returns
+	/// the function object after it has been applied to each element.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename UnaryFunction>
+	inline UnaryFunction for_each (Container& ctr, UnaryFunction f)
+	{
+		return (for_each (ctr.begin(), ctr.end(), f));
+	}
+
+	/// For_each applies the function object f to each element in the range
+	/// [first, last); f's return value, if any, is ignored. Applications are
+	/// performed in forward order, i.e. from first to last. For_each returns
+	/// the function object after it has been applied to each element.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename UnaryFunction>
+	inline UnaryFunction for_each (const Container& ctr, UnaryFunction f)
+	{
+		return (for_each (ctr.begin(), ctr.end(), f));
+	}
+
+	/// Replace replaces every element in the range [first, last) equal to
+	/// old_value with new_value. That is: for every iterator i,
+	/// if *i == old_value then it performs the assignment *i = new_value.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename T>
+	inline void replace (Container& ctr, const T& old_value, const T& new_value)
+	{
+		replace (ctr.begin(), ctr.end(), old_value, new_value);
+	}
+
+	/// Replace_if replaces every element in the range [first, last) for which
+	/// pred returns true with new_value. That is: for every iterator i, if
+	/// pred(*i) is true then it performs the assignment *i = new_value.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename Predicate, typename T>
+	inline void replace_if (Container& ctr, Predicate pred, const T& new_value)
+	{
+		replace_if (ctr.begin(), ctr.end(), pred, new_value);
+	}
+
+	/// Replace_copy copies elements from the range [first, last) to the range
+	/// [result, result + (last-first)), except that any element equal to old_value
+	/// is not copied; new_value is copied instead. More precisely, for every
+	/// integer n such that 0 <= n < last-first, replace_copy performs the
+	/// assignment *(result+n) = new_value if *(first+n) == old_value, and
+	/// *(result+n) = *(first+n) otherwise.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename T>
+	inline OutputIterator replace_copy (const Container& ctr, OutputIterator result, const T& old_value, const T& new_value)
+	{
+		return (replace_copy (ctr.begin(), ctr.end(), result, old_value, new_value));
+	}
+
+	/// Replace_copy_if copies elements from the range [first, last) to the range
+	/// [result, result + (last-first)), except that any element for which pred is
+	/// true is not copied; new_value is copied instead. More precisely, for every
+	/// integer n such that 0 <= n < last-first, replace_copy_if performs the
+	/// assignment *(result+n) = new_value if pred(*(first+n)),
+	/// and *(result+n) = *(first+n) otherwise.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename Predicate, typename T>
+	inline OutputIterator replace_copy_if (const Container& ctr, OutputIterator result, Predicate pred, const T& new_value) 
+	{
+		return (replace_copy_if (ctr.begin(), ctr.end(), result, pred, new_value));
+	}
+
+	/// Fill assigns the value value to every element in the range [first, last).
+	/// That is, for every iterator i in [first, last),
+	/// it performs the assignment *i = value.
+	/// \ingroup GeneratorAlgorithms
+	///
+	template <typename Container, typename T>
+	inline void fill (Container& ctr, const T& value)
+	{
+		fill (ctr.begin(), ctr.end(), value);
+	}
+
+	/// Generate assigns the result of invoking gen, a function object that
+	/// takes no arguments, to each element in the range [first, last).
+	/// \ingroup GeneratorAlgorithms
+	///
+	template <typename Container, typename Generator>
+	inline void generate (Container& ctr, Generator gen)
+	{
+		generate (ctr.begin(), ctr.end(), gen);
+	}
+
+	/// Returns the pointer to the first pair of unequal elements.
+	/// \ingroup SearchingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	///
+	template <typename InputIterator, typename BinaryPredicate>
+	inline pair<InputIterator,InputIterator>
+	mismatch (InputIterator first1, InputIterator last1, InputIterator first2, BinaryPredicate comp)
+	{
+		while (first1 != last1 && comp(*first1, *first2))
+		++ first1, ++ first2;
+		return (make_pair (first1, first2));
+	}
+
+	/// \brief Inserts the *--last into the preceeding range assumed to be a heap.
+	/// \ingroup HeapAlgorithms
+	/// \ingroup MutatingAlgorithms
+	template <typename RandomAccessIterator, typename Compare>
+	void push_heap (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+	{
+		if (last <= first)
+		return;
+		typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+		const value_type v (*--last);
+		while (first < last) {
+		RandomAccessIterator iParent = first + (distance(first, last) - 1) / 2;
+		if (comp (v, *iParent))
+			break;
+		*last = *iParent;
+		last = iParent;
+		}
+		*last = v;
+	}
+
+	/// Randomly permute the elements of the container.
+	/// \ingroup GeneratorAlgorithms
+	///
+	template <typename Container>
+	inline void random_shuffle (Container& ctr)
+	{
+		random_shuffle (ctr.begin(), ctr.end());
+	}
+
+	/// Remove_copy copies elements that are not equal to value from the range
+	/// [first, last) to a range beginning at result. The return value is the
+	/// end of the resulting range. This operation is stable, meaning that the
+	/// relative order of the elements that are copied is the same as in the
+	/// range [first, last).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename T>
+	inline OutputIterator remove_copy (const Container& ctr, OutputIterator result, const T& value)
+	{
+		return (remove_copy (ctr.begin(), ctr.end(), result, value));
+	}
+
+	/// Remove removes from the range [first, last) all elements that are equal to
+	/// value. That is, remove returns an iterator new_last such that the range
+	/// [first, new_last) contains no elements equal to value. Remove is stable,
+	/// meaning that the relative order of elements that are not equal to value is
+	/// unchanged.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename T>
+	inline void remove (Container& ctr, const T& value)
+	{
+		ctr.erase (remove_copy (ctr.begin(), ctr.end(), ctr.begin(), value), ctr.end());
+	}
+
+	/// Remove_copy_if copies elements from the range [first, last) to a range
+	/// beginning at result, except that elements for which pred is true are not
+	/// copied. The return value is the end of the resulting range. This operation
+	/// is stable, meaning that the relative order of the elements that are copied
+	/// is the same as in the range [first, last).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename Predicate>
+	inline OutputIterator remove_copy_if (const Container& ctr, OutputIterator result, Predicate pred)
+	{
+		return (remove_copy_if (ctr.begin(), ctr.end(), result, pred));
+	}
+
+	/// Remove removes from the range [first, last) all elements that have an iterator
+	/// in range [rfirst, rlast). The range is assumed to be sorted. That is, remove
+	/// returns an iterator new_last such that the range [first, new_last) contains
+	/// no elements whose iterators are in [rfirst, rlast). Remove is stable,
+	/// meaning that the relative order of elements that are not equal to value is
+	/// unchanged. This version of the algorithm is a std extension.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename ForwardIterator>
+	inline void remove (Container& ctr, ForwardIterator rfirst, ForwardIterator rlast)
+	{
+		ctr.erase (remove_copy (ctr.begin(), ctr.end(), ctr.begin(), rfirst, rlast), ctr.end());
+	}
+
+	/// Remove_if removes from the range [first, last) every element x such that
+	/// pred(x) is true. That is, remove_if returns an iterator new_last such that
+	/// the range [first, new_last) contains no elements for which pred is true.
+	/// The iterators in the range [new_last, last) are all still dereferenceable,
+	/// but the elements that they point to are unspecified. Remove_if is stable,
+	/// meaning that the relative order of elements that are not removed is
+	/// unchanged.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename Predicate>
+	inline void remove_if (Container& ctr, Predicate pred)
+	{
+		ctr.erase (remove_copy_if (ctr.begin(), ctr.end(), ctr.begin(), pred), ctr.end());
+	}
+
+	/// Unique_copy copies elements from the range [first, last) to a range
+	/// beginning with result, except that in a consecutive group of duplicate
+	/// elements only the first one is copied. The return value is the end of
+	/// the range to which the elements are copied. This behavior is similar
+	/// to the Unix filter uniq.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator>
+	inline OutputIterator unique_copy (const Container& ctr, OutputIterator result)
+	{
+		return (unique_copy (ctr.begin(), ctr.end(), result));
+	}
+
+	/// Every time a consecutive group of duplicate elements appears in the range
+	/// [first, last), the algorithm unique removes all but the first element.
+	/// That is, unique returns an iterator new_last such that the range [first,
+	/// new_last) contains no two consecutive elements that are duplicates.
+	/// The iterators in the range [new_last, last) are all still dereferenceable,
+	/// but the elements that they point to are unspecified. Unique is stable,
+	/// meaning that the relative order of elements that are not removed is
+	/// unchanged.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container>
+	inline void unique (Container& ctr)
+	{
+		ctr.erase (unique_copy (ctr.begin(), ctr.end(), ctr.begin()), ctr.end());
+	}
+
+
+	/// Reverse reverses a range.
+	/// That is: for every i such that 0 <= i <= (last - first) / 2),
+	/// it exchanges *(first + i) and *(last - (i + 1)).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container>
+	inline void reverse (Container& ctr)
+	{
+		reverse (ctr.begin(), ctr.end());
+	}
+
+	/// Exchanges ranges [first, middle) and [middle, last)
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container>
+	inline void rotate (Container& ctr, off_t offset)
+	{
+		assert (size_t(offset > 0 ? offset : -offset) < ctr.size());
+		if (offset > 0)
+			rotate (ctr.begin(), ctr.end() - offset, ctr.end());
+		else
+			rotate (ctr.begin(), ctr.begin() - offset, ctr.end());
+	}
+
+	/// Returns the furthermost iterator i in [first, last) such that,
+	/// for every iterator j in [first, i), *j < value
+	/// Assumes the range is sorted.
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container, typename LessThanComparable>
+	inline typename Container::const_iterator lower_bound (const Container& ctr, const LessThanComparable& value)
+	{
+		return (lower_bound (ctr.begin(), ctr.end(), value));
+	}
+	template <typename Container, typename LessThanComparable>
+	inline typename Container::iterator lower_bound (Container& ctr, const LessThanComparable& value)
+	{
+		return (lower_bound (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Every time a consecutive group of duplicate elements appears in the range
+	/// [first, last), the algorithm unique removes all but the first element.
+	/// That is, unique returns an iterator new_last such that the range [first,
+	/// new_last) contains no two consecutive elements that are duplicates.
+	/// The iterators in the range [new_last, last) are all still dereferenceable,
+	/// but the elements that they point to are unspecified. Unique is stable,
+	/// meaning that the relative order of elements that are not removed is
+	/// unchanged.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename BinaryPredicate>
+	inline void unique (Container& ctr, BinaryPredicate binary_pred)
+	{
+		ctr.erase (unique_copy (ctr.begin(), ctr.end(), ctr.begin(), binary_pred), ctr.end());
+	}
+
+	/// Returns the furthermost iterator i in [first,last) such that for
+	/// every iterator j in [first,i), value < *j is false.
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container, typename LessThanComparable>
+	inline typename Container::const_iterator upper_bound (const Container& ctr, const LessThanComparable& value)
+	{
+		return (upper_bound (ctr.begin(), ctr.end(), value));
+	}
+	template <typename Container, typename LessThanComparable>
+	inline typename Container::iterator upper_bound (Container& ctr, const LessThanComparable& value)
+	{
+		return (upper_bound (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Performs a binary search for \p value.
+	/// Assumes the range is sorted.
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container>
+	inline bool binary_search (const Container& ctr, const typename Container::value_type& value)
+	{
+		return (binary_search (ctr.begin(), ctr.end(), value));
+	}
+	template <typename Container>
+	inline bool binary_search (Container& ctr, const typename Container::value_type& value)
+	{
+		return (binary_search (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Returns pair<lower_bound,upper_bound>
+	/// \ingroup SearchingAlgorithms
+	///
+	template <typename Container, typename LessThanComparable>
+	inline pair<typename Container::const_iterator,typename Container::const_iterator> equal_range (const Container& ctr, const LessThanComparable& value)
+	{
+		return (equal_range (ctr.begin(), ctr.end(), value));
+	}
+	template <typename Container, typename LessThanComparable>
+	inline pair<typename Container::iterator,typename Container::iterator> equal_range (Container& ctr, const LessThanComparable& value)
+	{
+		return (equal_range (ctr.begin(), ctr.end(), value));
+	}
+
+	/// Sorts the container
+	/// \ingroup SortingAlgorithms
+	///
+	template <typename Container>
+	inline void sort (Container& ctr)
+	{
+		sort (ctr.begin(), ctr.end());
+	}
+
+	/// Sorts the container
+	/// \ingroup SortingAlgorithms
+	///
+	template <typename Container, typename Compare>
+	inline void sort (Container& ctr, Compare comp)
+	{
+		sort (ctr.begin(), ctr.end(), comp);
+	}
+
+	/// Sorts the container
+	/// \ingroup SortingAlgorithms
+	///
+	template <typename Container>
+	inline void stable_sort (Container& ctr)
+	{
+		stable_sort (ctr.begin(), ctr.end());
+	}
+
+	/// Sorts the container
+	/// \ingroup SortingAlgorithms
+	///
+	template <typename Container, typename Compare>
+	inline void stable_sort (Container& ctr, Compare comp)
+	{
+		stable_sort (ctr.begin(), ctr.end(), comp);
+	}
+
+
+/// Swaps corresponding elements of [first, last) and [result,)
+/// \ingroup SwapAlgorithms
+///
+template <typename ForwardIterator1, typename ForwardIterator2>
+inline ForwardIterator2 swap_ranges (ForwardIterator1 first, ForwardIterator2 last, ForwardIterator2 result)
+{
+    for (; first != last; ++first, ++result)
+	iter_swap (first, result);
+    return (result);
+}
+
+/// Returns the first iterator i in the range [first, last) such that
+/// *i == value. Returns last if no such iterator exists. 
+/// \ingroup SearchingAlgorithms
+///
+template <typename InputIterator, typename EqualityComparable>
+inline InputIterator find (InputIterator first, InputIterator last, const EqualityComparable& value)
+{
+    while (first != last && !(*first == value))
+	++ first;
+    return (first);
+}
+
+/// Returns the first iterator such that *i == *(i + 1)
+/// \ingroup SearchingAlgorithms
+///
+template <typename ForwardIterator>
+ForwardIterator adjacent_find (ForwardIterator first, ForwardIterator last)
+{
+    if (first != last)
+	for (ForwardIterator prev = first; ++first != last; ++ prev)
+	    if (*prev == *first)
+		return (prev);
+    return (last);
+}
+
+/// Returns the pointer to the first pair of unequal elements.
+/// \ingroup SearchingAlgorithms
+///
+template <typename InputIterator>
+pair<InputIterator,InputIterator>
+mismatch (InputIterator first1, InputIterator last1, InputIterator first2)
+{
+    while (first1 != last1 && *first1 == *first2)
+	++ first1, ++ first2;
+    return (make_pair (first1, first2));
+}
+
+/// \brief Returns true if two ranges are equal.
+/// This is an extension, present in std and SGI STL.
+/// \ingroup SearchingAlgorithms
+///
+template <typename InputIterator>
+inline bool equal (InputIterator first1, InputIterator last1, InputIterator first2)
+{
+    return (mismatch (first1, last1, first2).first == last1);
+}
+
+/// Count finds the number of elements in [first, last) that are equal
+/// to value. More precisely, the first version of count returns the
+/// number of iterators i in [first, last) such that *i == value.
+/// \ingroup SearchingAlgorithms
+///
+template <typename InputIterator, typename EqualityComparable>
+inline size_t count (InputIterator first, InputIterator last, const EqualityComparable& value)
+{
+    size_t total = 0;
+    for (; first != last; ++first)
+	if (*first == value)
+	    ++ total;
+    return (total);
+}
+
+///
+/// The first version of transform performs the operation op(*i) for each
+/// iterator i in the range [first, last), and assigns the result of that
+/// operation to *o, where o is the corresponding output iterator. That is,
+/// for each n such that 0 <= n < last - first, it performs the assignment
+/// *(result + n) = op(*(first + n)).
+/// The return value is result + (last - first).
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename InputIterator, typename OutputIterator, typename UnaryFunction>
+inline OutputIterator transform (InputIterator first, InputIterator last, OutputIterator result, UnaryFunction op)
+{
+    for (; first != last; ++result, ++first)
+	*result = op (*first);
+    return (result);
+}
+
+///
+/// The second version of transform is very similar, except that it uses a
+/// Binary Function instead of a Unary Function: it performs the operation
+/// op(*i1, *i2) for each iterator i1 in the range [first1, last1) and assigns
+/// the result to *o, where i2 is the corresponding iterator in the second
+/// input range and where o is the corresponding output iterator. That is,
+/// for each n such that 0 <= n < last1 - first1, it performs the assignment
+/// *(result + n) = op(*(first1 + n), *(first2 + n).
+/// The return value is result + (last1 - first1).
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename BinaryFunction>
+inline OutputIterator transform (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, OutputIterator result, BinaryFunction op)
+{
+    for (; first1 != last1; ++result, ++first1, ++first2)
+	*result = op (*first1, *first2);
+    return (result);
+}
+
+/// Replace replaces every element in the range [first, last) equal to
+/// old_value with new_value. That is: for every iterator i,
+/// if *i == old_value then it performs the assignment *i = new_value.
+/// \ingroup MutatingAlgorithms
+///
+template <typename ForwardIterator, typename T>
+inline void replace (ForwardIterator first, ForwardIterator last, const T& old_value, const T& new_value)
+{
+    for (; first != last; ++first)
+	if (*first == old_value)
+	    *first = new_value;
+}
+
+/// Replace_copy copies elements from the range [first, last) to the range
+/// [result, result + (last-first)), except that any element equal to old_value
+/// is not copied; new_value is copied instead. More precisely, for every
+/// integer n such that 0 <= n < last-first, replace_copy performs the
+/// assignment *(result+n) = new_value if *(first+n) == old_value, and
+/// *(result+n) = *(first+n) otherwise.
+/// \ingroup MutatingAlgorithms
+///
+template <typename InputIterator, typename OutputIterator, typename T>
+inline OutputIterator replace_copy (InputIterator first, InputIterator last, OutputIterator result, const T& old_value, const T& new_value)
+{
+    for (; first != last; ++result, ++first)
+        *result = (*first == old_value) ? new_value : *first;
+}
+
+/// Generate assigns the result of invoking gen, a function object that
+/// takes no arguments, to each element in the range [first, last).
+/// \ingroup GeneratorAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename Generator>
+inline void generate (ForwardIterator first, ForwardIterator last, Generator gen)
+{
+    for (; first != last; ++first)
+	*first = gen();
+}
+
+/// Generate_n assigns the result of invoking gen, a function object that
+/// takes no arguments, to each element in the range [first, first+n).
+/// The return value is first + n.
+/// \ingroup GeneratorAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename OutputIterator, typename Generator>
+inline OutputIterator generate_n (OutputIterator first, size_t n, Generator gen)
+{
+    for (uoff_t i = 0; i != n; ++i, ++first)
+	*first = gen();
+    return (first);
+}
+
+/// \brief Reverse reverses a range.
+/// That is: for every i such that 0 <= i <= (last - first) / 2),
+/// it exchanges *(first + i) and *(last - (i + 1)).
+/// \ingroup MutatingAlgorithms
+///
+template <typename BidirectionalIterator>
+inline void reverse (BidirectionalIterator first, BidirectionalIterator last)
+{
+    for (; distance (first, --last) > 0; ++first)
+	iter_swap (first, last);
+}
+
+/// \brief Reverses [first,last) and writes it to \p output.
+/// \ingroup MutatingAlgorithms
+///
+template <typename BidirectionalIterator, typename OutputIterator>
+inline OutputIterator reverse_copy (BidirectionalIterator first, BidirectionalIterator last, OutputIterator result)
+{
+    for (; first != last; ++result)
+	*result = *--last;
+    return (result);
+}
+
+/// \brief Exchanges ranges [first, middle) and [middle, last)
+/// \ingroup MutatingAlgorithms
+///
+template <typename ForwardIterator>
+ForwardIterator rotate (ForwardIterator first, ForwardIterator middle, ForwardIterator last)
+{
+    if (first == middle || middle == last)
+	return (first);
+    reverse (first, middle);
+    reverse (middle, last);
+    for (;first != middle && middle != last; ++first)
+	iter_swap (first, --last);
+    reverse (first, (first == middle ? last : middle));
+    return (first);
+}
+
+/// Specialization for pointers, which can be treated identically.
+template <typename T>
+inline T* rotate (T* first, T* middle, T* last)
+{
+    rotate_fast (const_cast<void *>(reinterpret_cast<const void *>(first)), const_cast<void *>(reinterpret_cast<const void *>(middle)), const_cast<void *>(reinterpret_cast<const void *>(last)));
+    return (first);
+}
+ 
+
+/// \brief Exchanges ranges [first, middle) and [middle, last) into \p result.
+/// \ingroup MutatingAlgorithms
+///
+template <typename ForwardIterator, typename OutputIterator>
+inline OutputIterator rotate_copy (ForwardIterator first, ForwardIterator middle, ForwardIterator last, OutputIterator result)
+{
+    return (copy (first, middle, copy (middle, last, result)));
+}
+
+/// \brief Combines two sorted ranges.
+/// \ingroup SortingAlgorithms
+///
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+OutputIterator merge (InputIterator1 first1, InputIterator1 last1,
+		      InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+{
+    for (; first1 != last1 && first2 != last2; ++result) {
+	if (*first1 < *first2)
+	    *result = *first1++;
+	else
+	    *result = *first2++;
+    }
+    if (first1 < last1)
+	return (copy (first1, last1, result));
+    else
+	return (copy (first2, last2, result));
+}
+
+/// Combines two sorted ranges from the same container.
+/// \ingroup SortingAlgorithms
+///
+template <typename InputIterator>
+void inplace_merge (InputIterator first, InputIterator middle, InputIterator last)
+{
+    for (; middle != last; ++first) {
+	while (*first < *middle)
+	    ++ first;
+	reverse (first, middle);
+	reverse (first, ++middle);
+    }
+}
+
+	/// Remove_copy copies elements that are not equal to value from the range
+	/// [first, last) to a range beginning at result. The return value is the
+	/// end of the resulting range. This operation is stable, meaning that the
+	/// relative order of the elements that are copied is the same as in the
+	/// range [first, last).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename InputIterator, typename OutputIterator, typename T>
+	OutputIterator remove_copy (InputIterator first, InputIterator last, OutputIterator result, const T& value)
+	{
+		for (; first != last; ++first) {
+		if (!(*first == value)) {
+			*result = *first;
+			++ result;
+		}
+		}
+		return (result);
+	}
+
+	/// Remove_copy copies elements pointed to by iterators in [rfirst, rlast)
+	/// from the range [first, last) to a range beginning at result. The return
+	/// value is the end of the resulting range. This operation is stable, meaning
+	/// that the relative order of the elements that are copied is the same as in the
+	/// range [first, last). Range [rfirst, rlast) is assumed to be sorted.
+	/// This algorithm is a std extension.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename InputIterator, typename OutputIterator, typename RInputIterator>
+	OutputIterator remove_copy (InputIterator first, InputIterator last, OutputIterator result, RInputIterator rfirst, RInputIterator rlast)
+	{
+		for (; first != last; ++first) {
+		while (rfirst != rlast && *rfirst < first)
+			++ rfirst;
+		if (rfirst == rlast || first != *rfirst) {
+			*result = *first;
+			++ result;
+		}
+		}
+		return (result);
+	}
+
+	/// Remove removes from the range [first, last) all elements that are equal to
+	/// value. That is, remove returns an iterator new_last such that the range
+	/// [first, new_last) contains no elements equal to value. [1] The iterators
+	/// in the range [new_last, last) are all still dereferenceable, but the
+	/// elements that they point to are unspecified. Remove is stable, meaning
+	/// that the relative order of elements that are not equal to value is
+	/// unchanged.
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename ForwardIterator, typename T>
+	inline ForwardIterator remove (ForwardIterator first, ForwardIterator last, const T& value)
+	{
+		return (remove_copy (first, last, first, value));
+	}
+
+	/// The first version of transform performs the operation op(*i) for each
+	/// iterator i in the range [first, last), and assigns the result of that
+	/// operation to *o, where o is the corresponding output iterator. That is,
+	/// for each n such that 0 <= n < last - first, it performs the assignment
+	/// *(result + n) = op(*(first + n)).
+	/// The return value is result + (last - first).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename UnaryFunction>
+	inline void transform (Container& ctr, UnaryFunction op)
+	{
+		transform (ctr.begin(), ctr.end(), ctr.begin(), op);
+	}
+
+	/// The first version of transform performs the operation op(*i) for each
+	/// iterator i in the range [first, last), and assigns the result of that
+	/// operation to *o, where o is the corresponding output iterator. That is,
+	/// for each n such that 0 <= n < last - first, it performs the assignment
+	/// *(result + n) = op(*(first + n)).
+	/// The return value is result + (last - first).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename OutputIterator, typename UnaryFunction>
+	inline OutputIterator transform (Container& ctr, OutputIterator result, UnaryFunction op)
+	{
+		return (transform (ctr.begin(), ctr.end(), result, op));
+	}
+
+	/// The second version of transform is very similar, except that it uses a
+	/// Binary Function instead of a Unary Function: it performs the operation
+	/// op(*i1, *i2) for each iterator i1 in the range [first1, last1) and assigns
+	/// the result to *o, where i2 is the corresponding iterator in the second
+	/// input range and where o is the corresponding output iterator. That is,
+	/// for each n such that 0 <= n < last1 - first1, it performs the assignment
+	/// *(result + n) = op(*(first1 + n), *(first2 + n).
+	/// The return value is result + (last1 - first1).
+	/// \ingroup MutatingAlgorithms
+	///
+	template <typename Container, typename InputIterator, typename OutputIterator, typename BinaryFunction>
+	inline OutputIterator transform (Container& ctr, InputIterator first, OutputIterator result, BinaryFunction op)
+	{
+		return (transform (ctr.begin(), ctr.end(), first, result, op));
+	}
+
+/// Unique_copy copies elements from the range [first, last) to a range
+/// beginning with result, except that in a consecutive group of duplicate
+/// elements only the first one is copied. The return value is the end of
+/// the range to which the elements are copied. This behavior is similar
+/// to the Unix filter uniq.
+/// \ingroup MutatingAlgorithms
+///
+template <typename InputIterator, typename OutputIterator>
+OutputIterator unique_copy (InputIterator first, InputIterator last, OutputIterator result)
+{
+    if (first != last) {
+	*result = *first;
+	while (++first != last)
+	    if (!(*first == *result))
+		*++result = *first;
+	++ result;
+    }
+    return (result);
+}
+
+/// Every time a consecutive group of duplicate elements appears in the range
+/// [first, last), the algorithm unique removes all but the first element.
+/// That is, unique returns an iterator new_last such that the range [first,
+/// new_last) contains no two consecutive elements that are duplicates.
+/// The iterators in the range [new_last, last) are all still dereferenceable,
+/// but the elements that they point to are unspecified. Unique is stable,
+/// meaning that the relative order of elements that are not removed is
+/// unchanged.
+/// \ingroup MutatingAlgorithms
+///
+template <typename ForwardIterator>
+inline ForwardIterator unique (ForwardIterator first, ForwardIterator last)
+{
+    return (unique_copy (first, last, first));
+}
+
+/// Returns the furthermost iterator i in [first, last) such that,
+/// for every iterator j in [first, i), *j < value
+/// Assumes the range is sorted.
+/// \ingroup SearchingAlgorithms
+///
+template <typename ForwardIterator, typename LessThanComparable>
+ForwardIterator lower_bound (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
+{
+    ForwardIterator mid;
+    while (first != last) {
+	mid = advance (first, distance (first,last) / 2);
+	if (*mid < value)
+	    first = mid + 1;
+	else
+	    last = mid;
+    }
+    return (first);
+}
+
+/// Performs a binary search inside the sorted range.
+/// \ingroup SearchingAlgorithms
+///
+template <typename ForwardIterator, typename LessThanComparable>
+inline bool binary_search (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
+{
+    ForwardIterator found = lower_bound (first, last, value);
+    return (found != last && !(value < *found));
+}
+
+/// Returns the furthermost iterator i in [first,last) such that for
+/// every iterator j in [first,i), value < *j is false.
+/// \ingroup SearchingAlgorithms
+///
+template <typename ForwardIterator, typename LessThanComparable>
+ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
+{
+    ForwardIterator mid;
+    while (first != last) {
+	mid = advance (first, distance (first,last) / 2);
+	if (value < *mid)
+	    last = mid;
+	else
+	    first = mid + 1;
+    }
+    return (last);
+}
+
+/// Returns pair<lower_bound,upper_bound>
+/// \ingroup SearchingAlgorithms
+///
+template <typename ForwardIterator, typename LessThanComparable>
+inline pair<ForwardIterator,ForwardIterator> equal_range (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
+{
+    pair<ForwardIterator,ForwardIterator> rv;
+    rv.second = rv.first = lower_bound (first, last, value);
+    while (rv.second != last && !(value < *(rv.second)))
+	++ rv.second;
+    return (rv);
+}
+
+/// Randomly permute the elements of the container.
+/// \ingroup GeneratorAlgorithms
+///
+template <typename RandomAccessIterator>
+void random_shuffle (RandomAccessIterator first, RandomAccessIterator last)
+{
+    for (; first != last; ++ first)
+	iter_swap (first, first + (rand() % distance (first, last)));
+}
+
+/// \brief Generic compare function adaptor to pass to qsort
+/// \ingroup FunctorObjects
+template <typename ConstPointer, typename Compare>
+int qsort_adapter (const void* p1, const void* p2)
+{
+    ConstPointer i1 = reinterpret_cast<ConstPointer>(p1);
+    ConstPointer i2 = reinterpret_cast<ConstPointer>(p2);
+    Compare comp;
+    return (comp (*i1, *i2) ? -1 : (comp (*i2, *i1) ? 1 : 0));
+}
+
+/// Sorts the container
+/// \ingroup SortingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename RandomAccessIterator, typename Compare>
+void sort (RandomAccessIterator first, RandomAccessIterator last, Compare)
+{
+    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+    typedef typename iterator_traits<RandomAccessIterator>::const_pointer const_pointer;
+    qsort (first, distance (first, last), sizeof(value_type),
+	   &qsort_adapter<const_pointer, Compare>);
+}
+
+/// Sorts the container
+/// \ingroup SortingAlgorithms
+///
+template <typename RandomAccessIterator>
+inline void sort (RandomAccessIterator first, RandomAccessIterator last)
+{
+    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+    sort (first, last, less<value_type>());
+}
+
+/// Sorts the container preserving order of equal elements.
+/// \ingroup SortingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename RandomAccessIterator, typename Compare>
+void stable_sort (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+{
+    for (RandomAccessIterator j, i = first; ++i < last;) { // Insertion sort
+	for (j = i; j-- > first && comp(*i, *j);) ;
+	if (++j != i) rotate (j, i, i + 1);
+    }
+}
+
+/// Sorts the container
+/// \ingroup SortingAlgorithms
+///
+template <typename RandomAccessIterator>
+inline void stable_sort (RandomAccessIterator first, RandomAccessIterator last)
+{
+    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+    stable_sort (first, last, less<value_type>());
+}
+
+/// \brief Searches for the first subsequence [first2,last2) in [first1,last1)
+/// \ingroup SearchingAlgorithms
+template <typename ForwardIterator1, typename ForwardIterator2>
+inline ForwardIterator1 search (ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2)
+{
+    typedef typename iterator_traits<ForwardIterator1>::value_type value_type;
+    return (search (first1, last1, first2, last2, equal_to<value_type>()));
+}
+
+/// \brief Searches for the last subsequence [first2,last2) in [first1,last1)
+/// \ingroup SearchingAlgorithms
+template <typename ForwardIterator1, typename ForwardIterator2>
+inline ForwardIterator1 find_end (ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2)
+{
+    typedef typename iterator_traits<ForwardIterator1>::value_type value_type;
+    return (find_end (first1, last1, first2, last2, equal_to<value_type>()));
+}
+
+/// \brief Searches for the first occurence of \p count \p values in [first, last)
+/// \ingroup SearchingAlgorithms
+template <typename Iterator, typename T>
+inline Iterator search_n (Iterator first, Iterator last, size_t count, const T& value)
+{
+    typedef typename iterator_traits<Iterator>::value_type value_type;
+    return (search_n (first, last, count, value, equal_to<value_type>()));
+}
+
+/// \brief Searches [first1,last1) for the first occurrence of an element from [first2,last2)
+/// \ingroup SearchingAlgorithms
+template <typename InputIterator, typename ForwardIterator>
+inline InputIterator find_first_of (InputIterator first1, InputIterator last1, ForwardIterator first2, ForwardIterator last2)
+{
+    typedef typename iterator_traits<InputIterator>::value_type value_type;
+    return (find_first_of (first1, last1, first2, last2, equal_to<value_type>()));
+}
+
+/// \brief Returns true if [first2,last2) is a subset of [first1,last1)
+/// \ingroup ConditionAlgorithms
+/// \ingroup SetAlgorithms
+template <typename InputIterator1, typename InputIterator2>
+inline bool includes (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (includes (first1, last1, first2, last2, less<value_type>()));
+}
+
+/// \brief Merges [first1,last1) with [first2,last2)
+///
+/// Result will contain every element that is in either set. If duplicate
+/// elements are present, max(n,m) is placed in the result.
+///
+/// \ingroup SetAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+inline OutputIterator set_union (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (set_union (first1, last1, first2, last2, result, less<value_type>()));
+}
+
+/// \brief Creates a set containing elements shared by the given ranges.
+/// \ingroup SetAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+inline OutputIterator set_intersection (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (set_intersection (first1, last1, first2, last2, result, less<value_type>()));
+}
+
+/// \brief Removes from [first1,last1) elements present in [first2,last2)
+/// \ingroup SetAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+inline OutputIterator set_difference (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (set_difference (first1, last1, first2, last2, result, less<value_type>()));
+}
+
+/// \brief Performs union of sets A-B and B-A.
+/// \ingroup SetAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+inline OutputIterator set_symmetric_difference (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (set_symmetric_difference (first1, last1, first2, last2, result, less<value_type>()));
+}
+
+/// \brief Returns true if the given range is sorted.
+/// \ingroup ConditionAlgorithms
+template <typename ForwardIterator>
+inline bool is_sorted (ForwardIterator first, ForwardIterator last)
+{
+    typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+    return (is_sorted (first, last, less<value_type>()));
+}
+
+/// \brief Compares two given containers like strcmp compares strings.
+/// \ingroup ConditionAlgorithms
+template <typename InputIterator1, typename InputIterator2>
+inline bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
+{
+    typedef typename iterator_traits<InputIterator1>::value_type value_type;
+    return (lexicographical_compare (first1, last1, first2, last2, less<value_type>()));
+}
+
+/// \brief Creates the next lexicographical permutation of [first,last).
+/// Returns false if no further permutations can be created.
+/// \ingroup GeneratorAlgorithms
+template <typename BidirectionalIterator>
+inline bool next_permutation (BidirectionalIterator first, BidirectionalIterator last)
+{
+    typedef typename iterator_traits<BidirectionalIterator>::value_type value_type;
+    return (next_permutation (first, last, less<value_type>()));
+}
+
+/// \brief Creates the previous lexicographical permutation of [first,last).
+/// Returns false if no further permutations can be created.
+/// \ingroup GeneratorAlgorithms
+template <typename BidirectionalIterator>
+inline bool prev_permutation (BidirectionalIterator first, BidirectionalIterator last)
+{
+    typedef typename iterator_traits<BidirectionalIterator>::value_type value_type;
+    return (prev_permutation (first, last, less<value_type>()));
+}
+
+/// \brief Returns iterator to the max element in [first,last)
+/// \ingroup SearchingAlgorithms
+template <typename ForwardIterator>
+inline ForwardIterator max_element (ForwardIterator first, ForwardIterator last)
+{
+    typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+    return (max_element (first, last, less<value_type>()));
+}
+
+/// \brief Returns iterator to the min element in [first,last)
+/// \ingroup SearchingAlgorithms
+template <typename ForwardIterator>
+inline ForwardIterator min_element (ForwardIterator first, ForwardIterator last)
+{
+    typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+    return (min_element (first, last, less<value_type>()));
+}
+
+/// \brief Makes [first,middle) a part of the sorted array.
+/// Contents of [middle,last) is undefined. This implementation just calls stable_sort.
+/// \ingroup SortingAlgorithms
+template <typename RandomAccessIterator>
+inline void partial_sort (RandomAccessIterator first, RandomAccessIterator middle, RandomAccessIterator last)
+{
+    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+    partial_sort (first, middle, last, less<value_type>());
+}
+
+/// \brief Puts \p nth element into its sorted position.
+/// In this implementation, the entire array is sorted. I can't think of any
+/// use for it where the time gained would be useful.
+/// \ingroup SortingAlgorithms
+/// \ingroup SearchingAlgorithms
+///
+template <typename RandomAccessIterator>
+inline void nth_element (RandomAccessIterator first, RandomAccessIterator nth, RandomAccessIterator last)
+{
+    partial_sort (first, nth, last);
+}
+
+/// \brief Like partial_sort, but outputs to [result_first,result_last)
+/// \ingroup SortingAlgorithms
+template <typename InputIterator, typename RandomAccessIterator>
+inline RandomAccessIterator partial_sort_copy (InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last)
+{
+    typedef typename iterator_traits<InputIterator>::value_type value_type;
+    return (partial_sort_copy (first, last, result_first, result_last, less<value_type>()));
+}
+
+/// Removes the largest element from the heap (*first) and places it at *(last-1)
+/// [first, last-1) is a heap after this operation.
+/// \ingroup HeapAlgorithms
+/// \ingroup MutatingAlgorithms
+template <typename RandomAccessIterator, typename Compare>
+void pop_heap (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+{
+    if (--last <= first)
+	return;
+    iter_swap (first, last);
+    make_heap (first, last, comp);
+}
+
+/// Sorts heap [first, last) in descending order according to comp.
+/// \ingroup HeapAlgorithms
+/// \ingroup SortingAlgorithms
+template <typename RandomAccessIterator, typename Compare>
+void sort_heap (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+{
+    for (; first < last; --last)
+	pop_heap (first, last, comp);
+}
+
+/// Replace_if replaces every element in the range [first, last) for which
+/// pred returns true with new_value. That is: for every iterator i, if
+/// pred(*i) is true then it performs the assignment *i = new_value.
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename Predicate, typename T>
+inline void replace_if (ForwardIterator first, ForwardIterator last, Predicate pred, const T& new_value)
+{
+    for (; first != last; ++first)
+	if (pred (*first))
+	    *first = new_value;
+}
+
+/// Replace_copy_if copies elements from the range [first, last) to the range
+/// [result, result + (last-first)), except that any element for which pred is
+/// true is not copied; new_value is copied instead. More precisely, for every
+/// integer n such that 0 <= n < last-first, replace_copy_if performs the
+/// assignment *(result+n) = new_value if pred(*(first+n)),
+/// and *(result+n) = *(first+n) otherwise.
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename InputIterator, typename OutputIterator, typename Predicate, typename T>
+inline OutputIterator replace_copy_if (InputIterator first, InputIterator last, OutputIterator result, Predicate pred, const T& new_value) 
+{
+    for (; first != last; ++result, ++first)
+        *result = pred(*first) ? new_value : *first;
+}
+
+/// Remove_copy_if copies elements from the range [first, last) to a range
+/// beginning at result, except that elements for which pred is true are not
+/// copied. The return value is the end of the resulting range. This operation
+/// is stable, meaning that the relative order of the elements that are copied
+/// is the same as in the range [first, last).
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename InputIterator, typename OutputIterator, typename Predicate>
+inline OutputIterator remove_copy_if (InputIterator first, InputIterator last, OutputIterator result, Predicate pred)
+{
+    for (; first != last; ++first)
+	if (pred (*first))
+	    *result++ = *first;
+    return (result);
+}
+
+/// Remove_if removes from the range [first, last) every element x such that
+/// pred(x) is true. That is, remove_if returns an iterator new_last such that
+/// the range [first, new_last) contains no elements for which pred is true.
+/// The iterators in the range [new_last, last) are all still dereferenceable,
+/// but the elements that they point to are unspecified. Remove_if is stable,
+/// meaning that the relative order of elements that are not removed is
+/// unchanged.
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename Predicate>
+inline ForwardIterator remove_if (ForwardIterator first, ForwardIterator last, Predicate pred)
+{
+    return (remove_copy_if (first, last, first, pred));
+}
+
+/// The reason there are two different versions of unique_copy is that there
+/// are two different definitions of what it means for a consecutive group of
+/// elements to be duplicates. In the first version, the test is simple
+/// equality: the elements in a range [f, l) are duplicates if, for every
+/// iterator i in the range, either i == f or else *i == *(i-1). In the second,
+/// the test is an arbitrary Binary Predicate binary_pred: the elements in
+/// [f, l) are duplicates if, for every iterator i in the range, either
+/// i == f or else binary_pred(*i, *(i-1)) is true.
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename InputIterator, typename OutputIterator, typename BinaryPredicate>
+OutputIterator unique_copy (InputIterator first, InputIterator last, OutputIterator result, BinaryPredicate binary_pred)
+{
+    if (first != last) {
+	*result = *first;
+	while (++first != last)
+	    if (!binary_pred (*first, *result))
+		*++result = *first;
+	++ result;
+    }
+    return (result);
+}
+
+/// Every time a consecutive group of duplicate elements appears in the range
+/// [first, last), the algorithm unique removes all but the first element.
+/// That is, unique returns an iterator new_last such that the range [first,
+/// new_last) contains no two consecutive elements that are duplicates.
+/// The iterators in the range [new_last, last) are all still dereferenceable,
+/// but the elements that they point to are unspecified. Unique is stable,
+/// meaning that the relative order of elements that are not removed is
+/// unchanged.
+/// \ingroup MutatingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename BinaryPredicate>
+inline ForwardIterator unique (ForwardIterator first, ForwardIterator last, BinaryPredicate binary_pred)
+{
+    return (unique_copy (first, last, first, binary_pred));
+}
+
+/// Returns the furthermost iterator i in [first, last) such that,
+/// for every iterator j in [first, i), comp(*j, value) is true.
+/// Assumes the range is sorted.
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename T, typename StrictWeakOrdering>
+ForwardIterator lower_bound (ForwardIterator first, ForwardIterator last, const T& value, StrictWeakOrdering comp)
+{
+    ForwardIterator mid;
+    while (first != last) {
+	mid = advance (first, distance (first,last) / 2);
+	if (comp (*mid, value))
+	    first = mid + 1;
+	else
+	    last = mid;
+    }
+    return (first);
+}
+
+/// Performs a binary search inside the sorted range.
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename T, typename StrictWeakOrdering>
+inline bool binary_search (ForwardIterator first, ForwardIterator last, const T& value, StrictWeakOrdering comp)
+{
+    ForwardIterator found = lower_bound (first, last, value, comp);
+    return (found != last && !comp(*found, value));
+}
+
+/// Returns the furthermost iterator i in [first,last) such that for
+/// every iterator j in [first,i), comp(value,*j) is false.
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename T, typename StrictWeakOrdering>
+ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last, const T& value, StrictWeakOrdering comp)
+{
+    ForwardIterator mid;
+    while (first != last) {
+	mid = advance (first, distance (first,last) / 2);
+	if (comp (value, *mid))
+	    last = mid;
+	else
+	    first = mid + 1;
+    }
+    return (last);
+}
+
+/// Returns pair<lower_bound,upper_bound>
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename ForwardIterator, typename T, typename StrictWeakOrdering>
+inline pair<ForwardIterator,ForwardIterator> equal_range (ForwardIterator first, ForwardIterator last, const T& value, StrictWeakOrdering comp)
+{
+    pair<ForwardIterator,ForwardIterator> rv;
+    rv.second = rv.first = lower_bound (first, last, value, comp);
+    while (rv.second != last && !comp(value, *(rv.second)))
+	++ rv.second;
+    return (rv);
+}
+
+/// \brief Puts \p nth element into its sorted position.
+/// In this implementation, the entire array is sorted. The performance difference is
+/// so small and the function use is so rare, there is no need to have code for it.
+/// \ingroup SortingAlgorithms
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+///
+template <typename RandomAccessIterator, typename Compare>
+inline void nth_element (RandomAccessIterator first, RandomAccessIterator, RandomAccessIterator last, Compare comp)
+{
+    sort (first, last, comp);
+}
+
+/// \brief Searches for the first subsequence [first2,last2) in [first1,last1)
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename ForwardIterator1, typename ForwardIterator2, typename BinaryPredicate>
+ForwardIterator1 search (ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2, BinaryPredicate comp)
+{
+    const ForwardIterator1 slast = last1 - distance(first2, last2) + 1;
+    for (; first1 < slast; ++first1) {
+	ForwardIterator2 i = first2;
+	ForwardIterator1 j = first1;
+	for (; i != last2 && comp(*j, *i); ++i, ++j) ;
+	if (i == last2)
+	    return (first1);
+    }
+    return (last1);
+}
+
+/// \brief Searches for the last subsequence [first2,last2) in [first1,last1)
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename ForwardIterator1, typename ForwardIterator2, typename BinaryPredicate>
+ForwardIterator1 find_end (ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2, BinaryPredicate comp)
+{
+    ForwardIterator1 s = last1 - distance(first2, last2);
+    for (; first1 < s; --s) {
+	ForwardIterator2 i = first2, j = s;
+	for (; i != last2 && comp(*j, *i); ++i, ++j) ;
+	if (i == last2)
+	    return (s);
+    }
+    return (last1);
+}
+
+/// \brief Searches for the first occurence of \p count \p values in [first, last)
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename Iterator, typename T, typename BinaryPredicate>
+Iterator search_n (Iterator first, Iterator last, size_t count, const T& value, BinaryPredicate comp)
+{
+    size_t n = 0;
+    for (; first != last; ++first) {
+	if (!comp (*first, value))
+	    n = 0;
+	else if (++n == count)
+	    return (first - --n);
+    }
+    return (last);
+}
+
+/// \brief Searches [first1,last1) for the first occurrence of an element from [first2,last2)
+/// \ingroup SearchingAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename InputIterator, typename ForwardIterator, typename BinaryPredicate>
+InputIterator find_first_of (InputIterator first1, InputIterator last1, ForwardIterator first2, ForwardIterator last2, BinaryPredicate comp)
+{
+    for (; first1 != last1; ++first1)
+	for (ForwardIterator i = first2; i != last2; ++i)
+	    if (comp (*first1, *i))
+		return (first1);
+    return (first1);
+}
+
+/// \brief Returns true if [first2,last2) is a subset of [first1,last1)
+/// \ingroup ConditionAlgorithms
+/// \ingroup SetAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename StrictWeakOrdering>
+bool includes (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, StrictWeakOrdering comp)
+{
+    for (; (first1 != last1) & (first2 != last2); ++first1) {
+	if (comp (*first2, *first1))
+	    return (false);
+	first2 += !comp (*first1, *first2);
+    }
+    return (first2 == last2);
+}
+
+/// \brief Merges [first1,last1) with [first2,last2)
+///
+/// Result will contain every element that is in either set. If duplicate
+/// elements are present, max(n,m) is placed in the result.
+///
+/// \ingroup SetAlgorithms
+/// \ingroup PredicateAlgorithms
+template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename StrictWeakOrdering>
+OutputIterator set_union (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, StrictWeakOrdering comp)
+{
+    for (; (first1 != last1) & (first2 != last2); ++result) {
+	if (comp (*first2, *first1))
+	    *result = *first2++;
+	else {
+	    first2 += !comp (*first1, *first2);
+	    *result = *first1++;
+	}
+    }
+    return (copy (first2, last2, copy (first1, last1, result)));
+}
+
+	/// \brief Creates a set containing elements shared by the given ranges.
+	/// \ingroup SetAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename StrictWeakOrdering>
+	OutputIterator set_intersection (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, StrictWeakOrdering comp)
+	{
+		while ((first1 != last1) & (first2 != last2)) {
+		bool b1ge2 = !comp (*first1, *first2), b2ge1 = !comp (*first2, *first1);
+		if (b1ge2 & b2ge1)
+			*result++ = *first1;
+		first1 += b2ge1;
+		first2 += b1ge2;
+		}
+		return (result);
+	}
+
+	/// \brief Removes from [first1,last1) elements present in [first2,last2)
+	/// \ingroup SetAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename StrictWeakOrdering>
+	OutputIterator set_difference (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, StrictWeakOrdering comp)
+	{
+		while ((first1 != last1) & (first2 != last2)) {
+		bool b1ge2 = !comp (*first1, *first2), b2ge1 = !comp (*first2, *first1);
+		if (!b1ge2)
+			*result++ = *first1;
+		first1 += b2ge1;
+		first2 += b1ge2;
+		}
+		return (copy (first1, last1, result));
+	}
+
+	/// \brief Performs union of sets A-B and B-A.
+	/// \ingroup SetAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename StrictWeakOrdering>
+	OutputIterator set_symmetric_difference (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, StrictWeakOrdering comp)
+	{
+		while ((first1 != last1) & (first2 != last2)) {
+		bool b1l2 = comp (*first1, *first2), b2l1 = comp (*first2, *first1);
+		if (b1l2)
+			*result++ = *first1;
+		else if (b2l1)
+			*result++ = *first2;
+		first1 += !b2l1;
+		first2 += !b1l2;
+		}
+		return (copy (first2, last2, copy (first1, last1, result)));
+	}
+
+	/// \brief Returns true if the given range is sorted.
+	/// \ingroup ConditionAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename ForwardIterator, typename StrictWeakOrdering>
+	bool is_sorted (ForwardIterator first, ForwardIterator last, StrictWeakOrdering comp)
+	{
+		for (ForwardIterator i = first; ++i < last; ++first)
+		if (comp (*i, *first))
+			return (false);
+		return (true);
+	}
+
+	/// \brief Compares two given containers like strcmp compares strings.
+	/// \ingroup ConditionAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
+	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, BinaryPredicate comp)
+	{
+		for (; (first1 != last1) & (first2 != last2); ++first1, ++first2) {
+		if (comp (*first1, *first2))
+			return (true);
+		if (comp (*first2, *first1))
+			return (false);
+		}
+		return ((first1 == last1) & (first2 != last2));
+	}
+
+	/// \brief Creates the next lexicographical permutation of [first,last).
+	/// Returns false if no further permutations can be created.
+	/// \ingroup GeneratorAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename BidirectionalIterator, typename StrictWeakOrdering>
+	bool next_permutation (BidirectionalIterator first, BidirectionalIterator last, StrictWeakOrdering comp)
+	{
+		if (distance (first, last) < 2)
+		return (false);
+		BidirectionalIterator i = last;
+		for (--i; i != first; ) {
+		--i;
+		if (comp (i[0], i[1])) {
+			BidirectionalIterator j = last;
+			while (!comp (*i, *--j)) ;
+			iter_swap (i, j);
+			reverse (i + 1, last);
+			return (true);
+		}
+		}
+		reverse (first, last);
+		return (false);
+	}
+
+	/// \brief Creates the previous lexicographical permutation of [first,last).
+	/// Returns false if no further permutations can be created.
+	/// \ingroup GeneratorAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename BidirectionalIterator, typename StrictWeakOrdering>
+	bool prev_permutation (BidirectionalIterator first, BidirectionalIterator last, StrictWeakOrdering comp)
+	{
+		if (distance (first, last) < 2)
+		return (false);
+		BidirectionalIterator i = last;
+		for (--i; i != first; ) {
+		--i;
+		if (comp(i[1], i[0])) {
+			BidirectionalIterator j = last;
+			while (!comp (*--j, *i)) ;
+			iter_swap (i, j);
+			reverse (i + 1, last);
+			return (true);
+		}
+		}
+		reverse (first, last);
+		return (false);
+	}
+
+	/// \brief Returns iterator to the max element in [first,last)
+	/// \ingroup SearchingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename ForwardIterator, typename BinaryPredicate>
+	inline ForwardIterator max_element (ForwardIterator first, ForwardIterator last, BinaryPredicate comp)
+	{
+		ForwardIterator result = first;
+		for (; first != last; ++first)
+		if (comp (*result, *first))
+			result = first;
+		return (result);
+	}
+
+	/// \brief Returns iterator to the min element in [first,last)
+	/// \ingroup SearchingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename ForwardIterator, typename BinaryPredicate>
+	inline ForwardIterator min_element (ForwardIterator first, ForwardIterator last, BinaryPredicate comp)
+	{
+		ForwardIterator result = first;
+		for (; first != last; ++first)
+		if (comp (*first, *result))
+			result = first;
+		return (result);
+	}
+
+	/// \brief Makes [first,middle) a part of the sorted array.
+	/// Contents of [middle,last) is undefined. This implementation just calls stable_sort.
+	/// \ingroup SortingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename RandomAccessIterator, typename StrictWeakOrdering>
+	inline void partial_sort (RandomAccessIterator first, RandomAccessIterator, RandomAccessIterator last, StrictWeakOrdering comp)
+	{
+		stable_sort (first, last, comp);
+	}
+
+	/// \brief Like partial_sort, but outputs to [result_first,result_last)
+	/// \ingroup SortingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename InputIterator, typename RandomAccessIterator, typename StrictWeakOrdering>
+	RandomAccessIterator partial_sort_copy (InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last, StrictWeakOrdering comp)
+	{
+		RandomAccessIterator rend = result_first;
+		for (; first != last; ++first) {
+		RandomAccessIterator i = result_first;
+		for (; i != rend && comp (*i, *first); ++i) ;
+		if (i == result_last)
+			continue;
+		rend += (rend < result_last);
+		copy_backward (i, rend - 1, rend);
+		*i = *first;
+		}
+		return (rend);
+	}
+
+	/// \brief Like partition, but preserves equal element order.
+	/// \ingroup SortingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename ForwardIterator, typename Predicate>
+	ForwardIterator stable_partition (ForwardIterator first, ForwardIterator last, Predicate pred)
+	{
+		if (first == last)
+		return (first);
+		ForwardIterator l, r, m = advance (first, distance (first, last) / 2);
+		if (first == m)
+		return (pred(*first) ? last : first);
+		l = stable_partition (first, m, pred);
+		r = stable_partition (m, last, pred);
+		rotate (l, m, r);
+		return (advance (l, distance (m, r)));
+	}
+
+	/// \brief Splits [first,last) in two by \p pred.
+	///
+	/// Creates two ranges [first,middle) and [middle,last), where every element
+	/// in the former is less than every element in the latter.
+	/// The return value is middle.
+	///
+	/// \ingroup SortingAlgorithms
+	/// \ingroup PredicateAlgorithms
+	template <typename ForwardIterator, typename Predicate>
+	inline ForwardIterator partition (ForwardIterator first, ForwardIterator last, Predicate pred)
+	{
+		return (stable_partition (first, last, pred));
+	}
+
+} // namespace std
+

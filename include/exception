@@ -1,0 +1,136 @@
+/*
+ * Copyright © 2012, MuThink Inc, All rights reserved.
+ * http://www.muthink.com
+ * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
+ */
+// exception - Visual C++ MSVCRT.DLL version of exception.
+#if _MSC_VER > 1000
+#pragma once
+#endif
+#ifndef _EXCEPTION_
+#define _EXCEPTION_
+#include "lostlbase.h"
+
+#ifdef  _MSC_VER
+#pragma pack(push,8)
+#endif  /* _MSC_VER */
+
+#ifndef _CRTIMP
+#ifdef	_NTSDK
+/* definition compatible with NT SDK */
+#define _CRTIMP
+#else	/* ifndef _NTSDK */
+/* current definition */
+#ifdef	_DLL
+#define _CRTIMP __declspec(dllimport)
+#else	/* ifndef _DLL */
+#define _CRTIMP
+#endif	/* _DLL */
+#endif	/* _NTSDK */
+#endif	/* _CRTIMP */
+
+typedef const char *__exString;
+
+namespace lo { class libc_exception; }
+
+namespace std { class bad_alloc; class logic_error; class runtime_error; }
+
+class _CRTIMP exception
+{
+	friend class lo::libc_exception;
+	friend class std::bad_alloc;
+	friend class std::logic_error;
+	friend class std::runtime_error;
+public:
+	exception();
+	exception(const __exString&);
+	exception(const exception&);
+	exception& operator= (const exception&);
+	virtual ~exception();
+	virtual const char * what() const;
+private:
+	const char * _m_what;
+	int _m_doFree;
+};
+
+namespace std {
+
+	typedef ::exception exception;
+
+	class _CRTIMP bad_exception	: public exception {
+	public:
+		bad_exception(const char *_S = "bad exception") throw()	: exception(_S) {}
+		virtual ~bad_exception() throw() {}
+	protected:
+		virtual void _Doraise() const
+			{throw(*this); }
+	};
+
+	/// Returns true when the caught exception violates the throw specification.
+	_CRTIMP bool __cdecl uncaught_exception();
+	/// If you write a replacement terminate handler, it must be of this type.
+	typedef void (*terminate_handler) (void);
+	/// If you write a replacement unexpected handler, it must be of this type.
+	typedef void (*unexpected_handler) (void);
+	/// Takes a new handler function as an argument, returns the old function.
+	terminate_handler set_terminate (terminate_handler pHandler) throw();
+	/// The runtime will call this function if exception handling must be
+	/// abandoned for any reason.  It can also be called by the user.
+	void terminate (void) throw() __attribute__ ((__noreturn__));
+	/// Takes a new handler function as an argument, returns the old function.
+	unexpected_handler set_unexpected (unexpected_handler pHandler) throw();
+	/// The runtime will call this function if an exception is thrown which
+	/// violates the function's exception specification.
+	void unexpected (void) __attribute__ ((__noreturn__));
+
+} // end namespace std
+
+namespace lo {  	// Extended exception definitions
+	
+	/// \class libc_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief Thrown when a libc function returns an error.
+	///
+	/// Contains an errno and description. This is a std extension.
+	///
+	class libc_exception : public exception {
+	public:
+		explicit				libc_exception (int m_Errno) throw();
+		explicit				libc_exception (const char* operation,bool doFree = false) throw();
+								libc_exception (const libc_exception& v) throw();
+		const libc_exception&	operator= (const libc_exception& v);
+	};
+
+	/// \class file_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief File-related exceptions.
+	///
+	/// Contains the file name. This is a std extension.
+	///
+	class file_exception : public libc_exception {
+	public:
+		file_exception (const char* operation, const char* filename) throw();
+	};
+
+	/// \class stream_bounds_exception
+	/// \ingroup Exceptions
+	///
+	/// \brief Stream bounds checking.
+	///
+	/// Only thrown in debug builds unless you say otherwise in config.h
+	/// This is a std extension.
+	///
+	class stream_bounds_exception : public libc_exception {
+	public:
+		stream_bounds_exception (const char* operation, const char* type, uoff_t offset, size_t expected, size_t remaining) throw();
+	};
+
+}
+
+#ifdef  _MSC_VER
+#pragma pack(pop)
+#endif  /* _MSC_VER */
+
+#endif /* _EXCEPTION_ */

@@ -1,0 +1,12 @@
+/* lolibc */
+#pragma once
+#ifndef _CERRNO_
+#define _CERRNO_
+#ifndef RC_INVOKED
+#include <yvals.h>
+
+#include "errno.h"
+
+#endif /* RC_INVOKED */
+#endif /* _CERRNO_ */
+

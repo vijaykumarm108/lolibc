@@ -1,0 +1,166 @@
+// Lo-Overhead STL library - Lostl
+//
+
+#pragma once
+#include "lostlbase.h"
+#include "exception"
+#include "lo_utf8.h"
+#include "ios_base.h"
+
+namespace std {
+
+	class istream;
+	class string;
+
+	/// \brief Helper class to write packed binary streams.
+	///
+	/// This class contains a set of functions to write integral types into an
+	/// unstructured memory block. Packing binary file data can be done this
+	/// way, for instance. aligning the data is your responsibility, and can
+	/// be accomplished by proper ordering of writes and by calling align.
+	/// Unaligned access is usually slower by orders of magnitude and,
+	/// on some architectures, such as PowerPC, can cause your program to crash.
+	/// Therefore, all write functions have asserts to check alignment.
+	/// See \ref istream documentation for rules on designing your data format.
+	/// Overwriting the end of the stream will also cause a crash (an assert in
+	/// debug builds).
+	///
+	/// Example code:
+	/// \code
+	///     block b;
+	///     ostream os (b);
+	///     os << boolVar << ios::talign<int>();
+	///     os << intVar << floatVar;
+	///     os.write (binaryData, binaryDataSize);
+	///     os.align();
+	///     b.resize (os.pos());
+	///     b.write_file ("test.file");
+	/// \endcode
+	///
+	class ostream : public lo::blocklink, public ios_base {
+	public:
+		inline					ostream (void) : blocklink (), m_Pos (0) {}
+		inline					ostream (void* p, streamsize n)  : blocklink (p, n), m_Pos (0) {}
+		inline explicit			ostream (const blocklink& source) : blocklink (source), m_Pos (0) {}
+		streamsize				align_size (streamsize grain = lo::c_DefaultAlignment) const;
+		void					align (streamsize grain = lo::c_DefaultAlignment);
+		bool					aligned (streamsize grain = lo::c_DefaultAlignment) const;
+		inline iterator			end (void)						{ return (lo::blocklink::end()); }
+		inline const_iterator	end (void) const				{ return (lo::blocklink::end()); }
+		void					erase (iterator start, streamsize size);
+		void					insert (iterator start, streamsize size);
+		inline iterator			ipos (void)						{ return (begin() + pos()); }
+		inline const_iterator	ipos (void) const				{ return (begin() + pos()); }
+		void					iseek (const_iterator newPos);
+		/// Writes type T into the stream via a direct pointer cast.
+		template <typename T>
+		inline void				iwrite (const T& v)
+		{
+			assert (aligned (alignof (v)));
+			assert (remaining() >= sizeof(T));
+			*reinterpret_cast<T*>(ipos()) = v;
+			SetPos (pos() + sizeof(T));
+		}
+		inline void				link (void* p, streamsize n)	{ blocklink::link (p, n); }
+		inline void				link (blocklink& l)				{ blocklink::link (l.data(), l.writable_size()); }
+		inline void				link (void* f, void* l)			{ blocklink::link (f, l); }
+		inline virtual streamsize	overflow (streamsize = 1)	{ return (remaining()); }
+		inline uoff_t			pos (void) const				{ return (m_Pos); }
+		void					read (istream& is);
+		inline void				relink (void* p, streamsize n)	{ blocklink::relink (p, n); m_Pos = 0; }
+		inline void				relink (blocklink& l)				{ relink (l.data(), l.writable_size()); }
+		streamsize				remaining (void) const;
+		void					seek (uoff_t newPos);
+		void					seekp (off_t p, seekdir d = beg);
+		void					skip (streamsize nBytes);
+		void					swap (ostream& os);
+		inline size_t			stream_size (void) const		{ return (this->pos()); }
+		void					text_write (ostringstream& os) const;
+		inline off_t			tellp (void) const				{ return (off_t)(pos()); }
+		virtual void			unlink (void) throw();
+		bool					verify_remaining (const char* op, const char* type, size_t n);
+		inline void				write (ostream& os) const		{ os.write (begin(), pos()); }
+		void					write (const void* buffer, streamsize size);
+		void					write (const cblocklink& buf);
+		void					write_strz (const char* str);
+	protected:
+		inline void				SetPos (uoff_t newPos)			{ m_Pos = newPos; }
+	private:
+		streamoff				m_Pos;	///< Current write position.
+	};
+
+	//----------------------------------------------------------------------
+
+	/// \class ostream_iterator LoMostream.h std.h
+	/// \ingroup BinaryStreamIterators
+	///
+	/// \brief An iterator over an ostream to use with std algorithms.
+	///
+	template <typename T, typename Stream = ostream>
+	class ostream_iterator {
+	public:
+		typedef T			value_type;
+		typedef ptrdiff_t		difference_type;
+		typedef value_type*		pointer;
+		typedef value_type&		reference;
+		typedef typename Stream::size_type	size_type;
+	public:
+		inline explicit		ostream_iterator (Stream& os) : m_Os (os) {}
+		inline			ostream_iterator (const ostream_iterator& iter)	: m_Os (iter.m_Os) {} 
+		/// Writes \p v into the stream.
+		inline ostream_iterator&	operator= (const T& v)		{ m_Os << v; return (*this); }
+		inline ostream_iterator&	operator* (void)			{ return (*this); }
+		inline ostream_iterator&	operator++ (void)			{ return (*this); }
+		inline ostream_iterator	operator++ (int)				{ return (*this); }
+		inline ostream_iterator&	operator+= (streamsize n)	{ m_Os.skip (n); return (*this); }
+		inline bool					operator== (const ostream_iterator& i) const
+						{ return (m_Os.pos() == i.m_Os.pos()); }
+		inline bool					operator< (const ostream_iterator& i) const
+						{ return (m_Os.pos() < i.m_Os.pos()); }
+	private:
+		Stream&	m_Os;
+	};
+
+	template <typename T> struct object_writer
+	{
+		inline void operator()(ostream& os, const T& v) const { v.write (os); }
+	};
+
+	template <typename T> struct integral_object_writer
+	{
+		inline void operator()(ostream& os, const T& v) const { os.iwrite (v); }
+	};
+
+	template <typename T>
+	inline ostream& operator<< (ostream& os, const T& v)
+	{
+		typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
+			integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
+		object_writer_t()(os, v);
+		return (os);
+	}
+
+	template <typename T>
+	inline ostream& operator<< (ostream& os, size_t& i )
+	{
+		typedef typename lo::tm::Select <numeric_limits<T>::is_integral,
+			integral_object_writer<T>, object_writer<T> >::Result object_writer_t;
+		integral_object_writer()(os, i);
+		return (os);
+	}
+
+} // namespace std
+
+namespace lo {	// utf8 extensions to the spec
+
+	typedef std::ostream_iterator<lo::utf8subchar_t>	ostream_iterator_for_utf8;
+	typedef utf8out_iterator<ostream_iterator_for_utf8>	utf8ostream_iterator;
+
+	/// Returns a UTF-8 adapter writing to \p os.
+	inline utf8ostream_iterator utf8out (std::ostream& os)
+	{
+		ostream_iterator_for_utf8 si (os);
+		return (utf8ostream_iterator (si));
+	}
+
+}

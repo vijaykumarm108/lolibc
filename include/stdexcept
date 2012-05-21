@@ -1,0 +1,103 @@
+#pragma once
+
+#include "exception"
+#include "string"
+#include <typeinfo>
+
+namespace std {
+
+	/// \class logic_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Logic errors represent problems in the internal logic of the program.
+	///
+	class logic_error : public exception {
+	public:
+		explicit	logic_error (const char* arg) throw();
+	protected:
+		logic_error (const type_info &type, const char* arg) throw();
+	};
+
+	/// \class domain_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports domain errors ("domain" is in the mathematical sense)
+	///
+	class domain_error : public logic_error {
+	public:
+		inline explicit		domain_error (const char* arg) throw() : logic_error (typeid(domain_error),arg) {}
+	};
+
+	/// \class invalid_argument stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports an invalid argument to a function.
+	///
+	class invalid_argument : public logic_error {
+	public:
+		inline explicit		invalid_argument (const char* arg) throw() : logic_error (typeid(invalid_argument),arg) {}
+	};
+
+	/// \class length_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports when an object exceeds its allowed size.
+	///
+	class length_error : public logic_error {
+	public:
+		inline explicit		length_error (const char* arg) throw() : logic_error (typeid(length_error),arg) {} 
+	};
+
+	/// \class out_of_range stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports arguments with values out of allowed range.
+	///
+	class out_of_range : public logic_error {
+	public:
+		inline explicit		out_of_range (const char* arg) throw() : logic_error (typeid(out_of_range),arg) {}
+	};
+
+	/// \class runtime_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports errors that are dependent on the data being processed.
+	///
+	class runtime_error : public exception {
+	public:
+		explicit		runtime_error (const char* arg) throw();
+	protected:
+		runtime_error(const type_info &type ,const char *arg);
+	};
+
+	/// \class range_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports data that does not fall within the permitted range.
+	///
+	class range_error : public runtime_error {
+	public:
+		inline explicit		range_error (const char* arg) throw() : runtime_error(typeid(range_error),arg) {}
+	};
+
+	/// \class overflow_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports arithmetic overflow.
+	///
+	class overflow_error : public runtime_error {
+	public:
+		inline explicit		overflow_error (const char* arg) throw() : runtime_error(typeid(overflow_error),arg) {}
+	};
+
+	/// \class underflow_error stdexcept
+	/// \ingroup Exceptions
+	///
+	/// \brief Reports arithmetic underflow.
+	///
+	class underflow_error : public runtime_error {
+	public:
+		inline explicit		underflow_error (const char* arg) throw() : runtime_error(typeid(underflow_error),arg) {}
+	};
+
+}  // namespace std
