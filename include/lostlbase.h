@@ -1,11 +1,5 @@
 /*
 	All the base classes required for the stl part of lolibc.
-	All classes derive either from reference_type or value_type.
-	value_types always contain a sub-type which is always cloned on copy.
-	You can:
-	object
-		value_type - always copied type
-		buffer - memory link type
 */
 #pragma once
 #include "lolibbase.h"
@@ -14,19 +8,24 @@
 
 namespace lo
 {
-	class object;
+	class object_base;
+	template <typename T> class ref;
+	typedef ref<object_base>	object;
 	class reference_type;
 
+	/// Base class of the ref<T> and iref<T> smart pointers
 	class ref_base
 	{
-	public:
+	protected:
 		ref_base();
 		ref_base(object *obj);
 		virtual ~ref_base();
-	protected:
-		reference_type	*m_obj;
+		object_base	*m_obj;		// Object we are referring to
+	private:
+		uintptr_t	m_id;		// The unique id bit/number of this reference
 	};
 
+	/// The main smart pointer used in lolibc
 	template <typename T>
 	class ref : public ref_base
 	{
@@ -35,9 +34,21 @@ namespace lo
 		ref(const T& obj) : ref_base(&obj)	{  }
 		ref(const T* obj) : ref_base(obj)	{  }
 		inline ref( ref<T> & external ) : BaseRef(external.ptr) {}
-		inline T* operator->()				{ return (reinterpret_cast<T *>(ptr)); }
-		inline T *Ptr() const				{ return reinterpret_cast<T*>(ptr); }
+		inline T* operator->()				{ return (reinterpret_cast<T *>(m_obj)); }
+		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_obj); }
 	private:
+	};
+
+	/// This class stores an indirect reference to an object, for accessing base classes and interfaces
+	template <typename T>
+	class iref : public ref_base
+	{
+	public:
+		iref(object *obj) : ref_base(obj) {}
+		inline T* operator->()				{ return (reinterpret_cast<T *>(m_ptr)); }
+		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_ptr); }
+	private:
+		T *m_ptr;
 	};
 
 	typedef uint8_t utf8subchar_t;	///< Type for the encoding subcharacters.
@@ -78,63 +89,18 @@ namespace lo
 {
 	int GetHashCode(const unsigned char *buffer,size_t len);
 
-	class object
+	class object_base
 	{
 		friend class ref_base;
 	public:
-		virtual ~object();
+		virtual ~object_base();
 		inline virtual int			GetHashCode() const	{ return 0; }
-		virtual ref<::std::string>	ToString();
+		virtual ref<std::string>	ToString();
 	private:
-		ref<::std::vector<ref_base *>>	m_references;
+		uintptr_t		m_references;	// ID mask for references
 	};
 
-	/*!
-	\brief value_type always copies its value.
-	T = class name, TValue = value type name, i.e. "bool"
-	Derive your value_type from this class.
-	 */
-	template <class T,typename TValue>
-	class value_type : public object
-	{
-	public:
-		virtual int CompareTo(const object &obj) const
-		{
-			if( const ValueType<T,TValue> * t = dynamic_cast<const ValueType<T,TValue> *>(&obj) )
-				return CompareTo(*t);
-			return 1;
-		}
-		virtual bool Equals(const object &obj) const
-		{
-			if( const ValueType<T,TValue> * t = dynamic_cast<const ValueType<T,TValue> *>(&obj) )
-				return Equals(*t);
-			return false;
-		}
-		virtual bool Equals(const T &obj) const
-		{
-			return (m_value==obj.m_value) != 0;
-		}
-		inline bool	operator== (const T &obj) const
-		{
-			return m_value==obj.m_value;
-		}
-		inline bool	operator!= (const T &obj) const
-		{
-			return m_value!=obj.m_value;
-		}
-		inline operator TValue()	{ return m_value; }
-		inline const TValue *		GetPointer() const	{ return &m_value; }
-		inline size_t				ValueSize()	const	{ return sizeof(TValue); }
-		ref<object>					Clone()				{ return ref<object>(static_cast<object *>(new T(m_value))); }
-		virtual int					GetHashCode() const	{ return ::lo::GetHashCode(reinterpret_cast<const unsigned char *>(GetPointer()), ValueSize()); }
-	protected:
-		inline value_type()	{}
-		inline value_type(const TValue value) : m_value(value)	{}
-		TValue				m_value;
-	};
-
-
-	class buffer_type : public object
+	class buffer_type : public object_base
 	{
 	};
 

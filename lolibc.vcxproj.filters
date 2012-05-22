@@ -40,6 +40,9 @@
     <Filter Include="Source Files\windows">
       <UniqueIdentifier>{f119e847-2040-4745-b8c9-a6fd21a4f110}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\so">
+      <UniqueIdentifier>{ec24595c-bb4e-41ac-8214-d61925f28764}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
