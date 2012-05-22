@@ -4,4 +4,5 @@
 //
 #pragma once
 #include "targetver.h"
+#include "lostlbase.h"
 #include "stdio.h"

@@ -339,12 +339,10 @@ namespace std {
 	/// Equivalent to a vsprintf on the string.
 	int string::vformat (const char* fmt, va_list args)
 	{
-		va_list args2;
-		va_start(args2,args);
 		size_t rv = size();
 		do {
 			reserve (rv);
-			rv = vsnprintf (data(), block::capacity(), fmt, args2);
+			rv = vsnprintf (data(), block::capacity(), fmt, args);
 			rv = minV (rv, block::capacity());
 		} while (rv > capacity());
 		resize (minV (rv, capacity()));

@@ -10,10 +10,7 @@
 #pragma once
 #include "lolibbase.h"
 
-#ifndef __cplusplus
-#error This header requires a C++ compiler ...
-#endif
-
+#ifdef __cplusplus
 
 namespace lo
 {
@@ -56,13 +53,13 @@ namespace std
 	class ostream;
 	class ostringstream;
 	template<typename T>	class vector;
-	typedef unsigned size_type;
+	typedef size_t size_type;
 	
 	/// Returns the difference \p p1 - \p p2
 	template <typename T1, typename T2>
 	inline ptrdiff_t distance (T1 i1, T2 i2)
 	{
-		return (i2 - i1);
+		return ((intptr_t)i2 - (intptr_t)i1);
 	}
 	
 	/// Assigns the contents of a to b and the contents of b to a.
@@ -300,3 +297,6 @@ namespace std
 {
 	template <> inline void swap (lo::blocklink& a, lo::blocklink& b)			{ a.swap (b); }
 }
+
+#endif // __cplusplus
+

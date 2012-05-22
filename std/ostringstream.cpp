@@ -103,12 +103,10 @@ namespace std {
 	/// Equivalent to a vsprintf on the string.
 	int ostringstream::vformat (const char* fmt, va_list args)
 	{
-		va_list args2;
 		size_t rv, space;
-		va_start(args2,args);
 		do {
 			space = remaining();
-			rv = vsnprintf (const_cast<char *>(ipos()), space, fmt, args2);
+			rv = vsnprintf (const_cast<char *>(ipos()), space, fmt, args);
 			if (ssize_t(rv) < 0)
 				rv = space;
 		} while (rv >= space && rv < overflow(rv + 1));

@@ -186,8 +186,6 @@ typedef uint32_t	hashvalue_t;	///< Value type returned by the hash functions.
 typedef size_t		streamsize;		///< Size of stream data
 typedef uoff_t		streamoff;		///< Offset into a stream
 
-#include "xutility"
-
 // Test function
 #define BVT(x)	if(x)	throw #x
 #define BVTGROUP(x)	__try { (x); } __except(1) { puts("Error in group: " #x ); }

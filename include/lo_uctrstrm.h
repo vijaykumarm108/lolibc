@@ -160,7 +160,9 @@ size_t container_stream_size (const Container& v)
 /// Specialize to custom print elements.
 template <typename T>
 inline ostringstream& container_element_text_write (ostringstream& os, const T& v)
-{ return (os << v); }
+{
+	return (os << v);
+}
 
 /// Writes container \p v into stream \p os as text.
 template <typename Container>
@@ -175,7 +177,5 @@ ostringstream& container_text_write (ostringstream& os, const Container& v)
     }
     return (os);
 }
-
-//----------------------------------------------------------------------
 
 } // namespace std

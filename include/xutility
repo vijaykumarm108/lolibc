@@ -3,6 +3,7 @@
 
 #include "lostlbase.h"
 #include "lo_traits.h"
+#include "algorithm"
 #include "limits"
 #include <assert.h>
 
@@ -77,43 +78,21 @@ inline T1 maxV (const T1& a, const T2& b)
 template <typename T> inline T* NullPointer (void)
 { return ((T*) NULL); }
 
-/// \brief Returns a non-dereferentiable value reference.
-/// This is useful for passing to alignof or the like which need a value but
-/// don't need to actually use it.
-template <typename T> inline T& NullValue (void)
-{ return (*NullPointer<T>()); }
+	/// \brief Returns a non-dereferentiable value reference.
+	/// This is useful for passing to alignof or the like which need a value but
+	/// don't need to actually use it.
+	template <typename T> inline T& NullValue (void)
+	{
+		return (*NullPointer<T>());
+	}
 
-/// Offsets an iterator
-template <typename T>
-inline T advance (T i, ssize_t offset)
-{
-    return (i + offset);
-}
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-/// Offsets a void pointer
-template <>
-inline const void* advance (const void* p, ssize_t offset)
-{
-    assert (p || !offset);
-    return (reinterpret_cast<const uint8_t*>(p) + offset);
-}
-
-/// Offsets a void pointer
-template <>
-inline void* advance (void* p, ssize_t offset)
-{
-    assert (p || !offset);
-    return (reinterpret_cast<uint8_t*>(p) + offset);
-}
-#endif
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define UNVOID_DISTANCE(T1const,T2const)				   \
 template <> inline ptrdiff_t distance (T1const void* p1, T2const void* p2) \
 { return ((T2const uint8_t*)(p2) - (T1const uint8_t*)(p1)); }
 UNVOID_DISTANCE(,)
-UNVOID_DISTANCE(const,const)
+//UNVOID_DISTANCE(const,const)
 UNVOID_DISTANCE(,const)
 UNVOID_DISTANCE(const,)
 #undef UNVOID_DISTANCE
@@ -214,35 +193,35 @@ template <typename T> inline T native_to_le (const T& v) { return (v); }
 template <typename T> inline T native_to_be (const T& v) { return (bswap (v)); }
 #endif // BYTE_ORDER
 
-/// Deletes \p p and sets it to NULL
-template <typename T>
-inline void Delete (T*& p)
-{
-    delete p;
-    p = NULL;
-}
+	/// Deletes \p p and sets it to NULL
+	template <typename T>
+	inline void Delete (T*& p)
+	{
+		delete p;
+		p = NULL;
+	}
 
-/// Deletes \p p as an array and sets it to NULL
-template <typename T>
-inline void DeleteVector (T*& p)
-{
-    delete [] p;
-    p = NULL;
-}
+	/// Deletes \p p as an array and sets it to NULL
+	template <typename T>
+	inline void DeleteVector (T*& p)
+	{
+		delete [] p;
+		p = NULL;
+	}
 
-/// Template of making != from ! and ==
-template <typename T>
-inline bool operator!= (const T& x, const T& y)
-{
-    return (!(x == y));
-}
+	/// Template of making != from ! and ==
+	template <typename T>
+	inline bool operator!= (const T& x, const T& y)
+	{
+		return (!(x == y));
+	}
 
-/// Template of making > from <
-template <typename T>
-inline bool operator> (const T& x, const T& y)
-{
-    return (y < x);
-}
+	/// Template of making > from <
+	template <typename T>
+	inline bool operator> (const T& x, const T& y)
+	{
+		return (y < x);
+	}
 
 /// Template of making <= from < and ==
 template <typename T>
@@ -326,93 +305,82 @@ inline uoff_t FirstBit (uint32_t v, uoff_t nbv)
 #endif
     return (n);
 }
-/// Returns the index of the first set bit in \p v or \p nbv if none.
-inline uoff_t FirstBit (uint64_t v, uoff_t nbv)
-{
-    uoff_t n = nbv;
-#if __x86_64__
-    if (!__builtin_constant_p(v)) asm ("bsr\t%1, %0":"+r,r"(n):"r,m"(v)); else
-#endif
-#if __GNUC__
-    if (v) n = 63 - __builtin_clzl(v);
-#else
-    if (v) for (uint64_t m = uint64_t(1)<<(n=63); !(v & m); m >>= 1) --n;
-#endif
-    return (n);
-}
+	/// Returns the index of the first set bit in \p v or \p nbv if none.
+	inline uoff_t FirstBit (uint64_t v, uoff_t nbv)
+	{
+		uoff_t n = nbv;
+	#if __x86_64__
+		if (!__builtin_constant_p(v)) asm ("bsr\t%1, %0":"+r,r"(n):"r,m"(v)); else
+	#endif
+	#if __GNUC__
+		if (v) n = 63 - __builtin_clzl(v);
+	#else
+		if (v) for (uint64_t m = uint64_t(1)<<(n=63); !(v & m); m >>= 1) --n;
+	#endif
+		return (n);
+	}
 
-/// Returns the next power of 2 >= \p v.
-/// Values larger than UINT32_MAX/2 will return 2^0
-inline uint32_t NextPow2 (uint32_t v)
-{
-    uint32_t r = v-1;
-#if __i386__ || __x86_64__
-    if (!__builtin_constant_p(r)) asm("bsr\t%0, %0":"+r"(r)); else
-#endif
-    { r = (uint32_t)FirstBit(r,r); if (r >= (uint32_t)BitsInType(r)-1) r = uint32_t(-1); }
-    return (1<<(1+r));
-}
+	/// Returns the next power of 2 >= \p v.
+	/// Values larger than UINT32_MAX/2 will return 2^0
+	inline uint32_t NextPow2 (uint32_t v)
+	{
+		uint32_t r = v-1;
+	#if __i386__ || __x86_64__
+		if (!__builtin_constant_p(r)) asm("bsr\t%0, %0":"+r"(r)); else
+	#endif
+		{ r = (uint32_t)FirstBit(r,r); if (r >= (uint32_t)BitsInType(r)-1) r = uint32_t(-1); }
+		return (1<<(1+r));
+	}
 
-/// Bitwise rotate value left
-template <typename T>
-inline T Rol (T v, size_t n)
-{
-#if __i386__ || __x86_64__
-    if (!(__builtin_constant_p(v) && __builtin_constant_p(n))) asm("rol\t%b1, %0":"+r,r"(v):"i,c"(n)); else
-#endif
-    v = (v << n) | (v >> (BitsInType(T)-n));
-    return (v);
-}
+	/// Bitwise rotate value left
+	template <typename T>
+	inline T Rol (T v, size_t n)
+	{
+	#if __i386__ || __x86_64__
+		if (!(__builtin_constant_p(v) && __builtin_constant_p(n))) asm("rol\t%b1, %0":"+r,r"(v):"i,c"(n)); else
+	#endif
+		v = (v << n) | (v >> (BitsInType(T)-n));
+		return (v);
+	}
 
-/// Bitwise rotate value right
-template <typename T>
-inline T Ror (T v, size_t n)
-{
-#if __i386__ || __x86_64__
-    if (!(__builtin_constant_p(v) && __builtin_constant_p(n))) asm("ror\t%b1, %0":"+r,r"(v):"i,c"(n)); else
-#endif
-    v = (v >> n) | (v << (BitsInType(T)-n));
-    return (v);
-}
+	/// Bitwise rotate value right
+	template <typename T>
+	inline T Ror (T v, size_t n)
+	{
+	#if __i386__ || __x86_64__
+		if (!(__builtin_constant_p(v) && __builtin_constant_p(n))) asm("ror\t%b1, %0":"+r,r"(v):"i,c"(n)); else
+	#endif
+		v = (v >> n) | (v << (BitsInType(T)-n));
+		return (v);
+	}
 
-/// \brief This template is to be used for dereferencing a type-punned pointer without a warning.
-///
-/// When casting a local variable to an unrelated type through a pointer (for
-/// example, casting a float to a uint32_t without conversion), the resulting
-/// memory location can be accessed through either pointer, which violates the
-/// strict aliasing rule. While -fno-strict-aliasing option can be given to
-/// the compiler, eliminating this warning, inefficient code may result in
-/// some instances, because aliasing inhibits some optimizations. By using
-/// this template, and by ensuring the memory is accessed in one way only,
-/// efficient code can be produced without the warning. For gcc 4.1.0+.
-///
-template <typename DEST, typename SRC>
-inline DEST noalias (const DEST&, SRC* s)
-{
-    asm("":"+g"(s)::"memory");
-    union UPun { SRC s; DEST d; };
-    return (((UPun*)(s))->d);
-}
+	/// \brief This template is to be used for dereferencing a type-punned pointer without a warning.
+	///
+	/// When casting a local variable to an unrelated type through a pointer (for
+	/// example, casting a float to a uint32_t without conversion), the resulting
+	/// memory location can be accessed through either pointer, which violates the
+	/// strict aliasing rule. While -fno-strict-aliasing option can be given to
+	/// the compiler, eliminating this warning, inefficient code may result in
+	/// some instances, because aliasing inhibits some optimizations. By using
+	/// this template, and by ensuring the memory is accessed in one way only,
+	/// efficient code can be produced without the warning. For gcc 4.1.0+.
+	///
+	template <typename DEST, typename SRC>
+	inline DEST noalias (const DEST&, SRC* s)
+	{
+		asm("":"+g"(s)::"memory");
+		union UPun { SRC s; DEST d; };
+		return (((UPun*)(s))->d);
+	}
 
-template <typename DEST, typename SRC>
-inline DEST noalias_cast (SRC s)
-{
-    asm("":"+g"(s)::"memory");
-    union { SRC s; DEST d; } u = {s};
-    return (u.d);
-}
+	template <typename DEST, typename SRC>
+	inline DEST noalias_cast (SRC s)
+	{
+		asm("":"+g"(s)::"memory");
+		union { SRC s; DEST d; } u = {s};
+		return (u.d);
+	}
 
-namespace simd {
-    /// Call after you are done using SIMD algorithms for 64 bit tuples.
-    #define ALL_MMX_REGS_CHANGELIST "mm0","mm1","mm2","mm3","mm4","mm5","mm6","mm7","st","st(1)","st(2)","st(3)","st(4)","st(5)","st(6)","st(7)"
-#if CPU_HAS_3DNOW
-    inline void reset_mmx (void) { asm ("femms":::ALL_MMX_REGS_CHANGELIST); }
-#elif CPU_HAS_MMX
-    inline void reset_mmx (void) { asm ("emms":::ALL_MMX_REGS_CHANGELIST); }
-#else
-    inline void reset_mmx (void) {}
-#endif
-} // namespace simd
-}  // namespace std
+} // end namespace std
 
-#endif
+#endif // __cplusplus

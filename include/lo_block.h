@@ -3,6 +3,8 @@
 #pragma once
 #include "lostlbase.h"
 
+#ifdef __cplusplus
+
 namespace lo {
 
 	/** Managed memory block.
@@ -60,3 +62,5 @@ namespace std
 		a.swap (b);
 	}
 }
+
+#endif // __cplusplus

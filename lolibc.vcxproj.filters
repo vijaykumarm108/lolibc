@@ -108,9 +108,6 @@
     <ClInclude Include="include\vector">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="lolibc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\array">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
@@ -267,6 +264,15 @@
     <ClInclude Include="include\lo_typet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\regex">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wchar.h">
+      <Filter>Header Files\stdc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lolibc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -329,9 +335,6 @@
     <ClCompile Include="windows\wWinMain.c">
       <Filter>Source Files\windows</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files\windows</Filter>
-    </ClCompile>
     <ClCompile Include="windows\Stdlib2010.cpp">
       <Filter>Source Files\windows</Filter>
     </ClCompile>
@@ -367,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="std\blocklink.cpp">
       <Filter>Source Files\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <Filter>Source Files\windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -210,7 +210,7 @@
     <ClCompile Include="src\kernel32.cpp" />
     <ClCompile Include="src\loexcept.cpp" />
     <ClCompile Include="src\loutf8.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -527,6 +527,7 @@
     <ClInclude Include="include\ios_base.h" />
     <ClInclude Include="include\limits.h" />
     <ClInclude Include="include\process.h" />
+    <ClInclude Include="include\regex" />
     <ClInclude Include="include\stdarg.h" />
     <ClInclude Include="include\stddef.h" />
     <ClInclude Include="include\stdlib.h" />
@@ -583,9 +584,10 @@
     <ClInclude Include="include\stack" />
     <ClInclude Include="include\lo_utf8.h" />
     <ClInclude Include="include\lolibbase.h" />
+    <ClInclude Include="include\wchar.h" />
     <ClInclude Include="include\xutility" />
     <ClInclude Include="include\vector" />
-    <ClInclude Include="lolibc.h" />
+    <ClInclude Include="include\lolibc.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\winunix.h" />
