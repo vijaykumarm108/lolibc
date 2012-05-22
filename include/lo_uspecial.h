@@ -137,7 +137,10 @@ struct numeric_limits<tuple<N,T> > {
 };
 
 template <size_t N, typename T>
-inline size_t alignof (const tuple<N,T>&) { return (alignof (NullValue<T>())); }
+inline size_t alignof (const tuple<N,T>&)
+{
+	return (alignof (NullValue<T>()));
+}
 
 template <typename T, typename IntT>
 inline ostringstream& chartype_text_write (ostringstream& os, const T& v)
@@ -148,10 +151,15 @@ inline ostringstream& chartype_text_write (ostringstream& os, const T& v)
 
 template <>
 inline ostringstream& container_element_text_write (ostringstream& os, const uint8_t& v)
-{ return (chartype_text_write<uint8_t, unsigned int> (os, v)); }
+{
+	return (chartype_text_write<uint8_t, unsigned int> (os, v));
+}
+
 template <>
 inline ostringstream& container_element_text_write (ostringstream& os, const int8_t& v)
-{ return (chartype_text_write<int8_t, int> (os, v)); }
+{
+	return (chartype_text_write<int8_t, int> (os, v));
+}
 
 //----{ matrix }--------------------------------------------------------
 

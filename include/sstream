@@ -5,6 +5,7 @@
 #include "istream"
 #include "ostream"
 #include "string"
+
 #ifndef EOF
 #define EOF (-1)
 #endif

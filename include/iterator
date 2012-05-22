@@ -1,6 +1,5 @@
-// Lo-Overhead STL library - Lostl
-/// \file uiterator.h
-/// \brief Contains various iterator adapters.
+
+
 
 #pragma once
 
