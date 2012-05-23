@@ -94,7 +94,7 @@ namespace lo {  	// Extended exception definitions
 	///
 	/// Contains an errno and description. This is a std extension.
 	///
-	class libc_exception : public exception {
+	class libc_exception : public ::exception {
 	public:
 		explicit				libc_exception (int m_Errno) throw();
 		explicit				libc_exception (const char* operation,bool doFree = false) throw();

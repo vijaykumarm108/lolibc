@@ -18,7 +18,7 @@ namespace lo
 	{
 	protected:
 		ref_base();
-		ref_base(object *obj);
+		ref_base(object_base *obj);
 		virtual ~ref_base();
 		object_base	*m_obj;		// Object we are referring to
 	private:
@@ -33,6 +33,7 @@ namespace lo
 		ref() : ref_base() {}
 		ref(const T& obj) : ref_base(&obj)	{  }
 		ref(const T* obj) : ref_base(obj)	{  }
+		ref(object_base *obj) : ref_base(obj) {}
 		inline ref( ref<T> & external ) : BaseRef(external.ptr) {}
 		inline T* operator->()				{ return (reinterpret_cast<T *>(m_obj)); }
 		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_obj); }
