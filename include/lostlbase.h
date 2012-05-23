@@ -90,13 +90,25 @@ namespace lo
 {
 	int GetHashCode(const unsigned char *buffer,size_t len);
 
+	/// Class for returning new strings from functions -- to speed up the process...
+	class rstring
+	{
+	public:
+		rstring(const char *value);
+		rstring(char *value);
+		operator const char *();	// Throws exception if the string is not a constant.
+	private:
+		bool m_isConst;
+		char *m_str;
+	};
+
 	class object_base
 	{
 		friend class ref_base;
 	public:
 		virtual ~object_base();
-		inline virtual int			GetHashCode() const	{ return 0; }
-		virtual ref<std::string>	ToString();
+		inline virtual int		GetHashCode() const	{ return 0; }
+		virtual rstring			ToString();
 	private:
 		uintptr_t		m_references;	// ID mask for references
 	};

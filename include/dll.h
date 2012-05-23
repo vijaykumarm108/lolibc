@@ -2,6 +2,8 @@
 
 #ifdef __cplusplus
 
+#define WINAPI __stdcall
+
 namespace lo
 {
 	class dll

@@ -6,3 +6,5 @@
 #include "targetver.h"
 #include "lostlbase.h"
 #include "stdio.h"
+#include <string>
+#include <typeinfo>
