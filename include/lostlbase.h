@@ -62,6 +62,7 @@ namespace std
 {
 	class istream;
 	class string;
+	class wstring;
 	class ostream;
 	class ostringstream;
 	template<typename T>	class vector;
@@ -96,7 +97,10 @@ namespace lo
 	public:
 		rstring(const char *value);
 		rstring(char *value);
+		rstring(size_t bufferSize);
+		rstring(std::wstring& wstr);
 		operator const char *();	// Throws exception if the string is not a constant.
+		char *GetBuffer();
 	private:
 		bool m_isConst;
 		char *m_str;

@@ -13,22 +13,22 @@ If not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 */
 #include <stdafx.h>
 #include <dll.h>
-#include <windows.h>
+#include <dll/kernel32.h>
 
 namespace lo
 {
 	void dll::_addref()
 	{
 		if(counter()++ == 0)
-			m_handle = (void *)LoadLibraryA(Name());
+			m_handle = LoadLibraryA(Name());
 	}
 
 	void dll::_release()
 	{
 		if(--counter() == 0)
 		{
-			::FreeLibrary((HMODULE)m_handle);
-			m_handle = nullptr;
+			::FreeLibrary(m_handle);
+			m_handle = 0;
 		}
 	}
 }

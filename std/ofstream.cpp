@@ -1,6 +1,3 @@
-// Lo-Overhead STL library - Lostl
-//
-
 #include <stdafx.h>
 #include <fstream>
 #include <string>

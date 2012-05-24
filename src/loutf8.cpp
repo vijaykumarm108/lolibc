@@ -2,9 +2,27 @@
 
 #include <stdafx.h>
 #include <lo_utf8.h>
+#include <dll/kernel32.h>
 
 namespace lo
 {
+
+	/// Initializes an rstring from a wstring
+	rstring::rstring(std::wstring& wstr)
+	{
+		int length = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL );
+		if( length > 0 )
+		{
+			m_str=reinterpret_cast<char *>(malloc(length));
+			WideCharToMultiByte(CP_UTF8, 0, wstr, -1, m_str, length, NULL, NULL );
+			m_isConst = false;
+		}
+		else
+		{
+			m_str = "";
+			m_isConst = true;
+		}
+	}
 
 	/// Returns the number of bytes required to UTF-8 encode \p v.
 	size_t Utf8Bytes (wchar_t v)

@@ -1,4 +1,3 @@
-/* bitset.cpp for lolibc */
 
 #include <stdafx.h>
 #include <bitset>
@@ -11,8 +10,12 @@ namespace std {
 	{
 		string::iterator stri = buf.end();
 		for (size_t i = 0; i < n && stri > buf.begin(); ++ i)
-		for (bitset_value_type b = 1; b && stri > buf.begin(); b <<= 1)
-			*--stri = (v[i] & b) ? '1' : '0';
+		{
+			for (bitset_value_type b = 1; b && stri > buf.begin(); b <<= 1)
+			{
+				*--stri = (v[i] & b) ? '1' : '0';
+			}
+		}
 	}
 
 	/// Copies bits from \p buf as MSB "1011001..." LSB into \p v of size \p n.

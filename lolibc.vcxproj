@@ -249,6 +249,7 @@
     <ClCompile Include="std\ostringstream.cpp" />
     <ClCompile Include="std\stdxept.cpp" />
     <ClCompile Include="std\winunix.cpp" />
+    <ClCompile Include="windows\psapi.cpp" />
     <ClCompile Include="windows\_dbgrpt.c">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
@@ -502,6 +503,7 @@
   <ItemGroup>
     <ClInclude Include="include\assert.h" />
     <ClInclude Include="include\ctype.h" />
+    <ClInclude Include="include\dll\psapidll.h" />
     <ClInclude Include="include\fcntl.h" />
     <ClInclude Include="include\internal.h" />
     <ClInclude Include="include\ios_base.h" />

@@ -276,6 +276,9 @@
     <ClInclude Include="include\lolibc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\dll\psapidll.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -379,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="src\loobject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\psapi.cpp">
+      <Filter>Source Files\dll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

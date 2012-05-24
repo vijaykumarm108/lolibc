@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 
+_CRTIMP size_t __cdecl		_msize( void *memblock );
 int __cdecl					atexit(void (__cdecl *)(void));
 _CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);
 _CRTIMP void __cdecl		free(void *ptr);

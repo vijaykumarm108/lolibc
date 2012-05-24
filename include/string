@@ -187,7 +187,7 @@ inline hashvalue_t hash_value (const char* v)
 }
 
 //----------------------------------------------------------------------
-// Class wstring is only for the cases when we need to conver to and from widechar strings
+// Class wstring is only for the cases when we need to convert to and from widechar strings
 class wstring
 {
 public:
@@ -196,8 +196,9 @@ public:
 	wstring(int size)	{ buffer = reinterpret_cast<wchar_t *>(malloc(size*sizeof(wchar_t))); *buffer = 0; }
 	~wstring();
 	operator const wchar_t *()	{ return const_cast<const wchar_t *>(buffer); }
-	operator wchar_t *() { return buffer; }
-	inline string::size_type		length (void)	{ return wcslen(buffer); }
+	operator wchar_t *()		{ return buffer; }
+	inline size_t				capacity ( ) const	{ return _msize( reinterpret_cast<void *>(buffer))/sizeof(wchar_t);}
+	inline string::size_type	length (void)		{ return wcslen(buffer); }
 	void toString( string& text);
 private:
 	void init(const char *_init);
