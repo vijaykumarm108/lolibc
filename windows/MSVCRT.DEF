@@ -1,6 +1,10 @@
 LIBRARY	MSVCRT.DLL
 EXPORTS
 	$I10_OUTPUT
+	??1type_info@@UEAA@XZ					; 64 bit - virtual __cdecl type_info::~type_info(void)" ()
+	??3@YAXPEAX@Z							; 64 bit - void __cdecl operator delete(void *)" ()
+	?name@type_info@@QEBAPEBDXZ				; 64 bit - char const * __cdecl type_info::name(void)const
+	??2@YAPEAX_K@Z							; 64 bit - void * __cdecl operator new(unsigned __int64)
 	??0__non_rtti_object@@QAE@ABV0@@Z		; public: __thiscall __non_rtti_object::__non_rtti_object(class __non_rtti_object const &) - #include <typeinfo>
 	??0__non_rtti_object@@QAE@PBD@Z			; public: __thiscall __non_rtti_object::__non_rtti_object(char const *) - #include <typeinfo>
 	??0bad_cast@@QAE@ABQBD@					; public: __thiscall bad_cast::bad_cast(char const * const &) - #include <typeinfo>

@@ -28,6 +28,7 @@ $License: $
 #include <typeinfo>
 //#pragma comment(lib,"msvcrt6.lib")
 
+
 #if 0
 void __cdecl operator delete( void * p )
 {

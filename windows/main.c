@@ -22,9 +22,10 @@ This file is included by the following files in order to support different bindi
 If this file is not wrapped, then its default is MBCS(not UNICODE) for console app.
 
 */
-#if defined(_M_IX86)
+//#if defined(_M_IX86)
 #define CRTDLL
-#endif
+//#endif
+
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -34,6 +35,7 @@ If this file is not wrapped, then its default is MBCS(not UNICODE) for console a
 #ifndef _DLL
 #define _DLL
 #endif  /* _DLL */
+
 
 #define SPECIAL_CRTEXE
 #include "lomsvcrt.h"
@@ -52,6 +54,7 @@ IMAGE_DOS_HEADER __ImageBase;
 #else  /* defined (_WIN64) && defined (_M_IA64) */
 extern IMAGE_DOS_HEADER __ImageBase;
 #endif  /* defined (_WIN64) && defined (_M_IA64) */
+
 
 /* We only want to set the UnhandledExceptionFilter when this crt is loaded by an EXE (ie. not loaded by a DLL) */
 //int  __cdecl __CxxSetUnhandledExceptionFilter(void);
@@ -78,24 +81,24 @@ extern void __cdecl _initterm(_PVFV *, _PVFV *);
 /*
  * Declare the names of the exports corresponding to _fmode and _commode
  */
-#ifdef _M_IX86
+//#ifdef _M_IX86
 
 #define _IMP___FMODE    (__p__fmode())
 #define _IMP___COMMODE  (__p__commode())
 
-#else  /* _M_IX86 */
+//#else  /* _M_IX86 */
 
 /* assumed to be MIPS or Alpha */
 
-#define _IMP___FMODE    __imp__fmode
-#define _IMP___COMMODE  __imp__commode
+//#define _IMP___FMODE    __imp__fmode
+//#define _IMP___COMMODE  __imp__commode
 
-#endif  /* _M_IX86 */
+//#endif  /* _M_IX86 */
 
-#if !defined (_M_IX86)
-extern int * _IMP___FMODE;      /* exported from the CRT DLL */
-extern int * _IMP___COMMODE;    /* these names are implementation-specific */
-#endif  /* !defined (_M_IX86) */
+//#if !defined (_M_IX86)
+//extern int * _IMP___FMODE;      /* exported from the CRT DLL */
+//extern int * _IMP___COMMODE;    /* these names are implementation-specific */
+//#endif  /* !defined (_M_IX86) */
 
 /*
  * Declare/define communal that serves as indicator the default matherr

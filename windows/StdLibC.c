@@ -102,17 +102,25 @@ void *_recalloc( void *block, size_t num, size_t size )
 	return realloc( block, num*size );
 }
 
-void __declspec(naked) __fastcall __security_check_cookie(UINT_PTR cookie)
+#ifdef _M_IX86
+#define NAKED __declspec(naked)
+#else
+#define NAKED
+#endif
+
+void NAKED __fastcall __security_check_cookie(UINT_PTR cookie)
 {
+#ifdef _M_IX86
 	/* x86 version written in asm to preserve all regs */
 	__asm {
 		cmp ecx, __security_cookie
-			jne failure
-			rep ret /* REP to avoid AMD branch prediction penalty */
+		jne failure
+		rep ret /* REP to avoid AMD branch prediction penalty */
 failure:
 		ret
 		//jmp __report_gsfailure
 	}
+#endif
 }
 
 
@@ -291,7 +299,7 @@ errno_t strcpy_s( char *strDestination, size_t numberOfElements, const char *str
 	{
 		return EINVAL;
 	}
-	lstrcpynA( strDestination, strSource, numberOfElements );
+	strncpy(strDestination,strSource,numberOfElements);
 	return 0;
 }
 
@@ -301,7 +309,7 @@ errno_t wcsncpy_s( wchar_t *strDest, size_t numberOfElements, const wchar_t *str
 	{
 		return EINVAL;
 	}
-	lstrcpynW( strDest, strSource, min(numberOfElements,count) );
+	wcsncpy(strDest, strSource, min(numberOfElements,count) );
 	return 0;
 }
 
@@ -372,7 +380,7 @@ errno_t strcat_s( char *strDestination, size_t numberOfElements, const char *str
 
 size_t wcstombs( char *mbstr, const wchar_t *wcstr, size_t count )
 {
-	return WideCharToMultiByte( CP_THREAD_ACP, 0, wcstr, -1, mbstr, count, NULL, NULL );
+	return WideCharToMultiByte( CP_THREAD_ACP, 0, wcstr, -1, mbstr, (int)count, NULL, NULL );
 }
 
 errno_t __cdecl wcstombs_s ( size_t *pConvertedChars, char * dst, size_t sizeInBytes, const wchar_t * src, size_t n )
@@ -381,10 +389,10 @@ errno_t __cdecl wcstombs_s ( size_t *pConvertedChars, char * dst, size_t sizeInB
 
 	if ( (NULL==src) || ((NULL==dst) && (sizeInBytes>0)) )
 		return EINVAL;
-	vI = WideCharToMultiByte( CP_THREAD_ACP, 0, src, n, dst, sizeInBytes, NULL, NULL );
+	vI = WideCharToMultiByte( CP_THREAD_ACP, 0, src, (int)n, dst, (int)sizeInBytes, NULL, NULL );
 	if ( (vI < 0) || (vI > (int)sizeInBytes) )
 		return ERANGE;
-	WideCharToMultiByte( CP_THREAD_ACP, 0, src, n, dst, sizeInBytes, NULL, NULL );
+	WideCharToMultiByte( CP_THREAD_ACP, 0, src, (int)n, dst, (int)sizeInBytes, NULL, NULL );
 	return 0;
 }
 
@@ -445,7 +453,7 @@ __int64 _strtoi64( const char *nptr, char **endptr, int base )
 
 wchar_t *wcsncpy( wchar_t *strDest, const wchar_t *strSource, size_t count )
 {
-	return lstrcpynW( strDest, strSource, count );
+	return lstrcpynW( strDest, strSource, (int)count );
 }
 
 int _wfindnexti64( intptr_t handle, struct _wfinddata64_t *fileinfo );
