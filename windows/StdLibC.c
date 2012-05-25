@@ -540,4 +540,11 @@ int remove( const char *fileName )
 	return _wremove(path);
 }
 
+// Debug requirement
+void _CRT_RTC_INITW()
+{
+
+}
+
+
 /*! @} */

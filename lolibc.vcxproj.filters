@@ -58,7 +58,6 @@
     <None Include="include\iterator">
       <Filter>Header Files\stl</Filter>
     </None>
-    <None Include="windows\crt0dat.rsp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ostream">
@@ -437,10 +436,17 @@
     <CustomBuild Include="windows\sehsupp.rsp">
       <Filter>Source Files\windows</Filter>
     </CustomBuild>
+    <CustomBuild Include="windows\chandler.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\jmpuwind.rsp" />
+    <CustomBuild Include="windows\pesect.rsp" />
+    <CustomBuild Include="windows\gshandler.rsp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="windows\StdLibX86.asm">
       <Filter>Source Files\windows</Filter>
     </MASM>
+    <MASM Include="windows\StdLibx64.asm" />
   </ItemGroup>
 </Project>

@@ -108,11 +108,17 @@ int __defaultmatherr;
 
 /* _initterm_c and the C and C++ initialization variables */
 extern int __cdecl _initterm_e ( _PIFV * pfbegin, _PIFV * pfend );
+#ifdef _WIN64
+_CRTALLOC(".CRT$XIA") _PIFV __xi_a[];
+_CRTALLOC(".CRT$XIZ") _PIFV __xi_z[];    /* C initializers */
+_CRTALLOC(".CRT$XCA") _PVFV __xc_a[];
+_CRTALLOC(".CRT$XCZ") _PVFV __xc_z[];    /* C++ initializers */
+#else
 extern _CRTALLOC(".CRT$XIA") _PIFV __xi_a[];
 extern _CRTALLOC(".CRT$XIZ") _PIFV __xi_z[];    /* C initializers */
 extern _CRTALLOC(".CRT$XCA") _PVFV __xc_a[];
 extern _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[];    /* C++ initializers */
-
+#endif
 /*
  * Pointer to callback function to initialize any dynamically initialized
  * __declspec(thread) variables.  This relies on a subtle aspect of C.
@@ -152,21 +158,23 @@ _PVFV *__onexitend;
 //extern int _argc;
 //extern _TSCHAR **_argv;
 #pragma warning(disable:4273)
-//extern int __argc;   /* three standard arguments to main */
 #ifndef _UNICODE
-//extern char **__argv;
 char **envp;
 #else
-//wchar_t **__wargv;
 wchar_t **envp;
 #endif
-
+#ifdef _WIN64
+_CRTIMP extern int __argc;
+_CRTIMP extern char **__argv;
+_CRTIMP extern wchar_t ** __wargv;
+#else
 _CRTIMP int* __cdecl __p___argc(void);
 _CRTIMP char*** __cdecl __p___argv(void);
 _CRTIMP wchar_t*** __cdecl __p___wargv(void);
 #define __argv (*__p___argv())
 #define __argc (*__p___argc())
 #define __wargv (*__p___wargv())
+#endif
 
 static int argret;
 static int mainret=0;
@@ -366,12 +374,12 @@ int __declspec(noinline) mainCRTStartup(
 			 * using the CRT DLL.  That is to make sure the -J setting for
 			 * the EXE is not overridden by that of any DLL.
 			*/
-			pre_c_init();
-			_initterm( (_PVFV*)__xi_a, (_PVFV *)__xi_z );
+	//		pre_c_init();
+	//		_initterm( (_PVFV*)__xi_a, (_PVFV *)__xi_z );
 
-			pre_cpp_init();
+//			pre_cpp_init();
 			// Do C++ constructors (initializers) specific to this EXE
-			_initterm( __xc_a, __xc_z );
+	//		_initterm( __xc_a, __xc_z );
 
 			/*
 			 * If we have any dynamically initialized __declspec(thread)
@@ -380,7 +388,7 @@ int __declspec(noinline) mainCRTStartup(
 			 * through a callback defined in tlsdyn.obj.
 			 */
 			if (__dyn_tls_init_callback != NULL
-				/* && LoPeIsNonwritableInCurrentImage((PBYTE)&__ImageBase,(PBYTE)&__dyn_tls_init_callback) */)
+				/* && _IsNonwritableInCurrentImage((PBYTE)&__ImageBase,(PBYTE)&__dyn_tls_init_callback) */)
 			{
 				__dyn_tls_init_callback(NULL, DLL_THREAD_ATTACH, NULL);
 			}
@@ -442,7 +450,7 @@ int __declspec(noinline) mainCRTStartup(
 			mainret = wmain(__argc, __wargv, envp);
 #else   /* !_UNICODE */
 			__initenv = envp;
-			mainret = main(*__p___argc(), *__p___argv(), envp);
+			mainret = main(__argc, __argv, envp);
 #endif  /* _UNICODE */
 
 #endif  /* _WINMAIN_ */

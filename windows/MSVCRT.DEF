@@ -1,6 +1,8 @@
 LIBRARY	MSVCRT.DLL
 EXPORTS
 	$I10_OUTPUT
+	??0exception@@QEAA@AEBV0@@Z				; 64 bit - __cdecl exception::exception(class exception const &)
+	??1exception@@UEAA@XZ					; __cdecl exception::~exception(void)
 	??1type_info@@UEAA@XZ					; 64 bit - virtual __cdecl type_info::~type_info(void)" ()
 	??3@YAXPEAX@Z							; 64 bit - void __cdecl operator delete(void *)" ()
 	?name@type_info@@QEBAPEBDXZ				; 64 bit - char const * __cdecl type_info::name(void)const

@@ -266,9 +266,6 @@
     </ClCompile>
     <ClCompile Include="windows\Stdlib2010.cpp" />
     <ClCompile Include="windows\_initterm_e.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
@@ -281,6 +278,10 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VCInstallDir)crt\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</WholeProgramOptimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</WholeProgramOptimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</WholeProgramOptimization>
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="windows\DllMain.c">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)stdafxc.pch</PrecompiledHeaderOutputFile>
@@ -495,7 +496,6 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="windows\StdLibX86.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </MASM>
@@ -640,6 +640,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename).obj</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building _userapi_ for 64 bit lomsvcrt.lib</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building _userapi_ for 64 bit lomsvcrt.lib</Message>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -661,7 +663,71 @@
     <None Include="include\iterator" />
     <None Include="include\limits" />
     <None Include="ReadMe.txt" />
-    <None Include="windows\crt0dat.rsp" />
+    <CustomBuild Include="windows\chandler.rsp">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building 64 bit version of chandler.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building 64 bit version of chandler.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of chandler.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of chandler.obj</Message>
+    </CustomBuild>
+    <CustomBuild Include="windows\jmpuwind.rsp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Build 64 bit version of jmpuwind.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Build 64 bit version of jmpuwind.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Build 64 bit version of jmpuwind.obj</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Build 64 bit version of jmpuwind.obj</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="windows\pesect.rsp">
+      <FileType>Text</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building 64 bit version of pesect.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building 64 bit version of pesect.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of pesect.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of pesect.obj</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <MASM Include="windows\StdLibx64.asm">
+      <FileType>Text</FileType>
+    </MASM>
+    <CustomBuild Include="windows\gshandler.rsp">
+      <FileType>Text</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of gshandler.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of gshandler.obj</Message>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
