@@ -58,6 +58,7 @@
     <None Include="include\iterator">
       <Filter>Header Files\stl</Filter>
     </None>
+    <None Include="windows\crt0dat.rsp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ostream">

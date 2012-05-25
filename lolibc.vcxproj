@@ -661,6 +661,7 @@
     <None Include="include\iterator" />
     <None Include="include\limits" />
     <None Include="ReadMe.txt" />
+    <None Include="windows\crt0dat.rsp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
