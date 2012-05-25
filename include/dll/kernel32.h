@@ -33,7 +33,7 @@ extern "C" {
 
 //----------------------------------------- Function declarations -------------------------------------------
 WINBASEAPI int WINAPI		Beep( __in  uint32_t dwFreq, __in  uint32_t dwDuration	);
-WINBASEAPI void WINAPI		FreeLibrary( __in uint32_t libraryHandle );
+WINBASEAPI void WINAPI		FreeLibrary( __in intptr_t libraryHandle );
 WINBASEAPI intptr_t WINAPI	GetStdHandle( __in uint32_t nStdHandle );
 WINBASEAPI void WINAPI		InitializeCriticalSection( LPCRITICAL_SECTION lpCriticalSection );
 WINBASEAPI intptr_t WINAPI	LoadLibraryA( __in const char *moduleName );

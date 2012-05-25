@@ -177,53 +177,53 @@ int __cdecl _XcptFilter(_In_ unsigned long _ExceptionNum, _In_ struct _EXCEPTION
 
 /*!
 \brief The code in mainCRTStartup that was executed before executing C
-       initializers was shifted in this function. Also this function is the
-       first thing that is executed in c init section.
+	   initializers was shifted in this function. Also this function is the
+	   first thing that is executed in c init section.
 */
 static int __cdecl pre_c_init(void)
 {
-    /*
-     * Set __app_type properly
-     */
+	/*
+	 * Set __app_type properly
+	 */
 #ifdef _WINMAIN_
-    __set_app_type(_GUI_APP);
+	__set_app_type(_GUI_APP);
 #else  /* _WINMAIN_ */
-    __set_app_type(_CONSOLE_APP);
+	__set_app_type(_CONSOLE_APP);
 #endif  /* _WINMAIN_ */
 
-    /*
-     * Mark this module as an EXE file so that atexit/_onexit
-     * will do the right thing when called, including for C++
-     * d-tors.
-     */
+	/*
+	 * Mark this module as an EXE file so that atexit/_onexit
+	 * will do the right thing when called, including for C++
+	 * d-tors.
+	 */
 	__onexitbegin = __onexitend = (_PVFV *)(-1);
 
-    /*
-     * Propagate the _fmode and _commode variables to the DLL
-     */
-    *_IMP___FMODE = _fmode;
-    *_IMP___COMMODE = _commode;
+	/*
+	 * Propagate the _fmode and _commode variables to the DLL
+	 */
+	*_IMP___FMODE = _fmode;
+	*_IMP___COMMODE = _commode;
 
 #ifdef _M_IX86
-    /*
-     * Set the local copy of the Pentium FDIV adjustment flag
-     */
+	/*
+	 * Set the local copy of the Pentium FDIV adjustment flag
+	 */
 
-    // _adjust_fdiv = * _imp___adjust_fdiv;
+	// _adjust_fdiv = * _imp___adjust_fdiv;
 #endif  /* _M_IX86 */
 
-    /*
-     * Run the RTC initialization code for this DLL
-     */
+	/*
+	 * Run the RTC initialization code for this DLL
+	 */
 #ifdef _RTC
-    _RTC_Initialize();
+	_RTC_Initialize();
 #endif  /* _RTC */
 
-    /*
-     * Call _setargv(), which will trigger a call to __setargv() if
-     * SETARGV.OBJ is linked with the EXE.  If SETARGV.OBJ is not
-     * linked with the EXE, a dummy _setargv() will be called.
-     */
+	/*
+	 * Call _setargv(), which will trigger a call to __setargv() if
+	 * SETARGV.OBJ is linked with the EXE.  If SETARGV.OBJ is not
+	 * linked with the EXE, a dummy _setargv() will be called.
+	 */
 //#ifdef WPRFLAG
 //    _wsetargv();
 //#else  /* WPRFLAG */
@@ -231,16 +231,16 @@ static int __cdecl pre_c_init(void)
 //#endif  /* WPRFLAG */
 
 #if 0
-    /* If the user has supplied a _matherr routine then set * __pusermatherr to point to it. */
-    if ( !__defaultmatherr )
-        __setusermatherr(_matherr);
+	/* If the user has supplied a _matherr routine then set * __pusermatherr to point to it. */
+	if ( !__defaultmatherr )
+		__setusermatherr(_matherr);
 #endif
 
 #ifdef _M_IX86
 	_controlfp(_PC_53, _MCW_PC);
 #endif  /* _M_IX86 */
 
-    return 0;
+	return 0;
 }
 
 /*!
@@ -251,28 +251,28 @@ is the first thing that is executed in C++ init section.
 static void __cdecl pre_cpp_init(void)
 {
 #ifdef _RTC
-    atexit(_RTC_Terminate);
+	atexit(_RTC_Terminate);
 #endif  /* _RTC */
 
-    /*
-     * Get the arguments for the call to main. Note this must be
-     * done explicitly, rather than as part of the dll's
-     * initialization, to implement optional expansion of wild
-     * card chars in filename args
-     */
+	/*
+	 * Get the arguments for the call to main. Note this must be
+	 * done explicitly, rather than as part of the dll's
+	 * initialization, to implement optional expansion of wild
+	 * card chars in filename args
+	 */
 
-    startinfo.newmode = 0; // _newmode;
+	startinfo.newmode = 0; // _newmode;
 
 #ifdef _UNICODE
-    argret = __wgetmainargs(&__argc, &__wargv, &envp, 0 /* _dowildcard */, &startinfo);
+	argret = __wgetmainargs(&__argc, &__wargv, &envp, 0 /* _dowildcard */, &startinfo);
 #else  /* !_UNICODE */
 //    argret = __getmainargs(__p___argc(), __p___argv(), &envp, 0 /* _dowildcard */, &startinfo);
 	argret = __getmainargs(&__argc, &__argv, &envp, 0 /* _dowildcard */, &startinfo);
 #endif  /* _UNICODE */
 
 #ifndef _SYSCRT
-    if (argret < 0)
-        _amsg_exit(_RT_SPACEARG);
+	if (argret < 0)
+		_amsg_exit(_RT_SPACEARG);
 #endif  /* _SYSCRT */
 }
 
@@ -285,7 +285,7 @@ extern HINSTANCE ghInstance;
 \brief This is the external wrapper to our startup code.
 
 This routine can be one of several different names:
-    Function:					User entry:
+	Function:					User entry:
 	mainCRTStartup(void)		main
 	wmainCRTStartup(void)		wmain
 	WinMainCRTStartup(void)		WinMain
@@ -315,8 +315,8 @@ int __declspec(noinline) mainCRTStartup(
 #endif  /* _UNICODE */
 
 #endif  /* _WINMAIN_ */
-        void
-        )
+		void
+		)
 {
 	/*
 	* The /GS security cookie must be initialized before any exception
@@ -329,135 +329,135 @@ int __declspec(noinline) mainCRTStartup(
 	//ghInstance = (HINSTANCE)&__ImageBase;
 
 #ifdef _WINMAIN_
-        TCHAR *lpszCommandLine;
-        STARTUPINFO StartupInfo;
-        BOOL inDoubleQuote=FALSE;
+		TCHAR *lpszCommandLine;
+		STARTUPINFO StartupInfo;
+		BOOL inDoubleQuote=FALSE;
 
-        __try {
-           /* Note: MSDN specifically notes that GetStartupInfo returns no error, and throws unspecified SEH if it fails, so
-              the very general exception handler below is appropriate. */
-            GetStartupInfo( &StartupInfo );
-        } __except(EXCEPTION_EXECUTE_HANDLER) {
-            return 255;
-        }
+		__try {
+		   /* Note: MSDN specifically notes that GetStartupInfo returns no error, and throws unspecified SEH if it fails, so
+			  the very general exception handler below is appropriate. */
+			GetStartupInfo( &StartupInfo );
+		} __except(EXCEPTION_EXECUTE_HANDLER) {
+			return 255;
+		}
 #endif  /* _WINMAIN_ */
 
 
-        /*
-         * Guard the initialization code and the call to user's main, or
-         * WinMain, function in a __try/__except statement.
-         */
+		/*
+		 * Guard the initialization code and the call to user's main, or
+		 * WinMain, function in a __try/__except statement.
+		 */
 
-        __try
-        {
+		__try
+		{
 		   /*
-             * Do runtime startup initializers.
-             *
-             * Note: the only possible entry we'll be executing here is for
-             * __lconv_init, pulled in from charmax.obj only if the EXE was
-             * compiled with -J.  All other .CRT$XI* initializers are only
-             * run as part of the CRT itself, and so for the CRT DLL model
-             * are not found in the EXE.  For that reason, we call _initterm,
-             * not _initterm_e, because __lconv_init will never return failure,
-             * and _initterm_e is not exported from the CRT DLL.
-             *
-             * Note further that, when using the CRT DLL, executing the
-             * .CRT$XI* initializers is only done for an EXE, not for a DLL
-             * using the CRT DLL.  That is to make sure the -J setting for
-             * the EXE is not overridden by that of any DLL.
-            */
+			 * Do runtime startup initializers.
+			 *
+			 * Note: the only possible entry we'll be executing here is for
+			 * __lconv_init, pulled in from charmax.obj only if the EXE was
+			 * compiled with -J.  All other .CRT$XI* initializers are only
+			 * run as part of the CRT itself, and so for the CRT DLL model
+			 * are not found in the EXE.  For that reason, we call _initterm,
+			 * not _initterm_e, because __lconv_init will never return failure,
+			 * and _initterm_e is not exported from the CRT DLL.
+			 *
+			 * Note further that, when using the CRT DLL, executing the
+			 * .CRT$XI* initializers is only done for an EXE, not for a DLL
+			 * using the CRT DLL.  That is to make sure the -J setting for
+			 * the EXE is not overridden by that of any DLL.
+			*/
 			pre_c_init();
 			_initterm( (_PVFV*)__xi_a, (_PVFV *)__xi_z );
 
 			pre_cpp_init();
-            // Do C++ constructors (initializers) specific to this EXE
-            _initterm( __xc_a, __xc_z );
+			// Do C++ constructors (initializers) specific to this EXE
+			_initterm( __xc_a, __xc_z );
 
-            /*
-             * If we have any dynamically initialized __declspec(thread)
-             * variables, then invoke their initialization for the primary
-             * thread used to start the process, by calling __dyn_tls_init
-             * through a callback defined in tlsdyn.obj.
-             */
-            if (__dyn_tls_init_callback != NULL
-                /* && LoPeIsNonwritableInCurrentImage((PBYTE)&__ImageBase,(PBYTE)&__dyn_tls_init_callback) */)
-            {
-                __dyn_tls_init_callback(NULL, DLL_THREAD_ATTACH, NULL);
-            }
+			/*
+			 * If we have any dynamically initialized __declspec(thread)
+			 * variables, then invoke their initialization for the primary
+			 * thread used to start the process, by calling __dyn_tls_init
+			 * through a callback defined in tlsdyn.obj.
+			 */
+			if (__dyn_tls_init_callback != NULL
+				/* && LoPeIsNonwritableInCurrentImage((PBYTE)&__ImageBase,(PBYTE)&__dyn_tls_init_callback) */)
+			{
+				__dyn_tls_init_callback(NULL, DLL_THREAD_ATTACH, NULL);
+			}
 
-            /* Enable buffer count checking if linking against static lib */
+			/* Enable buffer count checking if linking against static lib */
 #ifndef _DEBUG
-            _CrtSetCheckCount(TRUE);
+			_CrtSetCheckCount(TRUE);
 #endif
 
 #ifdef _WINMAIN_
-            /*
-             * Skip past program name (first token in command line).
-             * Check for and handle quoted program name.
-             */
+			/*
+			 * Skip past program name (first token in command line).
+			 * Check for and handle quoted program name.
+			 */
 #ifdef _UNICODE
-            /* OS may not support "W" flavors */
-            if (_wcmdln == NULL)
-                return 255;
-            lpszCommandLine = _wcmdln;
+			/* OS may not support "W" flavors */
+			if (_wcmdln == NULL)
+				return 255;
+			lpszCommandLine = _wcmdln;
 #else  /* _UNICODE */
-            lpszCommandLine = _acmdln;
+			lpszCommandLine = _acmdln;
 #endif  /* _UNICODE */
 
-            while ( (*lpszCommandLine > SPACECHAR) || (*lpszCommandLine && inDoubleQuote) )
+			while ( (*lpszCommandLine > SPACECHAR) || (*lpszCommandLine && inDoubleQuote) )
 			{
-                // Flip the count from 1 to 0 or 0 to 1 if current character is DOUBLEQUOTE.
-                if (*lpszCommandLine==DQUOTECHAR) inDoubleQuote=!inDoubleQuote;
+				// Flip the count from 1 to 0 or 0 to 1 if current character is DOUBLEQUOTE.
+				if (*lpszCommandLine==DQUOTECHAR) inDoubleQuote=!inDoubleQuote;
 #ifdef _MBCS
-                if (_ismbblead(*lpszCommandLine))
+				if (_ismbblead(*lpszCommandLine))
 				{
-                    if (lpszCommandLine)
+					if (lpszCommandLine)
 					{
-                        lpszCommandLine++;
-                    }
-                }
+						lpszCommandLine++;
+					}
+				}
 #endif  /* _MBCS */
-                ++lpszCommandLine;
-            }
+				++lpszCommandLine;
+			}
 
-            /*
-             * Skip past any white space preceding the second token.
-             */
-            while ( *lpszCommandLine && (*lpszCommandLine <= SPACECHAR) )
+			/*
+			 * Skip past any white space preceding the second token.
+			 */
+			while ( *lpszCommandLine && (*lpszCommandLine <= SPACECHAR) )
 			{
-                lpszCommandLine++;
-            }
+				lpszCommandLine++;
+			}
 
 #ifdef _UNICODE
-            mainret = wWinMain(
+			mainret = wWinMain(
 #else   /* !_UNICODE */
-            mainret = WinMain(
+			mainret = WinMain(
 #endif  /* _UNICODE */
-                       (HINSTANCE)&__ImageBase, NULL, lpszCommandLine,
+					   (HINSTANCE)&__ImageBase, NULL, lpszCommandLine,
 					   StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT );
 #else   /* _WINMAIN_ */
 
 #ifdef _UNICODE
-            __winitenv = envp;
-            mainret = wmain(__argc, __wargv, envp);
+			__winitenv = envp;
+			mainret = wmain(__argc, __wargv, envp);
 #else   /* !_UNICODE */
-            __initenv = envp;
-            mainret = main(*__p___argc(), *__p___argv(), envp);
+			__initenv = envp;
+			mainret = main(*__p___argc(), *__p___argv(), envp);
 #endif  /* _UNICODE */
 
 #endif  /* _WINMAIN_ */
 
-            exit(mainret);
-        }
-        __except ( _XcptFilter(GetExceptionCode(), GetExceptionInformation()) )
-        {
-            // Should never reach here
-            mainret = GetExceptionCode();
+			exit(mainret);
+		}
+		__except ( _XcptFilter(GetExceptionCode(), GetExceptionInformation()) )
+		{
+			// Should never reach here
+			mainret = GetExceptionCode();
 			// Just exit with exception code
-             _exit(mainret);
-        } /* end of try - except */
+			 _exit(mainret);
+		} /* end of try - except */
 
-        return mainret;
+		return mainret;
 }
 
 #endif  /* CRTDLL */
