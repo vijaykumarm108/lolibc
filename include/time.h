@@ -33,6 +33,7 @@ extern "C" {
 	};
 
 	_CRTIMP clock_t __cdecl clock(void);
+	_CRTIMP struct tm * localtime (const time_t *time);
 	_CRTIMP __time32_t mktime( struct tm *timeptr );
 	_CRTIMP __time32_t time ( __time32_t * timer );
 	int utime (const char *filename, const struct utimbuf *times);	// in StdLibC.c

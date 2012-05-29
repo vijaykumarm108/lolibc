@@ -23,6 +23,7 @@ _CRTIMP void * __cdecl		realloc(void *ptr, size_t size);
 _CRTIMP void				srand (unsigned int seed);
 _CRTIMP double __cdecl		strtod ( const char * str, char ** endptr );
 _CRTIMP long int __cdecl	strtol ( const char * str, char ** endptr, int base );
+int64_t	__cdecl				strtoll ( const char * str, char **tailptr, int base);
 
 #ifdef __cplusplus
 };

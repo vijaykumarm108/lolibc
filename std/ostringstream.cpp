@@ -56,30 +56,30 @@ namespace std {
 	}
 
 	/// Generates a sprintf format string for the given type.
-	void ostringstream::fmtstring (char* fmt, const char* typestr, bool bInteger) const
+	void ostringstream::fmtstring (char* format, const char* typestr, bool bInteger) const
 	{
-		*fmt++ = '%';
+		*format++ = '%';
 		if (m_Width)
-			fmt = encode_dec (fmt, m_Width);
+			format = encode_dec (format, m_Width);
 		if (m_Flags & left)
-			*fmt++ = '-';
+			*format++ = '-';
 		if (!bInteger) {
-			*fmt++ = '.';
-			fmt = encode_dec (fmt, m_Precision);
+			*format++ = '.';
+			format = encode_dec (format, m_Precision);
 		}
 		while (*typestr)
-			*fmt++ = *typestr++;
+			*format++ = *typestr++;
 		if (bInteger)
 		{
 			if (m_Base == 16)
-				fmt[-1] = 'X';
+				format[-1] = 'X';
 			else if (m_Base == 8)
-				fmt[-1] = 'o';
+				format[-1] = 'o';
 		} else {
 			if (m_Flags & scientific)
-				fmt[-1] = 'E';
+				format[-1] = 'E';
 		}
-		*fmt = 0;
+		*format = 0;
 	}
 
 	/// Writes \p v into the stream as utf8

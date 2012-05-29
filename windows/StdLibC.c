@@ -28,12 +28,12 @@ $URL:  $
 #endif
 #define _TICORE
 //#include <typeinfo.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
 
 #define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
 #include <errno.h>
 #include <float.h>
 #include <time.h>
@@ -156,7 +156,7 @@ void __cdecl _invalid_parameter_noinfo()
 
 }
 
-_CRTIMP _CONST_RETURN wchar_t * __cdecl wcsrchr(_In_z_ const wchar_t * str,  wchar_t ch)
+_CRTIMP wchar_t * __cdecl wcsrchr(_In_z_ const wchar_t * str,  wchar_t ch)
 {
 	wchar_t *start = (wchar_t *)str;
 	while (*str++)                       /* find end of string */
@@ -164,7 +164,7 @@ _CRTIMP _CONST_RETURN wchar_t * __cdecl wcsrchr(_In_z_ const wchar_t * str,  wch
 	/* search towards front */
 	while (--str != start && *str != (wchar_t)ch);
 	if (*str == (wchar_t)ch)             /* wchar_t found ? */
-		return (_CONST_RETURN wchar_t * )str;
+		return (wchar_t * )str;
 	return NULL;
 }
 
@@ -178,12 +178,12 @@ errno_t _controlfp_s( unsigned int *currentControl, unsigned int newControl, uns
 
 errno_t _wfopen_s( FILE** pFile, const wchar_t *filename, const wchar_t *mode )
 {
+	_CRTIMP	FILE *_wfopen( const wchar_t *filename, const wchar_t *mode );
 	if( !pFile || !filename || !mode )
 		return EINVAL;
 	*pFile = _wfopen( filename, mode );
 	return 0;
 }
-
 
 errno_t fopen_s( FILE** pFile, const char *filename, const char *mode )
 {
@@ -195,6 +195,7 @@ errno_t fopen_s( FILE** pFile, const char *filename, const char *mode )
 
 errno_t _gmtime64_s( struct tm* _tm, const __time64_t* time )
 {
+	_CRTIMP struct tm *_gmtime64( const __time64_t *timer );
 	if( !_tm || !time || (*time < 0) )
 		return EINVAL;
 	*_tm = *_gmtime64( time );
@@ -203,6 +204,7 @@ errno_t _gmtime64_s( struct tm* _tm, const __time64_t* time )
 
 int _stat64i32( const char *path, struct _stat64i32 *buffer )
 {
+	_CRTIMP int _stat64( const char *path, struct __stat64 *buffer );
 	int	iRetVal;
 	struct _stat64 s64;
 	if( (iRetVal = _stat64( path, &s64 )) == 0 )
@@ -224,6 +226,7 @@ int _stat64i32( const char *path, struct _stat64i32 *buffer )
 
 int _wstat64i32( const wchar_t *path, struct _stat64i32 *buffer )
 {
+	_CRTIMP int _wstat64( const wchar_t *path, struct __stat64 *buffer );
 	int	iRetVal;
 	struct _stat64 s64;
 	if( (iRetVal = _wstat64( path, &s64 )) == 0 )
@@ -245,6 +248,7 @@ int _wstat64i32( const wchar_t *path, struct _stat64i32 *buffer )
 
 errno_t _wdupenv_s( wchar_t **buffer, size_t *numberOfElements, const wchar_t *varname )
 {
+	_CRTIMP wchar_t *_wgetenv( const wchar_t *varname );
 	wchar_t	*temp;
 	if( !buffer || !numberOfElements || !varname )
 		return EINVAL;
@@ -261,6 +265,7 @@ errno_t _wdupenv_s( wchar_t **buffer, size_t *numberOfElements, const wchar_t *v
 
 int vswprintf_s( wchar_t *buffer, size_t numberOfElements, const wchar_t *format, va_list argptr )
 {
+	_CRTIMP int _vsnwprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
 	if( !buffer || (numberOfElements <= 0) || !format )
 	{
 		errno = EINVAL;
@@ -271,6 +276,7 @@ int vswprintf_s( wchar_t *buffer, size_t numberOfElements, const wchar_t *format
 
 int vsprintf_s( char *buffer, size_t numberOfElements, const char *format, va_list argptr )
 {
+	_CRTIMP int _vsnprintf(	char *buffer, size_t count,	const char *format,	va_list argptr );
 	if( !buffer || (numberOfElements <= 0) || !format )
 	{
 		errno = EINVAL;
@@ -398,6 +404,7 @@ errno_t __cdecl wcstombs_s ( size_t *pConvertedChars, char * dst, size_t sizeInB
 
 errno_t _itoa_s( int value, char *buffer, size_t sizeInCharacters, int radix )
 {
+	_CRTIMP char *_itoa( int value,	char *str, int radix );
 	char temp[34];
 	if ( (NULL==buffer) || (sizeInCharacters<=1) || (radix<2) || (radix>36) )
 		return EINVAL;
@@ -411,6 +418,7 @@ errno_t _itoa_s( int value, char *buffer, size_t sizeInCharacters, int radix )
 
 errno_t _itow_s( int value, wchar_t *buffer, size_t sizeInCharacters, int radix )
 {
+	_CRTIMP wchar_t * _itow( int value, wchar_t *str, int radix );
 	wchar_t temp[34];
 	if ( (NULL==buffer) || (sizeInCharacters<=1) || (radix<2) || (radix>36) )
 		return EINVAL;
@@ -456,58 +464,6 @@ wchar_t *wcsncpy( wchar_t *strDest, const wchar_t *strSource, size_t count )
 	return lstrcpynW( strDest, strSource, (int)count );
 }
 
-int _wfindnexti64( intptr_t handle, struct _wfinddata64_t *fileinfo );
-
-int _wfindnext64i32( intptr_t handle, struct _wfinddata64i32_t *fileinfo )
-{
-	struct _wfinddata64_t	f;
-	int retval = _wfindnexti64( handle, &f );
-	fileinfo->attrib = f.attrib;
-	fileinfo->size = (_fsize_t)f.size;
-	fileinfo->time_access = f.time_access;
-	fileinfo->time_create = f.time_create;
-	fileinfo->time_write = f.time_write;
-	wcsncpy( fileinfo->name, f.name, MAX_PATH );
-	return retval;
-}
-
-intptr_t _wfindfirst64i32( const wchar_t *filespec, struct _wfinddata64i32_t *fileinfo )
-{
-	struct _wfinddata64_t	f;
-	intptr_t retval = _wfindfirsti64( filespec, &f );
-	if(retval != -1)
-	{
-		fileinfo->attrib = f.attrib;
-		fileinfo->size = (_fsize_t)f.size;
-		fileinfo->time_access = f.time_access;
-		fileinfo->time_create = f.time_create;
-		fileinfo->time_write = f.time_write;
-		wcsncpy( fileinfo->name, f.name, MAX_PATH );
-	}
-	return retval;
-}
-
-int _fstat64i32( int fd, struct _stat64i32 *buffer )
-{
-	struct _stat64 s;
-	int retval = _fstati64( fd, &s );
-	if(!retval )
-	{
-		buffer->st_atime = s.st_atime;
-		buffer->st_ctime = s.st_ctime;
-		buffer->st_dev = s.st_dev;
-		buffer->st_gid = s.st_gid;
-		buffer->st_ino = s.st_ino;
-		buffer->st_mode = s.st_mode;
-		buffer->st_mtime = s.st_mtime;
-		buffer->st_nlink = s.st_nlink;
-		buffer->st_rdev = s.st_rdev;
-		buffer->st_size = (_off_t)s.st_size;
-		buffer->st_uid = s.st_uid;
-	}
-	return retval;
-}
-
 void Utf8ToUtf16( const char *input, wchar_t *output, int maxLength )
 {
 	MultiByteToWideChar( CP_UTF8, 0, input, -1, output, maxLength );
@@ -531,6 +487,7 @@ FILE * fopen ( const char * fileName, const char * mode )
 // Utf-8 version of fopen
 FILE * __cdecl freopen ( const char * fileName, const char * mode, FILE *stream )
 {
+	_CRTIMP FILE *_wfreopen( const wchar_t *path, const wchar_t *mode, FILE *stream );
 	wchar_t	path[512];
 	wchar_t wmode[20];
 	Utf8ToUtf16( fileName, path, _countof(path));
@@ -538,8 +495,10 @@ FILE * __cdecl freopen ( const char * fileName, const char * mode, FILE *stream 
 	return _wfreopen( path, wmode, stream ); 
 }
 
+/// Deletes the UTF-8 file designated by the path \p fileName
 int remove( const char *fileName )
 {
+	_CRTIMP int _wremove( const wchar_t *path );
 	wchar_t	path[512];
 	Utf8ToUtf16( fileName, path, _countof(path));
 	return _wremove(path);
@@ -592,6 +551,24 @@ __int64 fseeko64 (FILE *stream, __int64 offset, int whence)
 {
 	_CRTIMP __int64 _lseeki64( int fd, __int64 offset, int origin );
 	return _lseeki64(stream->_file, offset, whence );
+}
+
+/// UTF-8 version of access
+int access (const char *filename, int how)
+{
+	_CRTIMP int _waccess( const wchar_t *path, int mode );
+	wchar_t wpath[512];
+	Utf8ToUtf16( filename, wpath, _countof(wpath));
+	return _waccess( wpath, how );
+}
+
+/// Utf-8 version of stat
+int stat (const char *filename, struct stat *buf)
+{
+	_CRTIMP int _wstat(	const wchar_t *path, struct stat *buffer );
+	wchar_t wpath[512];
+	Utf8ToUtf16( filename, wpath, _countof(wpath));
+	return _wstat(wpath,buf);
 }
 
 // Debug requirement

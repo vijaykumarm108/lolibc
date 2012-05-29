@@ -288,6 +288,9 @@
     <ClInclude Include="include\unistd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\sys\socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -394,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="windows\psapi.cpp">
       <Filter>Source Files\dll</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\nonstandard.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -145,27 +145,14 @@ __inline int __cdecl fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat)
 	_CRTIMP int __cdecl _fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat);
 	return _fstat64(_FileDes,_Stat);
 }
+int stat (const char *filename, struct stat *buf); // In StdLibC.c
 #else
 _CRTIMP int __cdecl fstat(_In_ int _FileDes, _Out_ struct stat * _Stat);
 _CRTIMP int __cdecl fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat);
+_CRTIMP int stat (const char *filename, struct stat *buf);
+_CRTIMP int __cdecl stat64(_In_z_ const char * _Name, _Out_ struct _stat64 * _Stat);
 #endif
 
-_CRTIMP int __cdecl _stat32(_In_z_ const char * _Name, _Out_ struct _stat32 * _Stat);
-_CRTIMP int __cdecl _stat32i64(_In_z_ const char * _Name, _Out_ struct _stat32i64 * _Stat);
-_CRTIMP int __cdecl _stat64i32(_In_z_ const char * _Name, _Out_ struct _stat64i32 * _Stat);
-_CRTIMP int __cdecl _stat64(_In_z_ const char * _Name, _Out_ struct _stat64 * _Stat);
-
-#ifndef _WSTAT_DEFINED
-
-/* also declared in wchar.h */
-
-_CRTIMP int __cdecl _wstat32(_In_z_ const wchar_t * _Name, _Out_ struct _stat32 * _Stat);
-_CRTIMP int __cdecl _wstat32i64(_In_z_ const wchar_t * _Name, _Out_ struct _stat32i64 * _Stat);
-_CRTIMP int __cdecl _wstat64i32(_In_z_ const wchar_t * _Name, _Out_ struct _stat64i32 * _Stat);
-_CRTIMP int __cdecl _wstat64(_In_z_ const wchar_t * _Name, _Out_ struct _stat64 * _Stat);
-
-#define _WSTAT_DEFINED
-#endif  /* _WSTAT_DEFINED */
 
 #if !__STDC__
 

@@ -12,9 +12,9 @@ using namespace std;
 
 namespace lo {
 
-	cblocklink::cblocklink (const void* p, size_type n)	: m_Data (const_pointer(p)), m_Size (n)
+	cblocklink::cblocklink (const void* buffer, size_type sizeInBytes)	: m_Data (const_pointer(buffer)), m_Size (sizeInBytes)
 	{
-		assert (p || !n);
+		assert (buffer || !sizeInBytes);
 	}
 
 	cblocklink::iterator		cblocklink::iat (size_type i) const
@@ -60,7 +60,7 @@ namespace lo {
 	void cblocklink::write (ostream& os) const
 	{
 		const written_size_type sz ((written_size_type)size());
-		assert (sz == size() && "No support for writing memblocks larger than 4G");
+		assert (sz == size() && "No support for writing blocks larger than 4GB");
 		os << sz;
 		os.write (cdata(), sz);
 		os.align (alignof (sz));
@@ -79,7 +79,7 @@ namespace lo {
 		return (Align (stream_size_of (sz) + sz, alignof(sz)));
 	}
 
-	/// Writes the data to file \p "filename".
+	/// Writes the data to file \p "filename" with the given mode
 	void cblocklink::write_file (const char* filename, int mode) const
 	{
 		fstream f;
