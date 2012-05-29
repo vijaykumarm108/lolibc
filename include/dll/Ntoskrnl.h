@@ -40,6 +40,33 @@ namespace lo { namespace ntoskrnl {
 
 #pragma pack(pop)
 
+
+/// Service Types (Bit Mask)
+	static const uint32_t SERVICE_KERNEL_DRIVER = 0x00000001;
+	static const uint32_t SERVICE_FILE_SYSTEM_DRIVER = 0x00000002;
+	static const uint32_t SERVICE_ADAPTER = 0x00000004;
+	static const uint32_t SERVICE_RECOGNIZER_DRIVER = 0x00000008;
+	static const uint32_t SERVICE_DRIVER = (SERVICE_KERNEL_DRIVER | SERVICE_FILE_SYSTEM_DRIVER | SERVICE_RECOGNIZER_DRIVER);
+
+	static const uint32_t SERVICE_WIN32_OWN_PROCESS = 0x00000010;
+	static const uint32_t SERVICE_WIN32_SHARE_PROCESS = 0x00000020;
+	static const uint32_t SERVICE_WIN32 = (SERVICE_WIN32_OWN_PROCESS | SERVICE_WIN32_SHARE_PROCESS);
+	static const uint32_t SERVICE_INTERACTIVE_PROCESS = 0x00000100;
+	static const uint32_t SERVICE_TYPE_ALL = (SERVICE_WIN32 | SERVICE_ADAPTER | SERVICE_DRIVER | SERVICE_INTERACTIVE_PROCESS);
+
+/// Service Start Type
+	static const uint32_t SERVICE_BOOT_START     = 0x00000000;
+	static const uint32_t SERVICE_SYSTEM_START   = 0x00000001;
+	static const uint32_t SERVICE_AUTO_START     = 0x00000002;
+	static const uint32_t SERVICE_DEMAND_START   = 0x00000003;
+	static const uint32_t SERVICE_DISABLED       = 0x00000004;
+
+/// Error control type
+	static const uint32_t SERVICE_ERROR_IGNORE   = 0x00000000;
+	static const uint32_t SERVICE_ERROR_NORMAL   = 0x00000001;
+	static const uint32_t SERVICE_ERROR_SEVERE   = 0x00000002;
+	static const uint32_t SERVICE_ERROR_CRITICAL = 0x00000003;
+
 #ifdef __cplusplus
 } } // end namespace lo::ntoskrnl
 

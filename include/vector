@@ -102,160 +102,155 @@ namespace std {
 template <typename T>
 inline void vector<T>::reserve (size_type n, bool bExact)
 {
-    const size_type oldCapacity = m_Data.capacity() - m_Data.capacity() % sizeof(T);
-    m_Data.reserve (n * sizeof(T), bExact);
-    construct (iterator (m_Data.begin() + oldCapacity), iterator (m_Data.begin() + m_Data.capacity()));
+	const size_type oldCapacity = m_Data.capacity() - m_Data.capacity() % sizeof(T);
+	m_Data.reserve (n * sizeof(T), bExact);
+	construct (iterator (m_Data.begin() + oldCapacity), iterator (m_Data.begin() + m_Data.capacity()));
 }
 
 /// Resizes the vector to contain \p n elements.
 template <typename T>
 inline void vector<T>::resize (size_type n, bool bExact)
 {
-    const size_type nb = n * sizeof(T);
-    if (m_Data.capacity() < nb)
+	const size_type nb = n * sizeof(T);
+	if (m_Data.capacity() < nb)
 	reserve (n, bExact);
-    m_Data.blocklink::resize (nb);
+	m_Data.blocklink::resize (nb);
 }
 
 /// Calls element destructors and frees storage.
 template <typename T>
 inline void vector<T>::deallocate (void) throw()
 {
-    destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
-    m_Data.deallocate();
+	destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
+	m_Data.deallocate();
 }
 
 /// Initializes empty vector.
 template <typename T>
-inline vector<T>::vector (void)
-: m_Data ()
+inline vector<T>::vector (void) : m_Data ()
 {
 }
 
 /// Initializes a vector of size \p n.
 template <typename T>
-inline vector<T>::vector (size_type n)
-: m_Data ()
+inline vector<T>::vector (size_type n) : m_Data ()
 {
-    resize (n);
+	resize (n);
 }
 
 /// Copies \p n elements from \p v.
 template <typename T>
-vector<T>::vector (size_type n, const T& v)
-: m_Data ()
+vector<T>::vector (size_type n, const T& v) : m_Data ()
 {
-    resize (n);
-    ::lo::std::fill (begin(), end(), v);
+	resize (n);
+	::std::fill (begin(), end(), v);
 }
 
 /// Copies \p v.
 template <typename T>
-vector<T>::vector (const vector<T>& v)
-: m_Data ()
+vector<T>::vector (const vector<T>& v) : m_Data ()
 {
-    resize (v.size());
-    ::lo::std::copy (v.begin(), v.end(), begin());
+	resize (v.size());
+	::std::copy (v.begin(), v.end(), begin());
 }
 
 /// Copies range [\p i1, \p i2]
 template <typename T>
-vector<T>::vector (const_iterator i1, const_iterator i2)
-: m_Data ()
+vector<T>::vector (const_iterator i1, const_iterator i2) : m_Data ()
 {
-    resize (distance (i1, i2));
-    ::lo::std::copy (i1, i2, begin());
+	resize (distance (i1, i2));
+	::std::copy (i1, i2, begin());
 }
 
 /// Destructor
 template <typename T>
 inline vector<T>::~vector (void) throw()
 {
-    destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
+	destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
 }
 
 /// Copies the range [\p i1, \p i2]
 template <typename T>
 inline void vector<T>::assign (const_iterator i1, const_iterator i2)
 {
-    assert (i1 <= i2);
-    resize (distance (i1, i2));
-    ::lo::std::copy (i1, i2, begin());
+	assert (i1 <= i2);
+	resize (distance (i1, i2));
+	::std::copy (i1, i2, begin());
 }
 
 /// Copies \p n elements with value \p v.
 template <typename T>
 inline void vector<T>::assign (size_type n, const T& v)
 {
-    resize (n);
-    ::lo::std::fill (begin(), end(), v);
+	resize (n);
+	::std::fill (begin(), end(), v);
 }
 
 /// Copies contents of \p v.
 template <typename T>
 inline const vector<T>& vector<T>::operator= (const vector<T>& v)
 {
-    assign (v.begin(), v.end());
-    return (*this);
+	assign (v.begin(), v.end());
+	return (*this);
 }
 
 /// Inserts \p n uninitialized elements at \p ip.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::insert_space (iterator ip, size_type n)
 {
-    const uoff_t ipmi = distance (m_Data.begin(), block::iterator(ip));
-    reserve (size() + n, false);
-    return (iterator (m_Data.insert (m_Data.iat(ipmi), n * sizeof(T))));
+	const uoff_t ipmi = distance (m_Data.begin(), block::iterator(ip));
+	reserve (size() + n, false);
+	return (iterator (m_Data.insert (m_Data.iat(ipmi), n * sizeof(T))));
 }
 
 /// Inserts \p n elements with value \p v at offsets \p ip.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::insert (iterator ip, size_type n, const T& v)
 {
-    ip = insert_space (ip, n);
-    ::lo::std::fill (ip, ip + n, v);
-    return (ip);
+	ip = insert_space (ip, n);
+	::std::fill (ip, ip + n, v);
+	return (ip);
 }
 
 /// Inserts value \p v at offset \p ip.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::insert (iterator ip, const T& v)
 {
-    *(ip = insert_space (ip, 1)) = v;
-    return (ip);
+	*(ip = insert_space (ip, 1)) = v;
+	return (ip);
 }
 
 /// Inserts range [\p i1, \p i2] at offset \p ip.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::insert (iterator ip, const_iterator i1, const_iterator i2)
 {
-    assert (i1 <= i2);
-    ip = insert_space (ip, distance (i1, i2));
-    ::lo::std::copy (i1, i2, ip);
-    return (ip);
+	assert (i1 <= i2);
+	ip = insert_space (ip, distance (i1, i2));
+	::std::copy (i1, i2, ip);
+	return (ip);
 }
 
 /// Removes \p count elements at offset \p ep.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::erase (iterator ep, size_type n)
 {
-    return (iterator (m_Data.erase (block::iterator(ep), n * sizeof(T))));
+	return (iterator (m_Data.erase (block::iterator(ep), n * sizeof(T))));
 }
 
 /// Removes elements from \p ep1 to \p ep2.
 template <typename T>
 inline typename vector<T>::iterator vector<T>::erase (iterator ep1, iterator ep2)
 {
-    assert (ep1 <= ep2);
-    return (erase (ep1, distance(ep1, ep2)));
+	assert (ep1 <= ep2);
+	return (erase (ep1, distance(ep1, ep2)));
 }
 
 /// Inserts value \p v at the end of the vector.
 template <typename T>
 inline void vector<T>::push_back (const T& v)
 {
-    resize (size() + 1, false);
-    back() = v;
+	resize (size() + 1, false);
+	back() = v;
 }
 
 template<typename T> inline void swap (vector<T>& a, vector<T>& b) { a.swap (b); }

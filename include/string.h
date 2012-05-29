@@ -59,7 +59,7 @@ typedef unsigned short wchar_t;
 	_CRTIMP void * __cdecl		memccpy(void *, const void *, int, unsigned int);
 	int     __cdecl				memcmp(const void *, const void *, size_t);
 	void *  __cdecl				memcpy(void *, const void *, size_t);
-	inline wchar_t *			wmemcpy (wchar_t *wto, const wchar_t *wfrom, size_t size)
+	__inline wchar_t *			wmemcpy (wchar_t *wto, const wchar_t *wfrom, size_t size)
 	{
 		return (wchar_t *) memcpy (wto, wfrom, size * sizeof (wchar_t));
 	}
@@ -80,7 +80,7 @@ typedef unsigned short wchar_t;
 	_CRTIMP int     __cdecl		_strnicoll(const char *, const char *, size_t);
 	_CRTIMP size_t  __cdecl		strcspn(const char *, const char *);
 	_CRTIMP char *  __cdecl		_strdup(const char *);
-	inline char * __cdecl		strdup(const char *str)
+	__inline char * __cdecl		strdup(const char *str)
 	{
 		return _strdup(str);
 	}
@@ -106,7 +106,7 @@ _CRTIMP char * __cdecl		strlwr(char *);
 _CRTIMP int __cdecl			strnicmp(const char *, const char *, size_t);
 _CRTIMP char * __cdecl		strnset(char *, int, size_t);
 _CRTIMP char * __cdecl		strrev(char *);
-        char * __cdecl		strset(char *, int);
+		char * __cdecl		strset(char *, int);
 _CRTIMP char * __cdecl		strupr(char *);
 
 /* wide function prototypes, also declared in wchar.h  */

@@ -279,6 +279,9 @@
     <ClInclude Include="include\dll\psapidll.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
+    <ClInclude Include="include\dll\advapi32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -439,14 +442,22 @@
     <CustomBuild Include="windows\chandler.rsp">
       <Filter>Source Files\windows</Filter>
     </CustomBuild>
-    <CustomBuild Include="windows\jmpuwind.rsp" />
-    <CustomBuild Include="windows\pesect.rsp" />
-    <CustomBuild Include="windows\gshandler.rsp" />
+    <CustomBuild Include="windows\gshandler.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\jmpuwind.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\pesect.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="windows\StdLibX86.asm">
       <Filter>Source Files\windows</Filter>
     </MASM>
-    <MASM Include="windows\StdLibx64.asm" />
+    <MASM Include="windows\StdLibx64.asm">
+      <Filter>Source Files\windows</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

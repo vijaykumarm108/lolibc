@@ -1,3 +1,5 @@
+/* lolibc library
+*/
 #pragma once
 
 #ifndef _INC_FCNTL
@@ -66,15 +68,42 @@
 extern "C" {
 #endif
 
-_CRTIMP int __cdecl _close(int _FileHandle);
-int __cdecl _open( const char * _Filename, int _OpenFlag, ...);	// UTF8 version punts to _wopen
-inline int __cdecl open( const char * _Filename, int _OpenFlag, ...)
-{
-	return _open(_Filename,_OpenFlag);
-}
-_CRTIMP long __cdecl _lseek( int _FileHandle, long _Offset, int _Origin);
-_CRTIMP int __cdecl _read( int _FileHandle, void * _DstBuf, unsigned int _MaxCharCount);
-_CRTIMP int __cdecl _write( int _FileHandle, const void * _Buf, unsigned int _MaxCharCount);
+#ifdef _WIN32
+	__inline int __cdecl close(int _FileHandle)
+	{
+		_CRTIMP int __cdecl _close(int _FileHandle);
+		return _close(_FileHandle);
+	}
+	__inline off_t lseek(int fd, off_t offset, int whence)
+	{
+		_CRTIMP off_t _lseek(int fd, off_t offset, int whence);
+		return _lseek(fd,offset,whence);
+	}
+	__inline __int64 lseek64 (int filedes, __int64 offset, int whence)
+	{
+		_CRTIMP __int64 _lseeki64 (int filedes, __int64 offset, int whence);
+		return _lseeki64(filedes,offset,whence);
+	}
+	__inline int __cdecl open( const char * _Filename, int _OpenFlag, ...)
+	{
+		_CRTIMP int __cdecl _open( const char * _Filename, int _OpenFlag, ...);	// UTF8 version punts to _wopen
+		return _open(_Filename,_OpenFlag);
+	}
+	__inline int __cdecl read( int _FileHandle, void * _DstBuf, unsigned int _MaxCharCount)
+	{
+		_CRTIMP int __cdecl _read( int _FileHandle, void * _DstBuf, unsigned int _MaxCharCount);
+		return _read(_FileHandle,_DstBuf,_MaxCharCount);
+	}
+	__inline int __cdecl write( int file, const void * buffer, unsigned int bufferLength)
+	{
+		_CRTIMP int __cdecl _write( int file, const void * buffer, unsigned int bufferLength);
+		return _write(file,buffer,bufferLength);
+	}
+#else
+#error not implemented
+	_CRTIMP off_t lseek(int fd, off_t offset, int whence);
+	_CRTIMP __int64 lseek64 (int filedes, __int64 offset, int whence);
+#endif
 
 #ifdef __cplusplus
 };

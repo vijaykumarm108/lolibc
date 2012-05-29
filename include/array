@@ -10,7 +10,7 @@ std::array - Fixed arrays
 #include <iterator>
 #include <errno.h>
 
-#pragma pack(push,_CRT_PACKING)
+#pragma pack(push,8)
 #pragma warning(push,3)
 
 namespace std {

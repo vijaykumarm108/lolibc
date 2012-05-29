@@ -107,7 +107,7 @@ void fstream::close (void)
 {
     if (m_fd < 0)
 	return;	// already closed
-    while (_close(m_fd))
+    while (::close(m_fd))
 	{
 		if (errno != EINTR)
 		{
@@ -121,7 +121,7 @@ void fstream::close (void)
 /// Moves the current file position to \p n.
 off_t fstream::seek (off_t n, seekdir whence)
 {
-    off_t p = _lseek (m_fd, n, whence);
+    off_t p = lseek (m_fd, n, whence);
     if (p < 0)
 	set_and_throw (failbit, "seek");
     return (p);
@@ -130,7 +130,7 @@ off_t fstream::seek (off_t n, seekdir whence)
 /// Returns the current file position.
 off_t fstream::pos (void) const
 {
-    return (_lseek (m_fd, 0, SEEK_CUR));
+    return (lseek (m_fd, 0, SEEK_CUR));
 }
 
 /// Reads \p n bytes into \p p.
@@ -147,7 +147,7 @@ off_t fstream::readsome (void* p, off_t n)
 {
     ssize_t brn;
     do {
-		brn = _read (m_fd, p, n);
+		brn = ::read (m_fd, p, n);
 	} while ((brn < 0) & (errno == EINTR));
     if (brn > 0)
 		return (brn);
@@ -164,7 +164,7 @@ off_t fstream::write (const void* p, off_t n)
     off_t btw (n);
     while (btw) {
 		const off_t bw (n - btw);
-		ssize_t bwn = _write (m_fd, advance(p,bw), btw);
+		ssize_t bwn = ::write (m_fd, advance(p,bw), btw);
 		if (bwn > 0)
 			btw -= bwn;
 		else if (!bwn) {
@@ -220,7 +220,7 @@ int fstream::fcntl (const char* rname, int request, long argument)
 #ifdef UNIX
     int rv = _fcntl (m_fd, request, argument);
     if (rv < 0)
-	set_and_throw (failbit, rname);
+		set_and_throw (failbit, rname);
     return (rv);
 #endif
 	return 0;

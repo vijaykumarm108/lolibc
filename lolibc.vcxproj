@@ -503,6 +503,7 @@
   <ItemGroup>
     <ClInclude Include="include\assert.h" />
     <ClInclude Include="include\ctype.h" />
+    <ClInclude Include="include\dll\advapi32.h" />
     <ClInclude Include="include\dll\psapidll.h" />
     <ClInclude Include="include\fcntl.h" />
     <ClInclude Include="include\internal.h" />
@@ -610,7 +611,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(Filename).obj</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(Filename).obj</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LIB "$(VCInstallDir)lib\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LIB "$(VCInstallDir)lib\libcmt.lib" /OUT:"$(IntDir)%(Filename).obj" @%(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(IntDir)%(Filename).obj" /EXTRACT:f:\dd\vctools\crt_bld\SELF_64_amd64\crt\prebuild\build\amd64\mt_obj\_init_.obj</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LIB "$(VCInstallDir)lib\libcmt.lib" /OUT:"$(IntDir)%(Filename).obj" @%(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(IntDir)%(Filename).obj" /EXTRACT:f:\dd\vctools\crt_bld\SELF_64_amd64\crt\prebuild\build\amd64\mt_obj\_init_.obj</Command>
@@ -716,6 +717,8 @@
     </CustomBuild>
     <MASM Include="windows\StdLibx64.asm">
       <FileType>Text</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </MASM>
     <CustomBuild Include="windows\gshandler.rsp">
       <FileType>Text</FileType>
