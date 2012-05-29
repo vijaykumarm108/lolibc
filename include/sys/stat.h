@@ -134,17 +134,21 @@ struct _stat64 {
 
 
 /* Function prototypes */
-
-_CRTIMP int __cdecl _fstat(_In_ int _FileDes, _Out_ struct stat * _Stat);
-inline int __cdecl fstat(_In_ int _FileDes, _Out_ struct stat * _Stat)
+#ifdef _WIN32
+__inline int __cdecl fstat(_In_ int _FileDes, _Out_ struct stat * _Stat)
 {
+	_CRTIMP int __cdecl _fstat(_In_ int _FileDes, _Out_ struct stat * _Stat);
 	return _fstat(_FileDes,_Stat);
 }
-_CRTIMP int __cdecl _fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat);
-int __cdecl fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat)
+__inline int __cdecl fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat)
 {
+	_CRTIMP int __cdecl _fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat);
 	return _fstat64(_FileDes,_Stat);
 }
+#else
+_CRTIMP int __cdecl fstat(_In_ int _FileDes, _Out_ struct stat * _Stat);
+_CRTIMP int __cdecl fstat64(_In_ int _FileDes, _Out_ struct _stat64 * _Stat);
+#endif
 
 _CRTIMP int __cdecl _stat32(_In_z_ const char * _Name, _Out_ struct _stat32 * _Stat);
 _CRTIMP int __cdecl _stat32i64(_In_z_ const char * _Name, _Out_ struct _stat32i64 * _Stat);

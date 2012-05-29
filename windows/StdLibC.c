@@ -513,6 +513,11 @@ void Utf8ToUtf16( const char *input, wchar_t *output, int maxLength )
 	MultiByteToWideChar( CP_UTF8, 0, input, -1, output, maxLength );
 }
 
+void Utf16ToUtf8( const wchar_t *input, char *output, int maxLength )
+{
+	WideCharToMultiByte( CP_UTF8, 0, input, -1, output, maxLength, NULL, NULL );
+}
+
 // Utf-8 version of fopen
 FILE * fopen ( const char * fileName, const char * mode )
 {
@@ -538,6 +543,55 @@ int remove( const char *fileName )
 	wchar_t	path[512];
 	Utf8ToUtf16( fileName, path, _countof(path));
 	return _wremove(path);
+}
+
+/// Makes the UTF-8 \p path the current directory
+int chdir(const char *path)
+{
+	_CRTIMP int _wchdir(const wchar_t *path);
+	wchar_t	wpath[512];
+	Utf8ToUtf16( path, wpath, _countof(wpath));
+	return _wchdir(wpath);
+}
+
+/// Gets the current working directory as a utf8 \p path
+char * getcwd( char * path, int lengthOfPath )
+{
+	wchar_t * __cdecl _wgetcwd( wchar_t * wpath, int sizeInWords );
+	wchar_t	wpath[512];
+	_wgetcwd(wpath,_countof(wpath));
+	Utf16ToUtf8( wpath, path, lengthOfPath );
+	return path;
+}
+
+/// makes the directory from the utf-8 \p filename with the \b security mode
+int mkdir (const char *path, unsigned mode)
+{
+	_CRTIMP int _wmkdir(const wchar_t *dirname  );
+	wchar_t	wpath[512];
+	Utf8ToUtf16( path, wpath, _countof(wpath));
+	return _wmkdir(wpath);
+}
+
+/// Sets the file modification time for the UTF-8 \p filename
+int utime (const char *filename, const struct utimbuf *times)
+{
+	_CRTIMP int _wutime( const wchar_t *filename, const struct utimbuf *times );
+	wchar_t wpath[512];
+	Utf8ToUtf16( filename, wpath, _countof(wpath));
+	return _wutime(wpath,times);
+}
+
+__int64 ftello64(FILE *stream)
+{
+	_CRTIMP __int64 _telli64( int handle );
+	return _telli64( stream->_file);
+}
+
+__int64 fseeko64 (FILE *stream, __int64 offset, int whence)
+{
+	_CRTIMP __int64 _lseeki64( int fd, __int64 offset, int origin );
+	return _lseeki64(stream->_file, offset, whence );
 }
 
 // Debug requirement

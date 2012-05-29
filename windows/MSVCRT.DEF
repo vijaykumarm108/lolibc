@@ -1,8 +1,11 @@
 LIBRARY	MSVCRT.DLL
 EXPORTS
 	$I10_OUTPUT
+	??0exception@@QEAA@AEBQEBD@Z			; 64 bit - __cdecl exception::exception(char const * const &)
+	??0exception@@QEAA@XZ					; 64 bit - __cdecl exception::exception(void)
+	?what@exception@@UEBAPEBDXZ				; 64 bit - virtual char const * __cdecl exception::what(void)const
 	??0exception@@QEAA@AEBV0@@Z				; 64 bit - __cdecl exception::exception(class exception const &)
-	??1exception@@UEAA@XZ					; __cdecl exception::~exception(void)
+	??1exception@@UEAA@XZ					; 64 bit - __cdecl exception::~exception(void)
 	??1type_info@@UEAA@XZ					; 64 bit - virtual __cdecl type_info::~type_info(void)" ()
 	??3@YAXPEAX@Z							; 64 bit - void __cdecl operator delete(void *)" ()
 	?name@type_info@@QEBAPEBDXZ				; 64 bit - char const * __cdecl type_info::name(void)const
@@ -180,7 +183,7 @@ EXPORTS
 	_callnewh
 	_cexit
 	_cgets
-	_chdir
+	; _chdir ; replaced by the UTF-8 version of chdir in StdLibC.c
 	_chdrive
 	_chgsign
 	_chkesp
@@ -635,7 +638,7 @@ EXPORTS
 	fputws
 	fread
 	free
-	;freopen
+	;freopen - replaced by the UTF-8 version in StdLibC.c
 	frexp
 	fscanf
 	fseek
@@ -708,7 +711,7 @@ EXPORTS
 	raise
 	rand
 	realloc
-	;remove
+	;remove - UTF8 version declared in StdLibC.c
 	rename
 	rewind
 	scanf

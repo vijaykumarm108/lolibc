@@ -6,12 +6,21 @@
 extern "C" {
 #endif
 
+/* Definition of the argument values for the exit() function */
+#define EXIT_SUCCESS    0
+#define EXIT_FAILURE    1
+
+
 _CRTIMP size_t __cdecl		_msize( void *memblock );
+_CRTIMP long int atol ( const char * str );
 int __cdecl					atexit(void (__cdecl *)(void));
 _CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);
+_CRTIMP void				exit (int status);
 _CRTIMP void __cdecl		free(void *ptr);
 _CRTIMP void * __cdecl		malloc(size_t size);
+_CRTIMP int					rand (void);
 _CRTIMP void * __cdecl		realloc(void *ptr, size_t size);
+_CRTIMP void				srand (unsigned int seed);
 _CRTIMP double __cdecl		strtod ( const char * str, char ** endptr );
 _CRTIMP long int __cdecl	strtol ( const char * str, char ** endptr, int base );
 

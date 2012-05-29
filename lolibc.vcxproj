@@ -543,8 +543,10 @@
     <ClInclude Include="include\sys\stat.h" />
     <ClInclude Include="include\sys\types.h" />
     <ClInclude Include="include\tchar.h" />
+    <ClInclude Include="include\time.h" />
     <ClInclude Include="include\tuple" />
     <ClInclude Include="include\memory" />
+    <ClInclude Include="include\unistd.h" />
     <ClInclude Include="include\utility" />
     <ClInclude Include="include\ostream" />
     <ClInclude Include="include\string" />

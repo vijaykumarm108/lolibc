@@ -98,14 +98,23 @@ typedef struct _iobuf FILE;
 extern "C" {
 #endif
 
-	_CRTIMP size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
-	_CRTIMP size_t fwrite ( const void * ptr, size_t size, size_t count, FILE * stream );
-	_CRTIMP int getc ( FILE * stream );
-	_CRTIMP int getchar ( void );
-
+	_CRTIMP int		fclose ( FILE * stream );
+	_CRTIMP int		feof (FILE *stream);
+	_CRTIMP int		ferror (FILE *stream);
+	_CRTIMP FILE *	fopen ( const char * filename, const char * mode );
+	_CRTIMP size_t	fread ( void * ptr, size_t size, size_t count, FILE * stream );
+	_CRTIMP int		fseek ( FILE * stream, long int offset, int origin );
+	__int64			fseeko64 (FILE *stream, __int64 offset, int whence);	// in StdLibC.c
+	_CRTIMP long	ftell ( FILE * stream );
+	__int64			ftello64(FILE *stream);	// in StdLibC.c
+	_CRTIMP size_t	fwrite ( const void * ptr, size_t size, size_t count, FILE * stream );
+	_CRTIMP int		getc ( FILE * stream );
+	_CRTIMP int		getchar ( void );
 	_CRTIMP int printf( const char * format, ... );
 	_CRTIMP int putc ( int character, FILE * stream );
 	_CRTIMP int puts ( const char * str );
+	int remove (const char *filename);	// In stdlib.h
+	_CRTIMP int scanf (const char *format, ...);
 	_CRTIMP int sprintf( char *str, const char *format, ... );
 	_CRTIMP int vprintf( const char *format, va_list ap );
 	_CRTIMP int vsprintf( char *str, const char *format, va_list ap );

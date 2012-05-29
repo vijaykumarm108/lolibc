@@ -282,6 +282,12 @@
     <ClInclude Include="include\dll\advapi32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\unistd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
