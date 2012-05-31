@@ -5,7 +5,7 @@
  */
 /*!
 \file StdLib.c
-\brief Standard helper functions when compiling with MSVC from version 6.0.
+\brief Helper functions to facilitate glibc calls into MSVCRT calls.
 \author Jordan Stevens
 \verbatim
 $Author: jstevens $

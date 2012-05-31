@@ -16,103 +16,103 @@ extern "C" {
 	errno_t __cdecl _get_errno(_Out_ int * _Value);
 #endif  /* _CRT_ERRNO_DEFINED */
 
-/* Error Codes */
-#define EPERM			1
-#define ENOENT			2
-#define ESRCH			3
-#define EINTR			4
-#define EIO				5
-#define ENXIO			6
-#define E2BIG			7
-#define ENOEXEC			8
-#define EBADF			9
-#define ECHILD			10
-#define EAGAIN			11
-#define ENOMEM			12
-#define EACCES			13
-#define EFAULT			14
-#define EBUSY			16
-#define EEXIST			17
-#define EXDEV			18
-#define ENODEV			19
-#define ENOTDIR			20
-#define EISDIR			21
-#define ENFILE			23
-#define EMFILE			24
-#define ENOTTY			25
-#define EFBIG			27
-#define ENOSPC			28
-#define ESPIPE			29
-#define EROFS			30
-#define EMLINK			31
-#define EPIPE			32
-#define EDOM			33
-#define EDEADLK			36
-#define ENAMETOOLONG	38
-#define ENOLCK			39
-#define ENOSYS			40
-#define ENOTEMPTY		41
-
-	/* Error codes used in the Secure CRT functions */
-
-#ifndef RC_INVOKED
-#if !defined (_SECURECRT_ERRCODE_VALUES_DEFINED)
-#define _SECURECRT_ERRCODE_VALUES_DEFINED
-#define EINVAL          22
-#define ERANGE          34
-#define EILSEQ          42
-#define STRUNCATE       80
-#endif  /* !defined (_SECURECRT_ERRCODE_VALUES_DEFINED) */
-#endif  /* RC_INVOKED */
-
-	/* Support EDEADLOCK for compatibility with older MS-C versions */
-#define EDEADLOCK       EDEADLK
-
-	/* POSIX SUPPLEMENT */
-#define EADDRINUSE      100
-#define EADDRNOTAVAIL   101
-#define EAFNOSUPPORT    102
-#define EALREADY        103
-#define EBADMSG         104
-#define ECANCELED       105
-#define ECONNABORTED    106
-#define ECONNREFUSED    107
-#define ECONNRESET      108
-#define EDESTADDRREQ    109
-#define EHOSTUNREACH    110
-#define EIDRM           111
-#define EINPROGRESS     112
-#define EISCONN         113
-#define ELOOP           114
-#define EMSGSIZE        115
-#define ENETDOWN        116
-#define ENETRESET       117
-#define ENETUNREACH     118
-#define ENOBUFS         119
-#define ENODATA         120
-#define ENOLINK         121
-#define ENOMSG          122
-#define ENOPROTOOPT     123
-#define ENOSR           124
-#define ENOSTR          125
-#define ENOTCONN        126
-#define ENOTRECOVERABLE 127
-#define ENOTSOCK		128
-#define ENOTSUP			129
-#define EOPNOTSUPP		130
-#define EOTHER			131
-#define EOVERFLOW		132
-#define EOWNERDEAD		133
-#define EPROTO			134
-#define EPROTONOSUPPORT	135
-#define EPROTOTYPE		136
-#define ETIME			137
-#define ETIMEDOUT		138
-#define ETXTBSY			139
-#define EWOULDBLOCK		140
-
 #ifdef __cplusplus
 }
+
+namespace lo { 
+
+#endif  /* __cplusplus */
+
+		/* Error Codes */
+		typedef enum errnumbers {
+			EPERM			= 1,
+			ENOEN			= 2,
+			ESRCH			= 3,
+			EINTR			= 4,
+			EIO				= 5,
+			ENXIO			= 6,
+			E2BIG			= 7,
+			ENOEXEC			= 8,
+			EBADF			= 9,
+			ECHILD			= 10,
+			EAGAIN			= 11,
+			ENOMEM			= 12,
+			EACCES			= 13,
+			EFAULT			= 14,
+			EBUSY			= 16,
+			EEXIST			= 17,
+			EXDEV			= 18,
+			ENODEV			= 19,
+			ENOTDIR			= 20,
+			EISDIR			= 21,
+			EINVAL			= 22,
+			ENFILE			= 23,
+			EMFILE			= 24,
+			ENOTTY			= 25,
+			EFBIG			= 27,
+			ENOSPC			= 28,
+			ESPIPE			= 29,
+			EROFS			= 30,
+			EMLINK			= 31,
+			EPIPE			= 32,
+			EDOM			= 33,
+			ERANGE			= 34,
+			EDEADLK			= 36,
+			ENAMETOOLONG	= 38,
+			ENOLCK			= 39,
+			ENOSYS			= 40,
+			ENOTEMPTY		= 41,
+			EILSEQ			= 42,
+			STRUNCATE		= 80,
+			EADDRINUSE      = 100,
+			EADDRNOTAVAIL   = 101,
+			EAFNOSUPPORT    = 102,
+			EALREADY        = 103,
+			EBADMSG         = 104,
+			ECANCELED       = 105,
+			ECONNABORTED    = 106,
+			ECONNREFUSED    = 107,
+			ECONNRESET      = 108,
+			EDESTADDRREQ    = 109,
+			EHOSTUNREACH    = 110,
+			EIDRM           = 111,
+			EINPROGRESS     = 112,
+			EISCONN         = 113,
+			ELOOP           = 114,
+			EMSGSIZE        = 115,
+			ENETDOWN        = 116,
+			ENETRESET       = 117,
+			ENETUNREACH     = 118,
+			ENOBUFS         = 119,
+			ENODATA         = 120,
+			ENOLINK         = 121,
+			ENOMSG          = 122,
+			ENOPROTOOPT     = 123,
+			ENOSR           = 124,
+			ENOSTR          = 125,
+			ENOTCONN        = 126,
+			ENOTRECOVERABLE = 127,
+			ENOTSOCK		= 128,
+			ENOTSUP			= 129,
+			EOPNOTSUPP		= 130,
+			EOTHER			= 131,
+			EOVERFLOW		= 132,
+			EOWNERDEAD		= 133,
+			EPROTO			= 134,
+			EPROTONOSUPPORT	= 135,
+			EPROTOTYPE		= 136,
+			ETIME			= 137,
+			ETIMEDOUT		= 138,
+			ETXTBSY			= 139,
+			EWOULDBLOCK		= 140
+		};
+
+#ifdef __cplusplus
+
+}
+
+using lo::errnumbers;
+
 #endif  /* __cplusplus */
 
 #endif  /* _INC_ERRNO */

@@ -114,11 +114,23 @@ namespace lo
 		inline virtual int		GetHashCode() const	{ return 0; }
 		virtual rstring			ToString();
 	private:
-		uintptr_t		m_references;	// ID mask for references
+		uintptr_t		m_references;	// ID mask for references which have a lock on this object
+	};
+
+	/*!
+	\brief If you are passing around a reference, then derive from ref_object, not object_base
+	 */
+	template<class T>
+	class ref_object : object_base
+	{
+	protected:
+		inline T* operator->()				{ return (reinterpret_cast<T *>(m_pimpl->Ptr())); }
+		ref<T>	m_pimpl;
 	};
 
 	class buffer_type : public object_base
 	{
+	protected:
 	};
 
 	/// The alignment performed by default.

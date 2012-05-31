@@ -58,6 +58,8 @@
     <None Include="include\iterator">
       <Filter>Header Files\stl</Filter>
     </None>
+    <None Include="roadmap.txt" />
+    <None Include="gnulibc.csv" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ostream">
@@ -289,6 +291,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\sys\socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\setjmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

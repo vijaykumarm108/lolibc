@@ -1,0 +1,2 @@
+LoLibc strives to keep Cx11 and gnulibc compatibility.  To this end the following table is provided:
+

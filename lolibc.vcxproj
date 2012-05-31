@@ -517,6 +517,7 @@
     <ClInclude Include="include\limits.h" />
     <ClInclude Include="include\process.h" />
     <ClInclude Include="include\regex" />
+    <ClInclude Include="include\setjmp.h" />
     <ClInclude Include="include\stdarg.h" />
     <ClInclude Include="include\stddef.h" />
     <ClInclude Include="include\stdlib.h" />
@@ -668,6 +669,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <None Include="gnulibc.csv" />
     <None Include="include\complex" />
     <None Include="include\initializer_list" />
     <None Include="include\iterator" />
@@ -740,6 +742,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of gshandler.obj</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of gshandler.obj</Message>
     </CustomBuild>
+    <None Include="roadmap.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

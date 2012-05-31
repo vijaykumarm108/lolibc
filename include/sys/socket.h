@@ -12,7 +12,7 @@ extern "C" {
 #endif  /* __cplusplus */
 
 	
-	typedef UINT_PTR        SOCKET;
+	typedef uintptr_t        SOCKET;
 
 /*
  * Select uses arrays of SOCKETs.  These macros manipulate such
@@ -27,8 +27,8 @@ extern "C" {
 #endif /* FD_SETSIZE */
 
 	typedef struct fd_set {
-		u_int   fd_count;               /* how many are SET? */
-		SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs */
+		unsigned	fd_count;               /* how many are SET? */
+		SOCKET		fd_array[FD_SETSIZE];   /* an array of SOCKETs */
 	} fd_set;
 
 /// Address families.
@@ -273,6 +273,12 @@ struct ip_mreq {
  */
 #define TCP_NODELAY     0x0001
 #define TCP_BSDURGENT   0x7000
+
+#ifdef _WIN32
+#define PASCAL __stdcall
+#else
+#define PASCAL
+#endif
 
 	SOCKET PASCAL	accept ( __in SOCKET s, __out_bcount_opt(*addrlen) struct sockaddr *addr, __inout_opt int *addrlen);
 	int PASCAL		bind ( __in SOCKET s, __in_bcount(namelen) const struct sockaddr *addr, __in int namelen);

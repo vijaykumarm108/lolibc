@@ -81,7 +81,6 @@ const double _HUGE = System::Double::PositiveInfinity;
 #if !defined (__assembler)
 #ifndef _CRT_ABS_DEFINED
 #define _CRT_ABS_DEFINED
-        int     __cdecl abs( int _X);
         long    __cdecl labs( long _X);
         long long __cdecl llabs( long long _X);
 #endif  /* _CRT_ABS_DEFINED */

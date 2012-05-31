@@ -145,6 +145,8 @@ typedef _W64 unsigned int uintptr_t;
 #endif /* _WIN64 */
 #endif /* _UINTPTR_T_DEFINED */
 
+#define _CRT_ALIGN(x) __declspec(align(x))
+
 #include "stdint.h"
 #include "sys/types.h"
 #include "tchar.h"

@@ -20,6 +20,11 @@ namespace lo
 		m_str = const_cast<char *>(str);
 	}
 
+	ref_base::ref_base()
+	{
+		m_obj = nullptr;
+	}
+
 	ref_base::ref_base(object_base *obj )
 	{
 		m_obj = obj;

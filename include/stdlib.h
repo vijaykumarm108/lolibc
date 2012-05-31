@@ -12,6 +12,9 @@ extern "C" {
 
 
 _CRTIMP size_t __cdecl		_msize( void *memblock );
+_CRTIMP long int __cdecl	a64l (const char *string);
+int	__cdecl					abs (int number);	// intrinsic
+_CRTIMP void __cdecl		abort (void);
 _CRTIMP long int atol ( const char * str );
 int __cdecl					atexit(void (__cdecl *)(void));
 _CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);

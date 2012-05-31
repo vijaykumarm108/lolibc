@@ -1,0 +1,6 @@
+Function;Location;Standard;Description;Implemented;Notes
+long int a64l (const char *string);stdlib.h;(XPG);Encode Binary Data.;false;
+void abort (void);stdlib.h;(ISO):Aborting a Program.;true;
+int abs (int number);stdlib.h (ISO): Absolute Value. ;true;as intrinsic
+int accept (int socket, struct sockaddr *addr, socklen_t *length_ptr);sys/socket.h;BSD;Accepting Connections;true;
+int access (const char *filename, int how);unistd.h;POSIX.1;Testing File Access.;true;
