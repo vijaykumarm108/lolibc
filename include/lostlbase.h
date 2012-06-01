@@ -128,7 +128,12 @@ namespace lo
 		ref<T>	m_pimpl;
 	};
 
-	class buffer_type : public object_base
+	class _link_buffer;
+	/*!
+	\brief This class defines a continuous buffer, which can be either linked
+	or directly allocated.
+	*/
+	class link_buffer : public ref_object<_link_buffer>
 	{
 	protected:
 	};
