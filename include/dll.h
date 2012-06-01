@@ -27,6 +27,7 @@ namespace lo
 #define TRUE (1)
 typedef int BOOL;
 typedef BOOL *LPBOOL;
+typedef void *HINSTANCE;
 #define WINBASEAPI __declspec(dllimport)
 #define DELETE                           (0x00010000L)
 #define READ_CONTROL                     (0x00020000L)

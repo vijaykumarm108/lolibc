@@ -53,7 +53,6 @@ extern int * _imp___adjust_fdiv;
 extern void __cdecl _initterm(_PVFV *, _PVFV *);
 #ifndef _SYSCRT
 extern int __cdecl _initterm_e(_PIFV *, _PIFV *);
-extern void __cdecl __clean_type_info_names(void);
 #endif  /* _SYSCRT */
 
 /*
@@ -143,11 +142,8 @@ static int __cdecl pre_c_init(void)
     atexit(_RTC_Terminate);
 #endif  /* _RTC */
 #ifndef _SYSCRT
-        /*
-     * Register __clean_type_info_names so that we clean up all the
-     * type_info.names that are allocated
-         */
-    atexit(__clean_type_info_names);
+        /* Register __clean_type_info_names so that we clean up all the type_info.names that are allocated */
+//    atexit(__clean_type_info_names);
 #endif  /* _SYSCRT */
 
     return 0;
@@ -315,88 +311,56 @@ BOOL WINAPI _CRT_INIT( HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved )
 	return TRUE;
 }
 
-static BOOL __cdecl __DllMainCRTStartup( HANDLE hDllHandle, DWORD dwReason, LPVOID  lpreserved );
 
-BOOL WINAPI _DllMainCRTStartup( HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved )
+
+const PIMAGE_TLS_CALLBACK __dyn_tls_init_callback;	// Thread local storage variable.
+
+void _CRT_INIT()
 {
-       if (dwReason == DLL_PROCESS_ATTACH)
-        {
-            /* The /GS security cookie must be initialized before any exception
-            handling targeting the current image is registered.  No function
-            using exception handling can be called in the current image until
-            after __security_init_cookie has been called. */
-            __security_init_cookie();
-        }
+#ifdef _M_IX86
+	// Set the local copy of the Pentium FDIV adjustment flag
+	_adjust_fdiv = * _imp___adjust_fdiv;
+#endif  /* _M_IX86 */
 
-        return __DllMainCRTStartup( hDllHandle, dwReason, lpreserved );
+	_initterm_e( __xi_a, __xi_z );	// Invoke C constructors
+	_initterm( __xc_a, __xc_z );	// Invoke C++ constructors
 }
 
-__declspec(noinline) BOOL __cdecl __DllMainCRTStartup( HANDLE  hDllHandle, DWORD dwReason, LPVOID lpreserved )
+void _CRT_TERM()
+{
+
+}
+
+BOOL WINAPI _DllMainCRTStartup( HANDLE  hDllHandle, DWORD dwReason, LPVOID lpreserved )
 {
 	BOOL retcode = TRUE;
 
-    __try {
-//         __native_dllmain_reason = dwReason;
-        __try{
-            /*
-             * If this is a process detach notification, check that there has
-             * been a prior process attach notification.
-             */
-            if ( (dwReason == DLL_PROCESS_DETACH) && (__proc_attached == 0) )
-			{
-                retcode = FALSE;
-                __leave;
-            }
+	if(__proc_attached==0)
+	{
+		__proc_attached = 1;
+		ghInstance = (HINSTANCE)hDllHandle;
+		_CRT_INIT();
+	}
+	// Call the user's DllMain
+	if(dwReason==DLL_THREAD_ATTACH)
+	{
+		if(__dyn_tls_init_callback!=nullptr)
+			__dyn_tls_init_callback( hDllHandle, DLL_THREAD_ATTACH, lpreserved );
+		// Enable buffer count checking if linking against static lib
+		_CrtSetCheckCount(TRUE);
+	}
+	retcode = DllMain( hDllHandle, dwReason, lpreserved );
+	if(dwReason==DLL_THREAD_DETACH)
+	{
 
-            if ( dwReason == DLL_PROCESS_ATTACH || dwReason == DLL_THREAD_ATTACH )
-			{
-                if ( _pRawDllMain )
-				{
-                    retcode = (*_pRawDllMain)( hDllHandle, dwReason, lpreserved );
-				}
+	}
+	if(dwReason==DLL_PROCESS_DETACH)
+	{
+		_CRT_TERM();
+		__proc_attached = 0;
+	}
 
-                if ( retcode )
-                    retcode = _CRT_INIT( hDllHandle, dwReason, lpreserved );
-
-                if ( !retcode )
-                    __leave;
-            }
-
-			// Call the user's DllMain
-            retcode = DllMain( hDllHandle, dwReason, lpreserved );
-
-            if ( (dwReason == DLL_PROCESS_ATTACH) && !retcode )
-			{
-                // The user's DllMain routine returned failure.  Unwind the init.
-				DllMain( hDllHandle, DLL_PROCESS_DETACH, lpreserved );
-                _CRT_INIT( hDllHandle, DLL_PROCESS_DETACH, lpreserved );
-                if ( _pRawDllMain )
-				{
-                    (*_pRawDllMain)( hDllHandle, DLL_PROCESS_DETACH, lpreserved );
-				}
-            }
-
-            if ( (dwReason == DLL_PROCESS_DETACH) || (dwReason == DLL_THREAD_DETACH) )
-			{
-                if ( _CRT_INIT( hDllHandle, dwReason, lpreserved ) == FALSE )
-				{
-                    retcode = FALSE ;
-                }
-
-                if ( retcode && _pRawDllMain )
-				{
-                    retcode = (*_pRawDllMain)(hDllHandle, dwReason, lpreserved);
-                }
-            }
-        } __except ( TRUE /* __CppXcptFilter(GetExceptionCode(), GetExceptionInformation())*/ ) {
-            retcode = FALSE;
-        }
-    } __finally
-    {
-//        __native_dllmain_reason = __NO_REASON;
-    }
-
-    return retcode;
+	return retcode;
 }
 
 #endif  /* CRTDLL */
