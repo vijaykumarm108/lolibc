@@ -91,28 +91,13 @@ namespace lo
 {
 	int GetHashCode(const unsigned char *buffer,size_t len);
 
-	/// Class for returning new strings from functions -- to speed up the process...
-	class rstring
-	{
-	public:
-		rstring(const char *value);
-		rstring(char *value);
-		rstring(size_t bufferSize);
-		rstring(std::wstring& wstr);
-		operator const char *();	// Throws exception if the string is not a constant.
-		char *GetBuffer();
-	private:
-		bool m_isConst;
-		char *m_str;
-	};
-
 	class object_base
 	{
 		friend class ref_base;
 	public:
 		virtual ~object_base();
 		inline virtual int		GetHashCode() const	{ return 0; }
-		virtual rstring			ToString();
+		virtual std::string		ToString();
 	private:
 		uintptr_t		m_references;	// ID mask for references which have a lock on this object
 	};
@@ -128,14 +113,39 @@ namespace lo
 		ref<T>	m_pimpl;
 	};
 
-	class _link_buffer;
+	class _link_buffer : object_base
+	{
+	public:
+	private:
+		char			*m_buffer;
+		size_t			m_sizeOfElement;
+		size_t			m_numberElements;
+		bool			m_isConst;
+	};
 	/*!
 	\brief This class defines a continuous buffer, which can be either linked
 	or directly allocated.
 	*/
-	class link_buffer : public ref_object<_link_buffer>
+	class link_buffer
 	{
+	public:
+		typedef char				value_type;
+		typedef value_type*			pointer;
+		typedef const value_type*	const_pointer;
+		typedef value_type			reference;
+		typedef value_type			const_reference;
+		typedef size_t				size_type;
+		typedef uint32_t			written_size_type;
+		typedef ptrdiff_t			difference_type;
+		typedef const_pointer		const_iterator;
+		typedef const_iterator		iterator;
+		typedef const link_buffer&	rcself_t;
+		iterator				begin (void) const;//			{ return m_linkBuffer->m_buffer; }
+		const_pointer		cdata (void) const;//			{ return m_linkBuffer->m_buffer; }
+		bool					empty (void) const;
+		iterator				end (void) const;
 	protected:
+		ref<_link_buffer>			m_linkBuffer;
 	};
 
 	/// The alignment performed by default.

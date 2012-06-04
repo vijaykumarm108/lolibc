@@ -42,7 +42,7 @@ namespace std {
 
 	/// Offsets an iterator
 	template <typename T>
-	inline T advance (T i, ssize_t offset)
+	inline T advance (T i, size_t offset)
 	{
 		return (i + offset);
 	}
@@ -50,7 +50,7 @@ namespace std {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 	/// Offsets a void pointer
 	template <>
-	inline const void* advance (const void* p, ssize_t offset)
+	inline const void* advance (const void* p, size_t offset)
 	{
 		assert (p || !offset);
 		return (reinterpret_cast<const uint8_t*>(p) + offset);
@@ -58,7 +58,7 @@ namespace std {
 
 	/// Offsets a void pointer
 	template <>
-	inline void* advance (void* p, ssize_t offset)
+	inline void* advance (void* p, size_t offset)
 	{
 		assert (p || !offset);
 		return (reinterpret_cast<uint8_t*>(p) + offset);
@@ -1012,9 +1012,9 @@ namespace std {
 template <typename InputIterator, typename OutputIterator, typename UnaryFunction>
 inline OutputIterator transform (InputIterator first, InputIterator last, OutputIterator result, UnaryFunction op)
 {
-    for (; first != last; ++result, ++first)
+	for (; first != last; ++result, ++first)
 	*result = op (*first);
-    return (result);
+	return (result);
 }
 
 ///
@@ -1032,9 +1032,9 @@ inline OutputIterator transform (InputIterator first, InputIterator last, Output
 template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename BinaryFunction>
 inline OutputIterator transform (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, OutputIterator result, BinaryFunction op)
 {
-    for (; first1 != last1; ++result, ++first1, ++first2)
+	for (; first1 != last1; ++result, ++first1, ++first2)
 	*result = op (*first1, *first2);
-    return (result);
+	return (result);
 }
 
 /// Replace replaces every element in the range [first, last) equal to
@@ -1045,9 +1045,9 @@ inline OutputIterator transform (InputIterator1 first1, InputIterator1 last1, In
 template <typename ForwardIterator, typename T>
 inline void replace (ForwardIterator first, ForwardIterator last, const T& old_value, const T& new_value)
 {
-    for (; first != last; ++first)
+	for (; first != last; ++first)
 	if (*first == old_value)
-	    *first = new_value;
+		*first = new_value;
 }
 
 	/// Replace_copy copies elements from the range [first, last) to the range
@@ -1319,15 +1319,15 @@ inline void replace (ForwardIterator first, ForwardIterator last, const T& old_v
 template <typename ForwardIterator, typename LessThanComparable>
 ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
 {
-    ForwardIterator mid;
-    while (first != last) {
+	ForwardIterator mid;
+	while (first != last) {
 	mid = advance (first, distance (first,last) / 2);
 	if (value < *mid)
-	    last = mid;
+		last = mid;
 	else
-	    first = mid + 1;
-    }
-    return (last);
+		first = mid + 1;
+	}
+	return (last);
 }
 
 /// Returns pair<lower_bound,upper_bound>
@@ -1336,11 +1336,11 @@ ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last, const 
 template <typename ForwardIterator, typename LessThanComparable>
 inline pair<ForwardIterator,ForwardIterator> equal_range (ForwardIterator first, ForwardIterator last, const LessThanComparable& value)
 {
-    pair<ForwardIterator,ForwardIterator> rv;
-    rv.second = rv.first = lower_bound (first, last, value);
-    while (rv.second != last && !(value < *(rv.second)))
+	pair<ForwardIterator,ForwardIterator> rv;
+	rv.second = rv.first = lower_bound (first, last, value);
+	while (rv.second != last && !(value < *(rv.second)))
 	++ rv.second;
-    return (rv);
+	return (rv);
 }
 
 /// Randomly permute the elements of the container.
@@ -1349,7 +1349,7 @@ inline pair<ForwardIterator,ForwardIterator> equal_range (ForwardIterator first,
 template <typename RandomAccessIterator>
 void random_shuffle (RandomAccessIterator first, RandomAccessIterator last)
 {
-    for (; first != last; ++ first)
+	for (; first != last; ++ first)
 	iter_swap (first, first + (rand() % distance (first, last)));
 }
 
@@ -1358,10 +1358,10 @@ void random_shuffle (RandomAccessIterator first, RandomAccessIterator last)
 template <typename ConstPointer, typename Compare>
 int qsort_adapter (const void* p1, const void* p2)
 {
-    ConstPointer i1 = reinterpret_cast<ConstPointer>(p1);
-    ConstPointer i2 = reinterpret_cast<ConstPointer>(p2);
-    Compare comp;
-    return (comp (*i1, *i2) ? -1 : (comp (*i2, *i1) ? 1 : 0));
+	ConstPointer i1 = reinterpret_cast<ConstPointer>(p1);
+	ConstPointer i2 = reinterpret_cast<ConstPointer>(p2);
+	Compare comp;
+	return (comp (*i1, *i2) ? -1 : (comp (*i2, *i1) ? 1 : 0));
 }
 
 /// Sorts the container
@@ -1371,9 +1371,9 @@ int qsort_adapter (const void* p1, const void* p2)
 template <typename RandomAccessIterator, typename Compare>
 void sort (RandomAccessIterator first, RandomAccessIterator last, Compare)
 {
-    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
-    typedef typename iterator_traits<RandomAccessIterator>::const_pointer const_pointer;
-    qsort (first, distance (first, last), sizeof(value_type),
+	typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+	typedef typename iterator_traits<RandomAccessIterator>::const_pointer const_pointer;
+	qsort (first, distance (first, last), sizeof(value_type),
 	   &qsort_adapter<const_pointer, Compare>);
 }
 
@@ -1383,8 +1383,8 @@ void sort (RandomAccessIterator first, RandomAccessIterator last, Compare)
 template <typename RandomAccessIterator>
 inline void sort (RandomAccessIterator first, RandomAccessIterator last)
 {
-    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
-    sort (first, last, less<value_type>());
+	typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+	sort (first, last, less<value_type>());
 }
 
 /// Sorts the container preserving order of equal elements.
@@ -1394,10 +1394,10 @@ inline void sort (RandomAccessIterator first, RandomAccessIterator last)
 template <typename RandomAccessIterator, typename Compare>
 void stable_sort (RandomAccessIterator first, RandomAccessIterator last, Compare comp)
 {
-    for (RandomAccessIterator j, i = first; ++i < last;) { // Insertion sort
+	for (RandomAccessIterator j, i = first; ++i < last;) { // Insertion sort
 	for (j = i; j-- > first && comp(*i, *j);) ;
 	if (++j != i) rotate (j, i, i + 1);
-    }
+	}
 }
 
 /// Sorts the container
@@ -1406,8 +1406,8 @@ void stable_sort (RandomAccessIterator first, RandomAccessIterator last, Compare
 template <typename RandomAccessIterator>
 inline void stable_sort (RandomAccessIterator first, RandomAccessIterator last)
 {
-    typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
-    stable_sort (first, last, less<value_type>());
+	typedef typename iterator_traits<RandomAccessIterator>::value_type value_type;
+	stable_sort (first, last, less<value_type>());
 }
 
 	/// \brief Searches for the first subsequence [first2,last2) in [first1,last1)

@@ -97,24 +97,24 @@ typedef int errno_t;
 // __int3264 is intrinsic to 64b MIDL but not to old MIDL or to C compiler.
 //
 #if ( 501 < __midl )
-    typedef [public] __int3264 intptr_t, *PINT_PTR;
-    typedef [public] unsigned __int3264 UINT_PTR, *PUINT_PTR;
-    typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
-    typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
+	typedef [public] __int3264 intptr_t, *PINT_PTR;
+	typedef [public] unsigned __int3264 UINT_PTR, *PUINT_PTR;
+	typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
+	typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
 #else  // midl64
 // old midl and C++ compiler
 #if defined(_WIN64)
-    typedef __int64 intptr_t, *PINT_PTR;
-    typedef unsigned __int64 UINT_PTR, *PUINT_PTR;
-    typedef __int64 LONG_PTR, *PLONG_PTR;
-    typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
-    #define __int3264   __int64
+	typedef __int64 intptr_t, *PINT_PTR;
+	typedef unsigned __int64 UINT_PTR, *PUINT_PTR;
+	typedef __int64 LONG_PTR, *PLONG_PTR;
+	typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
+	#define __int3264   __int64
 #else
-    typedef _W64 int intptr_t, *PINT_PTR;
-    typedef _W64 unsigned int UINT_PTR, *PUINT_PTR;
-    typedef _W64 long LONG_PTR, *PLONG_PTR;
-    typedef _W64 unsigned long ULONG_PTR, *PULONG_PTR;
-    #define __int3264   __int32
+	typedef _W64 int intptr_t, *PINT_PTR;
+	typedef _W64 unsigned int UINT_PTR, *PUINT_PTR;
+	typedef _W64 long LONG_PTR, *PLONG_PTR;
+	typedef _W64 unsigned long ULONG_PTR, *PULONG_PTR;
+	#define __int3264   __int32
 #endif
 #endif // midl64
 
@@ -157,30 +157,30 @@ typedef _W64 unsigned int uintptr_t;
 #include "stdlib.h"
 
 #ifndef SIZE_MAX
-    #define SIZE_MAX		UINT_MAX
+	#define SIZE_MAX		UINT_MAX
 #endif
 #if sun || __sun		// Solaris defines UINTPTR_MAX as empty.
-    #undef UINTPTR_MAX
-    #define UINTPTR_MAX		ULONG_MAX
+	#undef UINTPTR_MAX
+	#define UINTPTR_MAX		ULONG_MAX
 #endif
 #ifndef WCHAR_MAX
-    #ifdef __WCHAR_MAX__
+	#ifdef __WCHAR_MAX__
 	#define WCHAR_MAX	__WCHAR_MAX__
-    #else
+	#else
 	#define WCHAR_MAX	CHAR_MAX
-    #endif
+	#endif
 #endif
 #if HAVE_LONG_LONG
-    #ifndef LLONG_MAX
+	#ifndef LLONG_MAX
 	#define ULLONG_MAX	UINT64_C(0xFFFFFFFFFFFFFFFF)
 	#define LLONG_MAX	INT64_C(0x7FFFFFFFFFFFFFFF)
 	#define LLONG_MIN	ULLONG_MAX
-    #endif
+	#endif
 #endif
 #ifndef BYTE_ORDER
-    #define LITTLE_ENDIAN	STD_LITTLE_ENDIAN
-    #define BIG_ENDIAN		STD_BIG_ENDIAN
-    #define BYTE_ORDER		STD_BYTE_ORDER
+	#define LITTLE_ENDIAN	STD_LITTLE_ENDIAN
+	#define BIG_ENDIAN		STD_BIG_ENDIAN
+	#define BYTE_ORDER		STD_BYTE_ORDER
 #endif
 
 typedef size_t		uoff_t;			///< A type for storing offsets into blocks measured by size_t.

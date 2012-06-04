@@ -9,15 +9,9 @@ namespace lo
 
 	}
 
-	rstring	object_base::ToString()
+	std::string	object_base::ToString()
 	{
 		return typeid(this).name();
-	}
-
-	rstring::rstring(const char *str)
-	{
-		m_isConst = true;
-		m_str = const_cast<char *>(str);
 	}
 
 	ref_base::ref_base()
