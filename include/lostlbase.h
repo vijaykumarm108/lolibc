@@ -95,12 +95,17 @@ namespace lo
 	{
 		friend class ref_base;
 	public:
+		object_base();
+		object_base(object_base &obj);
 		virtual ~object_base();
 		inline virtual int		GetHashCode() const	{ return 0; }
 		virtual std::string		ToString();
+		bool operator!=(const object_base &ref) const;
 	private:
 		uintptr_t		m_references;	// ID mask for references which have a lock on this object
 	};
+
+	extern object_base nullref;
 
 	/*!
 	\brief If you are passing around a reference, then derive from ref_object, not object_base

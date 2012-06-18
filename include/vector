@@ -16,7 +16,7 @@ namespace std {
 	/// this design elements frequently undergo bitwise move, so don't put it in
 	/// here if it doesn't support it. This mostly means having no self-pointers.
 	///
-	template <typename T> class vector
+	template <typename T> class vector : public lo::object_base
 	{
 	public:
 		typedef T										value_type;
