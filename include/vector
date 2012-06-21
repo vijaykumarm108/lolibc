@@ -36,6 +36,7 @@ namespace std {
 		inline explicit	vector (size_type n);
 						vector (size_type n, const T& v);
 						vector (const vector<T>& v);
+						vector (T *v );
 						vector (const_iterator i1, const_iterator i2);
 		inline			~vector (void) throw();
 		inline const vector<T>&	operator= (const vector<T>& v);
@@ -45,6 +46,7 @@ namespace std {
 		inline void				reserve (size_type n, bool bExact = true);
 		inline void				resize (size_type n, bool bExact = true);
 		inline size_type		capacity (void) const		{ return (m_Data.capacity() / sizeof(T));	}
+		inline size_t			get_Length(void) const		{size();}
 		inline size_type		size (void) const			{ return (m_Data.size() / sizeof(T));		}
 		inline size_type		max_size (void) const		{ return (m_Data.max_size() / sizeof(T));	}
 		inline bool				empty (void) const			{ return (m_Data.empty());			}
