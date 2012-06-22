@@ -2,7 +2,6 @@
 //
 #pragma once
 #include "lo_vector.hpp"
-#include "lo_uctralgo.h"
 
 namespace std {
 
