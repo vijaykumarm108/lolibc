@@ -4,6 +4,11 @@
 
 namespace lo
 {
+
+	object_base::object_base()
+	{
+
+	}
 	object_base::~object_base()
 	{
 

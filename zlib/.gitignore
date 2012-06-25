@@ -1,0 +1,9 @@
+Debug/
+ipch/
+Release/
+*.tlog
+*.user
+
+*.sdf
+*.suo
+*.opensdf
