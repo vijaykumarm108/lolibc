@@ -16,6 +16,7 @@ extern "C" {
 	int chdir(const char *path);					// In stdlibc.c
 	char * getcwd( char * path, int lengthOfPath );	// In stdlibc.c
 	int mkdir (const char *filename, mode_t mode);	// In stdlibc.c
+	int rmdir(const char * path);
 
 #ifdef __cplusplus
 }

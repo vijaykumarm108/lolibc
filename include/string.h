@@ -53,6 +53,7 @@ typedef unsigned short wchar_t;
 
 /* Function prototypes  - Those without _CRTIMP can be intrinsic. */
 
+	char * __cdecl				basename (const char *filename);
 	_CRTIMP void *  __cdecl		_memccpy(void *, const void *, int, unsigned int);
 	_CRTIMP int     __cdecl		_memicmp(const void *, const void *, unsigned int);
 	char *  __cdecl				_strset(char *, int);
@@ -64,6 +65,7 @@ typedef unsigned short wchar_t;
 		return (wchar_t *) memcpy (wto, wfrom, size * sizeof (wchar_t));
 	}
 	_CRTIMP int __cdecl			memicmp(const void *, const void *, unsigned int);
+	void *	__cdecl				memfrob (void *mem, size_t length);
 	void *  __cdecl				memset(void *, int, size_t);
 	char *  __cdecl				strcpy(char *, const char *);
 	char *  __cdecl				strcat(char *, const char *);

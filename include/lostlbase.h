@@ -34,7 +34,7 @@ namespace lo
 		ref(const T& obj) : ref_base(&obj)	{  }
 		ref(const T* obj) : ref_base(obj)	{  }
 		ref(object_base *obj) : ref_base(obj) {}
-		inline ref( ref<T> & external ) : BaseRef(external.ptr) {}
+//		inline ref( ref<T> & external ) : ref_base(external.ptr) {}
 		inline T *operator->()				{ return ((reinterpret_cast<T *>(m_obj))); }
 		inline const T *operator->() const 	{ return (((const T *)(m_obj))); }
 		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_obj); }
@@ -118,6 +118,9 @@ namespace lo
 		inline T* operator->()				{ return (reinterpret_cast<T *>(m_pimpl->Ptr())); }
 		ref<T>	m_pimpl;
 	};
+
+	/// This class is used to forward reference pimpl classes which are defined in the .cpp file only.
+	class Pimpl;
 
 	/*!
 	\brief This class contains a pointer and information about the buffer.

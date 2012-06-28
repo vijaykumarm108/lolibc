@@ -193,7 +193,8 @@ class wstring
 public:
 	inline wstring() : buffer(nullptr) {}
 	wstring(const char *_init) { init(_init); }
-	wstring(int size)	{ buffer = reinterpret_cast<wchar_t *>(malloc(size*sizeof(wchar_t))); *buffer = 0; }
+	wstring(const char *_init, size_t size);
+	wstring(size_t size)		{ buffer = reinterpret_cast<wchar_t *>(malloc(size*sizeof(wchar_t))); *buffer = 0; }
 	~wstring();
 	operator const wchar_t *()	{ return const_cast<const wchar_t *>(buffer); }
 	operator wchar_t *()		{ return buffer; }

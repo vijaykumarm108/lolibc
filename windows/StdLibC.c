@@ -576,6 +576,48 @@ void _CRT_RTC_INITW()
 {
 
 }
+/*!
+\brief function returns the last component of the path in filename.
+This function is the preferred usage, since it does not modify the argument, filename, and respects trailing slashes
+@param[in] filename full or relative path
+ */
+char * basename (const char *filename)
+{
+	const char *returns;
+	if(filename==(const char *)0)
+		return (char *)0;
+	if(*filename=='\0')
+		return (char *)filename;
+	for(returns = filename + strlen(filename) - 1; returns > filename; --returns )
+	{
+		if((*returns=='\\')||(*returns=='/'))
+		{
+			++returns;
+			break;
+		}
+	}
+	return (char *)returns;
+}
 
+/*!
+\brief  transforms (frobnicates) each byte of the data structure at mem, which is length bytes long, by bitwise exclusive oring it with binary 00101010.
+It does the transformation in place and its return value is always mem.
+\note that memfrob a second time on the same data structure returns it to its original state.
+ */
+void * memfrob (void *mem, size_t length)
+{
+	size_t i;
+	for( i = 0; i < length; ++i )
+		*((unsigned char *)mem + i) ^= 0x2A;
+	return mem;
+}
+
+int rmdir(const char * path)
+{
+	_CRTIMP int __cdecl _wrmdir(const wchar_t * _Path);
+	WCHAR	wpath[260];
+	Utf8ToUtf16(path,wpath,260);
+	return _wrmdir(wpath);
+}
 
 /*! @} */
