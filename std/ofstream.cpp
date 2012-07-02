@@ -86,10 +86,7 @@ namespace std {
 //----------------------------------------------------------------------
 
 	/// Constructs a stream to read from \p Fd.
-	ifstream::ifstream (int Fd)
-	: istringstream (),
-	  m_Buffer (255),
-	  m_File (Fd)
+	ifstream::ifstream (int Fd) : istringstream (), m_Buffer (255), m_File (Fd)
 	{
 		link (m_Buffer.data(), streamsize(0));
 	}

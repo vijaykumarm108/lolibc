@@ -17,6 +17,7 @@ int	__cdecl					abs (int number);	// intrinsic
 _CRTIMP void __cdecl		abort (void);
 _CRTIMP long int atol ( const char * str );
 int __cdecl					atexit(void (__cdecl *)(void));
+_CRTIMP int __cdecl			atoi ( const char * str );
 _CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);
 _CRTIMP void				exit (int status);
 _CRTIMP void __cdecl		free(void *ptr);

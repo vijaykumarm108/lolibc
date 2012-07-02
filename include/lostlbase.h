@@ -101,6 +101,7 @@ namespace lo
 		virtual ~object_base();
 		inline virtual int		GetHashCode() const	{ return 0; }
 		virtual std::string		ToString();
+		virtual std::string		ToString(const char *format);
 		bool operator!=(const object_base &ref) const;
 	private:
 		uintptr_t		m_references;	// ID mask for references which have a lock on this object

@@ -19,6 +19,11 @@ namespace lo
 		return typeid(this).name();
 	}
 
+	std::string object_base::ToString(const char *format)
+	{
+		return typeid(this).name();
+	}
+
 	ref_base::ref_base()
 	{
 		m_obj = nullptr;
