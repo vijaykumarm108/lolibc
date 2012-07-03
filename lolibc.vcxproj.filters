@@ -296,6 +296,9 @@
     <ClInclude Include="include\setjmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\dll\wininet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">

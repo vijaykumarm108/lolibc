@@ -511,6 +511,7 @@
     <ClInclude Include="include\ctype.h" />
     <ClInclude Include="include\dll\advapi32.h" />
     <ClInclude Include="include\dll\psapidll.h" />
+    <ClInclude Include="include\dll\wininet.h" />
     <ClInclude Include="include\fcntl.h" />
     <ClInclude Include="include\internal.h" />
     <ClInclude Include="include\ios_base.h" />
