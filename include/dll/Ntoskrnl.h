@@ -40,6 +40,25 @@ namespace lo { namespace ntoskrnl {
 
 #pragma pack(pop)
 
+	typedef struct _FILETIME {
+		uint32_t dwLowDateTime;
+		uint32_t dwHighDateTime;
+	} FILETIME, *PFILETIME, *LPFILETIME;
+
+#ifndef WIN32_FIND_DATAW
+	typedef struct _WIN32_FIND_DATAW {
+		uint32_t	dwFileAttributes;
+		FILETIME	ftCreationTime;
+		FILETIME	ftLastAccessTime;
+		FILETIME	ftLastWriteTime;
+		uint32_t	nFileSizeHigh;
+		uint32_t	nFileSizeLow;
+		uint32_t	dwReserved0;
+		uint32_t	dwReserved1;
+		wchar_t		cFileName[ 260 ];
+		wchar_t		cAlternateFileName[ 14 ];
+	} WIN32_FIND_DATAW, *PWIN32_FIND_DATAW, *LPWIN32_FIND_DATAW;
+#endif
 
 /// Service Types (Bit Mask)
 	static const uint32_t SERVICE_KERNEL_DRIVER = 0x00000001;
