@@ -14,8 +14,12 @@ namespace lo { namespace wininet {
 #include <pshpack4.h>
 #endif
 
-	typedef void * HINTERNET;
+#define INTERNET_OPEN_TYPE_PRECONFIG                    0   // use registry configuration
+#define INTERNET_OPEN_TYPE_DIRECT                       1   // direct to net
+#define INTERNET_OPEN_TYPE_PROXY                        3   // via named proxy
+#define INTERNET_OPEN_TYPE_PRECONFIG_WITH_NO_AUTOPROXY  4   // prevent using java/script/INS
 
+	typedef void * HINTERNET;
 
 	typedef enum { INTERNET_SCHEME_PARTIAL = -2, INTERNET_SCHEME_UNKNOWN = -1, INTERNET_SCHEME_DEFAULT = 0, INTERNET_SCHEME_FTP, INTERNET_SCHEME_GOPHER,
 		INTERNET_SCHEME_HTTP, INTERNET_SCHEME_HTTPS, INTERNET_SCHEME_FILE, INTERNET_SCHEME_NEWS, INTERNET_SCHEME_MAILTO, INTERNET_SCHEME_SOCKS, INTERNET_SCHEME_JAVASCRIPT,
