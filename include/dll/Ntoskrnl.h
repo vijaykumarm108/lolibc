@@ -95,6 +95,25 @@ extern "C" {
 #endif // __cplusplus
 
 	//----------------------------------------- Function declarations -------------------------------------------
+	typedef PVOID PSECURITY_DESCRIPTOR;
+
+	typedef struct _SYSTEMTIME {
+		WORD wYear;
+		WORD wMonth;
+		WORD wDayOfWeek;
+		WORD wDay;
+		WORD wHour;
+		WORD wMinute;
+		WORD wSecond;
+		WORD wMilliseconds;
+	} SYSTEMTIME, *PSYSTEMTIME, *LPSYSTEMTIME;
+
+	typedef DWORD		ACCESS_MASK;
+	typedef ACCESS_MASK	*PACCESS_MASK;
+	typedef DWORD		LCID;
+	typedef PDWORD		PLCID;
+	typedef WORD		LANGID;
+	typedef DWORD		FLONG;
 
 #ifdef __cplusplus
 };

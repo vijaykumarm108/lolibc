@@ -281,9 +281,6 @@
     <ClInclude Include="include\dll\psapidll.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
-    <ClInclude Include="include\dll\advapi32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -296,8 +293,17 @@
     <ClInclude Include="include\setjmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\dll\advapi32.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
     <ClInclude Include="include\dll\wininet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\gdi32.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\printer_driver.h">
+      <Filter>Header Files\dll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

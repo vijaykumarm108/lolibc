@@ -31,6 +31,8 @@ using namespace lo::kernel32;
 extern "C" {
 #endif
 
+typedef HANDLE              HGLOBAL;
+
 //----------------------------------------- Function declarations -------------------------------------------
 WINBASEAPI int WINAPI		Beep( __in  uint32_t dwFreq, __in  uint32_t dwDuration	);
 WINBASEAPI void WINAPI		FreeLibrary( __in intptr_t libraryHandle );
@@ -40,6 +42,7 @@ WINBASEAPI intptr_t WINAPI	LoadLibraryA( __in const char *moduleName );
 WINBASEAPI intptr_t WINAPI  OpenProcess( __in uint32_t desiredAccess, __in BOOL bInheritHandle, __in uint32_t processId );
 WINBASEAPI int	WINAPI		MultiByteToWideChar( uint32_t Codepage, uint32_t dwFlags, const char *lpMultiByteStr, int cbMultiByte, wchar_t * lpWideCharStr, int cchWideChar );
 WINBASEAPI BOOL WINAPI		SetConsoleTextAttribute( __in intptr_t hConsoleOutput, __in uint16_t wAttributes );
+WINBASEAPI VOID	WINAPI		SetLastError( __in DWORD dwErrCode );
 WINBASEAPI int WINAPI		WideCharToMultiByte( uint32_t CodePage, uint32_t dwFlags, const wchar_t *lpWideCharStr, int cchWideChar, char * lpMultiByteStr, int cbMultiByte, const char * lpDefaultChar, LPBOOL lpUsedDefaultChar );
 #ifdef __cplusplus
 }; // end extern "C"

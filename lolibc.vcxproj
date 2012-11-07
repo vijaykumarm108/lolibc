@@ -510,6 +510,8 @@
     <ClInclude Include="include\assert.h" />
     <ClInclude Include="include\ctype.h" />
     <ClInclude Include="include\dll\advapi32.h" />
+    <ClInclude Include="include\dll\gdi32.h" />
+    <ClInclude Include="include\dll\printer_driver.h" />
     <ClInclude Include="include\dll\psapidll.h" />
     <ClInclude Include="include\dll\wininet.h" />
     <ClInclude Include="include\fcntl.h" />
