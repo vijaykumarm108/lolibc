@@ -28,6 +28,7 @@ typedef void *				HDC;
 typedef void *				HFONT;
 typedef void *				HGDIOBJ;
 typedef void *				HGLRC;
+typedef void *				HKL;
 typedef void *				HMETAFILE;
 typedef void *				HPALETTE;
 typedef void *				HPEN;

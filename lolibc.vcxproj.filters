@@ -305,6 +305,15 @@
     <ClInclude Include="include\dll\printer_driver.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
+    <ClInclude Include="include\lolog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\user32.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dll\shell32.h">
+      <Filter>Header Files\dll</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -345,9 +354,6 @@
     </ClCompile>
     <ClCompile Include="std\stdxept.cpp">
       <Filter>Source Files\stl</Filter>
-    </ClCompile>
-    <ClCompile Include="bvt\bvt_kernel32.cpp">
-      <Filter>Source Files\bvt</Filter>
     </ClCompile>
     <ClCompile Include="std\ios.cpp">
       <Filter>Source Files\stl</Filter>

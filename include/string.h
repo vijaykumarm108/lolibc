@@ -118,6 +118,7 @@ wchar_t * __cdecl			wcscat(wchar_t *, const wchar_t *);
 _CRTIMP wchar_t * __cdecl	wcschr(const wchar_t *, wchar_t);
 int __cdecl					wcscmp(const wchar_t *, const wchar_t *);
 wchar_t * __cdecl			wcscpy(wchar_t *, const wchar_t *);
+errno_t						wcscpy_s( wchar_t *strDestination, size_t numberOfElements,	const wchar_t *strSource  ); // C++ only
 _CRTIMP size_t __cdecl		wcscspn(const wchar_t *, const wchar_t *);
 _CRTIMP wchar_t * __cdecl	wcsdup(const wchar_t *);
 size_t __cdecl				wcslen(const wchar_t *);

@@ -1,103 +1,15 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    compstui.h
-
-
-Abstract:
-
-    This module contains global header definition for the COMMON DRIVER UI
-
-
-Author:
-
-    19-Jun-1995 Mon 11:52:01 created  -by-  Daniel Chou (danielc)
-
-    17-Aug-1995 Thu 14:59:28 updated  -by-  Daniel Chou (danielc)
-        Updated for the first draft.
-
-    23-Aug-1995 Wed 15:13:27 updated  -by-  Daniel Chou (danielc)
-        Updated for second draft
-
-    29-Aug-1995 Tue 11:33:24 updated  -by-  Daniel Chou (danielc)
-        Adding ExtChkBox for some TVOT_xxx type
-
-    31-Aug-1995 Thu 04:04:23 updated  -by-  Daniel Chou (danielc)
-        Making UNICODE type
-
-    01-Sep-1995 Fri 17:29:18 updated  -by-  Daniel Chou (danielc)
-        Change the API interface type, so that it can be dynamically called
-        and generate the property pages to be merge with the shell
-
-    05-Sep-1995 Tue 11:52:43 updated  -by-  Daniel Chou (danielc)
-        Rename to compspui.h and update the API entry structure
-
-    07-Sep-1995 Thu 14:46:55 updated  -by-  Daniel Chou (danielc)
-        rename to compstui.h and update comments
-
-    07-Sep-1995 Thu 16:07:31 updated  -by-  Daniel Chou (danielc)
-        Adding UNION type for pSel/Sel, pOldSel/OldSel
-
-    08-Sep-1995 Fri 09:23:38 updated  -by-  Daniel Chou (danielc)
-        Remove TypeIdx from OPTITEM and use pOptType, and remove all
-        pOptType passed in the CPSUICBPARAM and COMPROPSHEETUI structures
-
-    25-Sep-1995 Mon 19:39:45 updated  -by-  Daniel Chou (danielc)
-        add other related stuff.
-
-    26-Sep-1995 Tue 11:02:26 updated  -by-  Daniel Chou (danielc)
-        Add error codes for GETLASTERROR
-
-    27-Sep-1995 Wed 16:32:37 updated  -by-  Daniel Chou (danielc)
-        Move hWndParent, pTitle, hInst and TitleIconID out from
-        COMPROPSHEETUI to COMPROPSHEETUIHEADER.
-
-    28-Sep-1995 Thu 17:06:46 updated  -by-  Daniel Chou (danielc)
-        Add hInstCaller to COMPROPSHEETUI and add _COMPSTUI_ and cplusplus
-        stuff
-
-    28-Sep-1995 Thu 23:16:34 updated  -by-  Daniel Chou (danielc)
-        change tick count for trackbar/scrollbar to multiply factor. and
-        add the push button flag which can overwrite the update permission so
-        it can let user view the current setting from push button's dialog
-        display
-
-    07-Feb-1996 Wed 17:45:31 updated  -by-  Daniel Chou (danielc)
-        Change the API CommonPropSheetUI to CommonPropertySheetUI so that it
-        not using stack but message base, this way any caller can add/delete
-        pages as they want without worry about how many pages been added from
-        its children.
-
-
-[Environment:]
-
-    NT Windows - Common Property Sheet UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
-
+/*!
+\file compstui.h - Common Property Sheet UI
+*/
+#pragma once
 #ifndef _COMPSTUI_
 #define _COMPSTUI_
-
-#include <winuser.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 #if (!defined(RC_INVOKED))
-
 
 //
 // For compilers that don't support nameless unions
@@ -1341,7 +1253,7 @@ typedef struct _OPTITEM {
     LPWSTR      pName;                  // name of the item
     union {
         LONG    Sel;                    // current selection (index)
-        LPTSTR  pSel;                   // current selection (pStr)
+        LPWSTR  pSel;                   // current selection (pStr)
         } DUMMYUNIONNAME;
     union {
         PEXTCHKBOX  pExtChkBox;         // Pointer to EXTCHKBOX structure
@@ -1883,7 +1795,7 @@ typedef struct _DLGPAGE {
     WORD        cbSize;         // size of this structure
     WORD        Flags;          // DPF_xxxx flags
     DLGPROC     DlgProc;        // caller's dialog box subclass procedue
-    LPTSTR      pTabName;       // pointer to the tab name
+    LPWSTR      pTabName;       // pointer to the tab name
     ULONG_PTR   IconID;         // icon to be used
     union {
         WORD    DlgTemplateID;  // dialog box template ID
@@ -3128,6 +3040,7 @@ typedef struct _CPSUIDATABLOCK {
 
 #define PSUIINFO_UNICODE                    0x0001
 
+
 typedef struct _PROPSHEETUI_INFO {
     WORD            cbSize;
     WORD            Version;
@@ -3474,7 +3387,7 @@ typedef LONG (FAR *PFNPROPSHEETUI)(PPROPSHEETUI_INFO   pPSUIInfo,
 typedef struct _PROPSHEETUI_INFO_HEADER {
     WORD                    cbSize;
     WORD                    Flags;
-    LPTSTR                  pTitle;
+    LPWSTR                  pTitle;
     HWND                    hWndParent;
     HINSTANCE               hInst;
     union {

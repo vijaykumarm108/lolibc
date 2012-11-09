@@ -2,9 +2,10 @@
 \file printer_driver.h - Lo-Overhead windows printer driver interface definitions.
 */
 #pragma once
-#include "gdi32.h"
+#include <windows.h>
 #include <guiddef.h>
 #include <winspool.h>
+#include "compstui.h"
 
 #ifndef EXTERN_C
     #ifdef __cplusplus
@@ -1765,40 +1766,16 @@ HSURF WINAPI DrvEnableSurface(
     DHPDEV dhpdev
     );
 
-VOID WINAPI DrvSynchronize(
-    DHPDEV dhpdev,
-    RECTL *prcl
-    );
+VOID WINAPI DrvSynchronize( DHPDEV dhpdev, RECTL *prcl );
+VOID WINAPI DrvDisableSurface( DHPDEV dhpdev );
+VOID WINAPI DrvDisablePDEV( DHPDEV dhpdev );
 
-VOID WINAPI DrvDisableSurface(
-    DHPDEV dhpdev
-    );
-
-VOID WINAPI DrvDisablePDEV(
-    DHPDEV dhpdev
-    );
-
-/* DrvSaveScreenBits - iMode definitions */
-
-#define SS_SAVE    0
-#define SS_RESTORE 1
-#define SS_FREE    2
-
-ULONG_PTR WINAPI DrvSaveScreenBits(
-    SURFOBJ  *pso,
-    ULONG    iMode,
-    ULONG_PTR ident,
-    RECTL    *prcl
-    );
 
 /*
  * Desktops
  */
 
-BOOL WINAPI DrvAssertMode(
-    DHPDEV dhpdev,
-    BOOL   bEnable
-    );
+BOOL WINAPI DrvAssertMode( DHPDEV dhpdev, BOOL bEnable );
 
 ULONG WINAPI DrvGetModes(
     HANDLE    hDriver,
@@ -1899,13 +1876,7 @@ PIFIMETRICS WINAPI DrvQueryFont(
 #define QFT_KERNPAIRS       2L
 #define QFT_GLYPHSET        3L
 
-PVOID WINAPI DrvQueryFontTree(
-    DHPDEV    dhpdev,
-    ULONG_PTR  iFile,
-    ULONG     iFace,
-    ULONG     iMode,
-    ULONG     *pid
-    );
+PVOID WINAPI DrvQueryFontTree( DHPDEV dhpdev, ULONG_PTR iFile, ULONG iFace, ULONG iMode, ULONG *pid );
 
 #define QFD_GLYPHANDBITMAP    1L
 #define QFD_GLYPHANDOUTLINE   2L
@@ -1918,22 +1889,9 @@ PVOID WINAPI DrvQueryFontTree(
 
 #define QFD_TT_MONO_BITMAP QFD_TT_GRAY1_BITMAP
 
-LONG WINAPI DrvQueryFontData(
-    DHPDEV      dhpdev,
-    FONTOBJ    *pfo,
-    ULONG       iMode,
-    HGLYPH      hg,
-    GLYPHDATA  *pgd,
-    PVOID       pv,
-    ULONG       cjSize
-    );
-
-VOID WINAPI DrvFree(
-PVOID   pv,
-ULONG   id);
-
-VOID WINAPI DrvDestroyFont(
-FONTOBJ *pfo);
+LONG WINAPI DrvQueryFontData( DHPDEV dhpdev, FONTOBJ *pfo, ULONG iMode, HGLYPH hg, GLYPHDATA *pgd, PVOID pv, ULONG cjSize );
+VOID WINAPI DrvFree( PVOID pv, ULONG id);
+VOID WINAPI DrvDestroyFont( FONTOBJ *pfo );
 
 // Capability flags for DrvQueryCaps.
 
@@ -1942,7 +1900,7 @@ FONTOBJ *pfo);
 #define QC_4BIT                 0x00000004
 
 //
-// This is a mask of the capabilites of a font provider that can return more
+// This is a mask of the capabilities of a font provider that can return more
 // than just glyph metrics (i.e., bitmaps and/or outlines).  If a driver has
 // one or more of these capabilities, then it is FONT DRIVER.
 //
@@ -2011,22 +1969,14 @@ LONG WINAPI DrvQueryTrueTypeOutline(
     TTPOLYGONHEADER *ppoly
     );
 
-PVOID WINAPI DrvGetTrueTypeFile (
-    ULONG_PTR   iFile,
-    ULONG      *pcj
-    );
+PVOID WINAPI DrvGetTrueTypeFile (ULONG_PTR iFile, ULONG *pcj );
 
 // values for ulMode:
 
 #define QFF_DESCRIPTION     1L
 #define QFF_NUMFACES        2L
 
-LONG WINAPI DrvQueryFontFile(
-    ULONG_PTR   iFile,
-    ULONG      ulMode,
-    ULONG      cjBuf,
-    ULONG      *pulBuf
-    );
+LONG WINAPI DrvQueryFontFile( ULONG_PTR iFile, ULONG ulMode, ULONG cjBuf, ULONG *pulBuf );
 
 /*
  * BitBlt
@@ -2319,16 +2269,9 @@ WNDOBJ * WINAPI EngCreateWnd(
     int              iPixelFormat
     );
 
-VOID WINAPI EngDeleteWnd(
-    WNDOBJ  *pwo
-    );
+VOID WINAPI EngDeleteWnd( WNDOBJ *pwo );
 
-ULONG WINAPI WNDOBJ_cEnumStart(
-    WNDOBJ  *pwo,
-    ULONG    iType,
-    ULONG    iDirection,
-    ULONG    cLimit
-    );
+ULONG WINAPI WNDOBJ_cEnumStart( WNDOBJ  *pwo, ULONG iType, ULONG iDirection, ULONG cLimit );
 
 BOOL WINAPI WNDOBJ_bEnum(
     WNDOBJ  *pwo,
@@ -2351,54 +2294,19 @@ HDRVOBJ WINAPI EngCreateDriverObj(
     HDEV hdev
     );
 
-BOOL WINAPI EngDeleteDriverObj(
-    HDRVOBJ hdo,
-    BOOL bCallBack,
-    BOOL bLocked
-    );
-
-DRIVEROBJ* WINAPI EngLockDriverObj(
-    HDRVOBJ hdo
-    );
-
-BOOL WINAPI EngUnlockDriverObj(
-    HDRVOBJ hdo
-    );
-
-/*
- * Engine callback - return current process handle.
- */
-
+BOOL WINAPI EngDeleteDriverObj( HDRVOBJ hdo, BOOL bCallBack, BOOL bLocked );
+DRIVEROBJ* WINAPI EngLockDriverObj( HDRVOBJ hdo );
+BOOL WINAPI EngUnlockDriverObj( HDRVOBJ hdo );
 HANDLE WINAPI EngGetProcessHandle();
-
-/*
- * Engine callback - return current thread id
- */
-
 HANDLE WINAPI EngGetCurrentThreadId();
-
-/*
- * Engine callback - return current process id
- */
-
 HANDLE WINAPI EngGetCurrentProcessId();
 
 /*
  * Pixel formats
  */
 
-BOOL WINAPI DrvSetPixelFormat(
-    SURFOBJ *pso,
-    LONG     iPixelFormat,
-    HWND     hwnd
-    );
-
-LONG WINAPI DrvDescribePixelFormat(
-    DHPDEV   dhpdev,
-    LONG     iPixelFormat,
-    ULONG    cjpfd,
-    PIXELFORMATDESCRIPTOR *ppfd
-    );
+BOOL WINAPI DrvSetPixelFormat( SURFOBJ *pso, LONG iPixelFormat, HWND hwnd );
+LONG WINAPI DrvDescribePixelFormat( DHPDEV dhpdev, LONG iPixelFormat, ULONG cjpfd, PIXELFORMATDESCRIPTOR *ppfd );
 
 BOOL WINAPI DrvSwapBuffers( SURFOBJ *pso, WNDOBJ  *pwo );
 
@@ -2472,78 +2380,15 @@ BOOL WINAPI EngGradientFill(
     ULONG            ulMode
     );
 
-BOOL WINAPI EngTransparentBlt(
-    SURFOBJ    *psoDst,
-    SURFOBJ    *psoSrc,
-    CLIPOBJ    *pco,
-    XLATEOBJ   *pxlo,
-    RECTL      *prclDst,
-    RECTL      *prclSrc,
-    ULONG      iTransColor,
-    ULONG      ulReserved
-    );
-
-BOOL WINAPI EngTextOut(
-    SURFOBJ  *pso,
-    STROBJ   *pstro,
-    FONTOBJ  *pfo,
-    CLIPOBJ  *pco,
-    RECTL    *prclExtra,
-    RECTL    *prclOpaque,
-    BRUSHOBJ *pboFore,
-    BRUSHOBJ *pboOpaque,
-    POINTL   *pptlOrg,
-    MIX       mix
-    );
-
+BOOL WINAPI EngTransparentBlt( SURFOBJ *psoDst, SURFOBJ *psoSrc, CLIPOBJ *pco, XLATEOBJ *pxlo, RECTL *prclDst, RECTL *prclSrc, ULONG iTransColor, ULONG ulReserved );
+BOOL WINAPI EngTextOut( SURFOBJ *pso, STROBJ *pstro, FONTOBJ *pfo, CLIPOBJ *pco, RECTL *prclExtra, RECTL *prclOpaque, BRUSHOBJ *pboFore, BRUSHOBJ *pboOpaque, POINTL *pptlOrg, MIX mix );
 BOOL WINAPI EngStrokePath( SURFOBJ   *pso, PATHOBJ   *ppo, CLIPOBJ   *pco, XFORMOBJ  *pxo, BRUSHOBJ  *pbo, POINTL    *pptlBrushOrg, LINEATTRS *plineattrs, MIX        mix );
 BOOL WINAPI EngFillPath( SURFOBJ  *pso, PATHOBJ  *ppo, CLIPOBJ  *pco, BRUSHOBJ *pbo, POINTL   *pptlBrushOrg, MIX       mix, FLONG     flOptions );
 BOOL WINAPI EngStrokeAndFillPath(SURFOBJ   *pso, PATHOBJ   *ppo, CLIPOBJ   *pco, XFORMOBJ  *pxo, BRUSHOBJ  *pboStroke, LINEATTRS *plineattrs, BRUSHOBJ  *pboFill,
-    POINTL    *pptlBrushOrg, MIX        mixFill, FLONG      flOptions );
-BOOL WINAPI EngPaint( SURFOBJ  *pso, CLIPOBJ  *pco, BRUSHOBJ *pbo, POINTL   *pptlBrushOrg, MIX       mix );
-
-BOOL WINAPI EngCopyBits(
-    SURFOBJ  *psoDest,
-    SURFOBJ  *psoSrc,
-    CLIPOBJ  *pco,
-    XLATEOBJ *pxlo,
-    RECTL    *prclDest,
-    POINTL   *pptlSrc
-    );
-
-ULONG WINAPI EngSetPointerShape(
-    SURFOBJ  *pso,
-    SURFOBJ  *psoMask,
-    SURFOBJ  *psoColor,
-    XLATEOBJ *pxlo,
-    LONG      xHot,
-    LONG      yHot,
-    LONG      x,
-    LONG      y,
-    RECTL    *prcl,
-    FLONG     fl
-    );
-
-VOID WINAPI EngMovePointer(
-    SURFOBJ  *pso,
-    LONG      x,
-    LONG      y,
-    RECTL    *prcl
-    );
-
-BOOL WINAPI EngPlgBlt(
-    SURFOBJ         *psoTrg,
-    SURFOBJ         *psoSrc,
-    SURFOBJ         *psoMsk,
-    CLIPOBJ         *pco,
-    XLATEOBJ        *pxlo,
-    COLORADJUSTMENT *pca,
-    POINTL          *pptlBrushOrg,
-    POINTFIX        *pptfx,
-    RECTL           *prcl,
-    POINTL          *pptl,
-    ULONG            iMode
-    );
+    POINTL *pptlBrushOrg, MIX mixFill, FLONG flOptions );
+BOOL WINAPI EngPaint( SURFOBJ  *pso, CLIPOBJ  *pco, BRUSHOBJ *pbo, POINTL   *pptlBrushOrg, MIX mix );
+BOOL WINAPI EngCopyBits(SURFOBJ *psoDest, SURFOBJ  *psoSrc, CLIPOBJ  *pco, XLATEOBJ *pxlo, RECTL *prclDest, POINTL *pptlSrc );
+BOOL WINAPI EngPlgBlt( SURFOBJ *psoTrg, SURFOBJ *psoSrc, SURFOBJ *psoMsk, CLIPOBJ *pco, XLATEOBJ *pxlo, COLORADJUSTMENT *pca, POINTL *pptlBrushOrg, POINTFIX *pptfx, RECTL *prcl, POINTL *pptl, ULONG iMode );
 
 ULONG WINAPI EngDitherColor( HDEV hdev, ULONG iMode, ULONG  rgb, ULONG *pul );
 
@@ -3028,7 +2873,7 @@ typedef VOID   (WINAPI *PFN_DrvNotify)(SURFOBJ*, ULONG, PVOID);
 
 
 
-#define PROPSHEETUI_REASON_INIT             0
+/*#define PROPSHEETUI_REASON_INIT             0
 #define PROPSHEETUI_REASON_GET_INFO_HEADER  1
 #define PROPSHEETUI_REASON_DESTROY          2
 #define PROPSHEETUI_REASON_SET_RESULT       3
@@ -3051,7 +2896,7 @@ typedef struct _PROPSHEETUI_INFO {
 	LPARAM          lParamInit;
 	ULONG_PTR       UserData;
 	ULONG_PTR       Result;
-} PROPSHEETUI_INFO, *PPROPSHEETUI_INFO;
+} PROPSHEETUI_INFO, *PPROPSHEETUI_INFO;*/
 
 LONG WINAPI DrvDevicePropertySheets( PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam	);
 

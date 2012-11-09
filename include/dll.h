@@ -8,6 +8,8 @@ Standard Windows DLL definitions. These are the very basic definitions for all w
 #ifdef __cplusplus
 
 #define WINAPI __stdcall
+#define WINAPIV __stdcall
+#define APIENTRY __stdcall
 
 namespace lo
 {
@@ -30,6 +32,8 @@ namespace lo
 
 #define FAR
 #define NEAR
+#define IN
+#define OUT
 #define CONST				const
 #define FALSE (0)
 #define TRUE (1)
@@ -50,7 +54,7 @@ typedef FLOAT               *PFLOAT;
 typedef void				*LPVOID;
 typedef const void			*LPCVOID;
 typedef unsigned short		SHORT;
-typedef unsigned int		UINT;
+typedef unsigned int		UINT, *PUINT;
 typedef unsigned long		ULONG;
 typedef CHAR				*NPSTR, *LPSTR, *PSTR;
 typedef const CHAR			*LPCSTR, *PCSTR;
@@ -77,9 +81,20 @@ typedef unsigned __int64	ULONGLONG;
 typedef ULONGLONG			DWORDLONG;
 typedef DWORDLONG			*PDWORDLONG;
 typedef DWORD				*PDWORD;
+typedef ULONG_PTR			DWORD_PTR, *PDWORD_PTR;
 typedef WORD				*PWORD;
 typedef ULONG				*PULONG;
 typedef WORD				FSHORT;
+
+typedef signed char         INT8, *PINT8;
+typedef signed short        INT16, *PINT16;
+typedef signed int          INT32, *PINT32;
+typedef signed __int64      INT64, *PINT64;
+typedef unsigned char       UINT8, *PUINT8;
+typedef unsigned short      UINT16, *PUINT16;
+typedef unsigned int        UINT32, *PUINT32;
+typedef unsigned __int64    UINT64, *PUINT64;
+
 #define WINBASEAPI __declspec(dllimport)
 #define CALLBACK    __stdcall
 typedef LONG				HRESULT;
@@ -137,3 +152,38 @@ typedef union _LARGE_INTEGER {
 	} u;
 	LONGLONG QuadPart;
 } LARGE_INTEGER, *PLARGE_INTEGER;
+
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
+#define MAKEWORD(a, b)      ((WORD)(((BYTE)(((DWORD_PTR)(a)) & 0xff)) | ((WORD)((BYTE)(((DWORD_PTR)(b)) & 0xff))) << 8))
+#define MAKELONG(a, b)      ((LONG)(((WORD)(((DWORD_PTR)(a)) & 0xffff)) | ((DWORD)((WORD)(((DWORD_PTR)(b)) & 0xffff))) << 16))
+#define LOWORD(l)           ((WORD)(((DWORD_PTR)(l)) & 0xffff))
+#define HIWORD(l)           ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
+#define LOBYTE(w)           ((BYTE)(((DWORD_PTR)(w)) & 0xff))
+#define HIBYTE(w)           ((BYTE)((((DWORD_PTR)(w)) >> 8) & 0xff))
+
+// More static analysis definitions
+#define __field_ecount_opt(Count)
+
+#ifndef DECLSPEC_UUID
+#if (_MSC_VER >= 1100) && defined(__cplusplus)
+#define DECLSPEC_UUID(x) __declspec(uuid(x))
+#else
+#define DECLSPEC_UUID(x)
+#endif
+#endif
+
+#ifndef DECLSPEC_NOVTABLE
+#if (_MSC_VER >= 1100) && defined(__cplusplus)
+#define DECLSPEC_NOVTABLE __declspec(novtable)
+#else
+#define DECLSPEC_NOVTABLE
+#endif
+#endif
+
+#define MIDL_INTERFACE(x)   struct DECLSPEC_UUID(x) DECLSPEC_NOVTABLE

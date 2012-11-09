@@ -114,6 +114,15 @@ extern "C" {
 	typedef PDWORD		PLCID;
 	typedef WORD		LANGID;
 	typedef DWORD		FLONG;
+	typedef void *		HKEY;
+
+	typedef struct _SECURITY_ATTRIBUTES {
+		DWORD nLength;
+		LPVOID lpSecurityDescriptor;
+		BOOL bInheritHandle;
+	} SECURITY_ATTRIBUTES, *PSECURITY_ATTRIBUTES, *LPSECURITY_ATTRIBUTES;
+
+	typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
 #ifdef __cplusplus
 };
