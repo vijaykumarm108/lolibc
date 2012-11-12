@@ -319,9 +319,19 @@ errno_t wcsncpy_s( wchar_t *strDest, size_t numberOfElements, const wchar_t *str
 	return 0;
 }
 
+int wcscmp( const wchar_t *string1, const wchar_t *string2 )
+{
+	return _wcsicmp(string1,string2);
+}
+
 errno_t wcscpy_s( wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource )
 {
 	return wcsncpy_s( strDestination, numberOfElements, strSource, numberOfElements );
+}
+
+void _CrtSetCheckCount(int i)
+{
+
 }
 
 errno_t wcscat_s( wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource )

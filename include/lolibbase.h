@@ -88,6 +88,58 @@ typedef int errno_t;
 #endif // defined(_M_IA64) || defined(_M_AMD64)
 #endif // !defined(UNALIGNED)
 
+
+
+#ifndef _PTRDIFF_T_DEFINED
+#ifdef _WIN64
+typedef __int64             ptrdiff_t;
+#else  /* _WIN64 */
+typedef __w64 int            ptrdiff_t;
+#endif  /* _WIN64 */
+#define _PTRDIFF_T_DEFINED
+#endif  /* _PTRDIFF_T_DEFINED */
+
+#ifndef _INTPTR_T_DEFINED
+#define _INTPTR_T_DEFINED
+#ifdef _WIN64
+typedef __int64 intptr_t;
+#else /* _WIN64 */
+typedef __w64 int intptr_t;
+#endif /* _WIN64 */
+#endif /* _INTPTR_T_DEFINED */
+
+#ifndef _UINTPTR_T_DEFINED
+#define _UINTPTR_T_DEFINED
+#ifdef _WIN64
+typedef unsigned __int64 uintptr_t;
+#else /* _WIN64 */
+typedef __w64 unsigned int uintptr_t;
+#endif /* _WIN64 */
+#endif /* _UINTPTR_T_DEFINED */
+
+
+//
+// The INT_PTR is guaranteed to be the same size as a pointer.  Its
+// size with change with pointer size (32/64).  It should be used
+// anywhere that a pointer is cast to an integer type. UINT_PTR is
+// the unsigned variation.
+//
+// __int3264 is intrinsic to 64b MIDL but not to old MIDL or to C compiler.
+//
+#if ( 501 < __midl )
+typedef [public] __int3264 intptr_t, *PINT_PTR;
+typedef [public] unsigned __int3264 UINT_PTR, *PUINT_PTR;
+typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
+typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
+#else  // midl64
+// old MIDL and C++ compiler
+#if defined(_WIN64)
+typedef __int64				INT_PTR, *PINT_PTR;
+typedef unsigned __int64	UINT_PTR, *PUINT_PTR;
+typedef __int64				LONG_PTR, *PLONG_PTR;
+typedef unsigned __int64	ULONG_PTR, *PULONG_PTR;
+#define __int3264   __int64
+#else
 //
 // The INT_PTR is guaranteed to be the same size as a pointer.  Its
 // size with change with pointer size (32/64).  It should be used
@@ -110,40 +162,19 @@ typedef int errno_t;
 	typedef unsigned __int64	ULONG_PTR, *PULONG_PTR;
 	#define __int3264   __int64
 #else
-	typedef _W64 intptr_t		INT_PTR, *PINT_PTR;
-	typedef _W64 unsigned int	UINT_PTR, *PUINT_PTR;
-	typedef _W64 long			LONG_PTR, *PLONG_PTR;
-	typedef _W64 unsigned long	ULONG_PTR, *PULONG_PTR;
+	typedef intptr_t __w64		INT_PTR, *PINT_PTR;
+	typedef unsigned int __w64	UINT_PTR, *PUINT_PTR;
+	typedef long __w64		LONG_PTR, *PLONG_PTR;
+	typedef unsigned long __w64	ULONG_PTR, *PULONG_PTR;
 	#define __int3264   __int32
 #endif
+#endif // midl64		INT_PTR, *PINT_PTR;
+typedef unsigned int	UINT_PTR, *PUINT_PTR;
+typedef long			LONG_PTR, *PLONG_PTR;
+typedef unsigned long	ULONG_PTR, *PULONG_PTR;
+#define __int3264   __int32
+#endif
 #endif // midl64
-
-#ifndef _PTRDIFF_T_DEFINED
-#ifdef _WIN64
-typedef __int64             ptrdiff_t;
-#else  /* _WIN64 */
-typedef _W64 int            ptrdiff_t;
-#endif  /* _WIN64 */
-#define _PTRDIFF_T_DEFINED
-#endif  /* _PTRDIFF_T_DEFINED */
-
-#ifndef _INTPTR_T_DEFINED
-#define _INTPTR_T_DEFINED
-#ifdef _WIN64
-typedef __int64 intptr_t;
-#else /* _WIN64 */
-typedef _W64 int intptr_t;
-#endif /* _WIN64 */
-#endif /* _INTPTR_T_DEFINED */
-
-#ifndef _UINTPTR_T_DEFINED
-#define _UINTPTR_T_DEFINED
-#ifdef _WIN64
-typedef unsigned __int64 uintptr_t;
-#else /* _WIN64 */
-typedef _W64 unsigned int uintptr_t;
-#endif /* _WIN64 */
-#endif /* _UINTPTR_T_DEFINED */
 
 #define _CRT_ALIGN(x) __declspec(align(x))
 

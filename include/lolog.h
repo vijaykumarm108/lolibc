@@ -21,5 +21,8 @@ namespace lo {
 		function_trace( const char *format );
 		~function_trace();
 		void set_return_value(intptr_t returnValue, bool isError=false);
+	private:
+		intptr_t m_returnValue;
+		const char *m_id;
 	};
 }
