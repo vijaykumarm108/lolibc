@@ -9,8 +9,9 @@
 .DATA
 
 	PUBLIC  _fltused
- _fltused			EQU	9876h
- 
+ _fltused		equ		9876h
+ _PAGESIZE_		equ     1000h
+
 .CODE
 
 ;-------------------- { TRAMPOLINE CALLS } --------------------------
@@ -33,3 +34,7 @@ __CxxFrameHandler4 endp
 
 END
 
+public __chkstk
+__chkstk proc
+	ret
+__chkstk endp

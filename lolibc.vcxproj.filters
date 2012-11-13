@@ -486,6 +486,12 @@
     <CustomBuild Include="windows\pesect.rsp">
       <Filter>Source Files\windows</Filter>
     </CustomBuild>
+    <CustomBuild Include="windows\chkstk.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
+    <CustomBuild Include="windows\gshandlereh.rsp">
+      <Filter>Source Files\windows</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="windows\StdLibX86.asm">

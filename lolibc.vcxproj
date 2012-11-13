@@ -749,6 +749,28 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of gshandler.obj</Message>
     </CustomBuild>
     <None Include="roadmap.txt" />
+    <CustomBuild Include="windows\chkstk.rsp">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of chkstk.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of chkstk.obj</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="windows\gshandlereh.rsp">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LIB "$(VCInstallDir)lib\amd64\libcmt.lib" /OUT:"$(OutDir)%(Filename).obj" @%(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building 64 bit version of gshandlerex.obj</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building 64 bit version of gshandlerex.obj</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)%(Filename).obj</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
