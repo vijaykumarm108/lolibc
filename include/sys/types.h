@@ -1,3 +1,6 @@
+/*!
+\file types.h lolibc
+*/
 #pragma once
 #ifndef _INC_TYPES
 #define _INC_TYPES

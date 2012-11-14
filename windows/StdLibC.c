@@ -1,21 +1,10 @@
-/*
- * Copyright © 2012, MuThink Inc, All rights reserved.
- * http://www.muthink.com
- * Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
- */
 /*!
-\file StdLib.c
-\brief Helper functions to facilitate glibc calls into MSVCRT calls.
-\author Jordan Stevens
-\verbatim
-$Author: jstevens $
-$Rev: 413 $
-$LastChangedDate: 2009-06-24 03:49:34 -0500 (Wed, 24 Jun 2009) $
-$URL:  $
-\endverbatim
-\ingroup StdLib
-@{
+\brief stdlibc.c lolibc
+Copyright © 2012, MuThink Inc, All rights reserved.
+http://www.muthink.com
+Copying and distribution of this product is forbidden without direct permission from MuThink Inc.
 */
+
 #ifdef MRTDLL
 #undef MRTDLL
 #endif  /* MRTDLL */
@@ -31,7 +20,7 @@ $URL:  $
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <string.h>
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <errno.h>
@@ -319,10 +308,12 @@ errno_t wcsncpy_s( wchar_t *strDest, size_t numberOfElements, const wchar_t *str
 	return 0;
 }
 
+#ifdef DEBUG
 int wcscmp( const wchar_t *string1, const wchar_t *string2 )
 {
 	return _wcsicmp(string1,string2);
 }
+#endif
 
 errno_t wcscpy_s( wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource )
 {

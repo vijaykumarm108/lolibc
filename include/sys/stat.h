@@ -1,4 +1,6 @@
-/* reimport as 32 bit file */
+/*!
+\file stat.h lolibc
+*/
 
 #pragma once
 

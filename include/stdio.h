@@ -1,3 +1,6 @@
+/*!
+\file stdio.h lolibc
+*/
 #pragma once
 
 #ifndef _INC_STDIO
@@ -81,7 +84,10 @@ typedef struct _iobuf FILE;
 #define _SYS_OPEN       20
 #define TMP_MAX         32767  /* SHRT_MAX */
 
-/* Define NULL pointer value */
+/*!
+\brief stdio.h
+MuThink
+*/
 #ifndef NULL
 #ifdef __cplusplus
 #define NULL    0
@@ -123,6 +129,7 @@ extern "C" {
 	{
 		return _vsnprintf(str,size,format,ap);
 	}
+	_CRTIMP int vswprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
 	_CRTIMP int vfprintf( FILE *stream, const char *format, va_list ap );
 
 #ifdef __cplusplus

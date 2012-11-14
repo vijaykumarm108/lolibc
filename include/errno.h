@@ -1,4 +1,6 @@
-/* lolibc */
+/*!
+\file errono.h lolibc
+*/
 #pragma once
 #ifndef _INC_ERRNO
 #define _INC_ERRNO
