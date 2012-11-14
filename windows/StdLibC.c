@@ -308,12 +308,10 @@ errno_t wcsncpy_s( wchar_t *strDest, size_t numberOfElements, const wchar_t *str
 	return 0;
 }
 
-#ifdef DEBUG
 int wcscmp( const wchar_t *string1, const wchar_t *string2 )
 {
 	return _wcsicmp(string1,string2);
 }
-#endif
 
 errno_t wcscpy_s( wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource )
 {

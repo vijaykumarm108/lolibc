@@ -50,7 +50,15 @@ public  __ftol2_sse
 __ftol2_sse proc near
    ; Jump indirect: Jumps to (*__ftol2 )
    jmp  __imp___ftol  ; Trampoline bounce 
-__ftol2_sse endp
+__ftol2_sse endp 
+
+public __ftol
+__ftol proc near
+	fistp    DWORD PTR [esp-12]
+	mov		 eax, DWORD PTR [esp-12]
+	mov		 ecx, DWORD PTR [esp-8]
+	ret
+__ftol endp
 
 ; __imp____iob_func -->
    extrn __imp___iob:dword	; external memory addr

@@ -6,7 +6,18 @@
 namespace lo {
 	void log::error( long errorcode, const char *format, ...)
 	{
+		char message[1024];
+		va_list	VAList;
 		SetLastError(errorcode);
+		va_start(VAList, format);
+		int len = vsnprintf(message, sizeof(message), format, VAList);
+		if( errorcode != 0 )
+		{
+			strcat(message," : ");
+			len += 3;
+			FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorcode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), message + len, sizeof(message) - len, NULL );
+		}
+		write(message);
 	}
 	void log::verbose( const char *format, ...)
 	{
@@ -15,6 +26,13 @@ namespace lo {
 	void log::warning( const char *format, ...)
 	{
 
+	}
+	void log::write( const char *output )
+	{
+#ifdef _DEBUG
+		OutputDebugStringA(output);
+		OutputDebugStringA("\r\n");
+#endif
 	}
 	function_trace::function_trace() : m_id("")
 	{

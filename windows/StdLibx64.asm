@@ -32,9 +32,12 @@ __CxxFrameHandler4 proc
    jmp  __imp___CxxFrameHandler  ; Trampoline bounce 
 __CxxFrameHandler4 endp
 
-END
-
-public __chkstk
-__chkstk proc
+public _ftol
+_ftol proc
+	fistp    DWORD PTR [esp-12]
+	mov		 eax, DWORD PTR [esp-12]
+	mov		 ecx, DWORD PTR [esp-8]
 	ret
-__chkstk endp
+_ftol endp
+
+END

@@ -257,7 +257,7 @@ EXPORTS
 	_fstati64
 	_ftime
 	_ftime64
-	_ftol
+;	_ftol
 	_fullpath
 	_futime
 	_futime64
