@@ -556,6 +556,8 @@
     <ClInclude Include="include\stdexcept" />
     <ClInclude Include="include\stdint.h" />
     <ClInclude Include="include\stdio.h" />
+    <ClInclude Include="include\System.h" />
+    <ClInclude Include="include\System\IO.h" />
     <ClInclude Include="include\sys\malloc.h" />
     <ClInclude Include="include\sys\socket.h" />
     <ClInclude Include="include\sys\stat.h" />

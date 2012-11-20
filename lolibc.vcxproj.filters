@@ -43,6 +43,9 @@
     <Filter Include="Source Files\so">
       <UniqueIdentifier>{ec24595c-bb4e-41ac-8214-d61925f28764}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{df1ad9c5-b8fe-4db4-8034-10598ee518a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -313,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="include\dll\shell32.h">
       <Filter>Header Files\dll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System\IO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\System.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
