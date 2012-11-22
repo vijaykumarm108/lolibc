@@ -2,7 +2,6 @@
 
 #include <stdafx.h>
 #include <lo_utf8.h>
-#include <dll/kernel32.h>
 
 namespace lo
 {

@@ -31,6 +31,7 @@ extern "C" {
 		__time32_t actime;	/* access time */
 		__time32_t modtime;	/* modification time */
 	};
+	#define _INC_UTIME
 
 	_CRTIMP clock_t __cdecl clock(void);
 	_CRTIMP struct tm * localtime (const time_t *time);

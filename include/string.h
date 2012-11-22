@@ -126,7 +126,7 @@ _CRTIMP size_t __cdecl		wcscspn(const wchar_t *, const wchar_t *);
 _CRTIMP wchar_t * __cdecl	wcsdup(const wchar_t *);
 size_t __cdecl				wcslen(const wchar_t *);
 size_t __cdecl				wcsnlen(const wchar_t *,size_t);
-_CRTIMP wchar_t * __cdecl	wcsncat(wchar_t *, const wchar_t *, size_t);
+wchar_t * __cdecl			wcsncat(wchar_t *, const wchar_t *, size_t);
 _CRTIMP int __cdecl			wcsncmp(const wchar_t *, const wchar_t *, size_t);
 _CRTIMP wchar_t * __cdecl	wcsncpy(wchar_t *, const wchar_t *, size_t);
 _CRTIMP wchar_t * __cdecl	wcspbrk(const wchar_t *, const wchar_t *);

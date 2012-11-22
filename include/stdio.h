@@ -107,8 +107,10 @@ extern "C" {
 	_CRTIMP int		fclose ( FILE * stream );
 	_CRTIMP int		feof (FILE *stream);
 	_CRTIMP int		ferror (FILE *stream);
+	_CRTIMP int		fflush(_Inout_opt_ FILE * _File);
 	_CRTIMP FILE *	fopen ( const char * filename, const char * mode );
 	_CRTIMP size_t	fread ( void * ptr, size_t size, size_t count, FILE * stream );
+	_CRTIMP FILE *	freopen ( const char * fileName, const char * mode, FILE *stream );
 	_CRTIMP int		fseek ( FILE * stream, long int offset, int origin );
 	__int64			fseeko64 (FILE *stream, __int64 offset, int whence);	// in StdLibC.c
 	_CRTIMP long	ftell ( FILE * stream );

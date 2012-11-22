@@ -317,12 +317,6 @@
     <ClInclude Include="include\dll\shell32.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
-    <ClInclude Include="include\System\IO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
@@ -344,9 +338,6 @@
       <Filter>Source Files\stl</Filter>
     </ClCompile>
     <ClCompile Include="src\dll.cpp">
-      <Filter>Source Files\dll</Filter>
-    </ClCompile>
-    <ClCompile Include="src\kernel32.cpp">
       <Filter>Source Files\dll</Filter>
     </ClCompile>
     <ClCompile Include="std\memblock.cpp">
@@ -423,9 +414,6 @@
     </ClCompile>
     <ClCompile Include="src\loobject.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="windows\psapi.cpp">
-      <Filter>Source Files\dll</Filter>
     </ClCompile>
     <ClCompile Include="windows\nonstandard.c">
       <Filter>Source Files</Filter>

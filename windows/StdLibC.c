@@ -619,4 +619,19 @@ int rmdir(const char * path)
 	return _wrmdir(wpath);
 }
 
+wchar_t * __cdecl wcsncat(wchar_t *destination, const wchar_t *source, size_t length)
+{
+	size_t destinationLength = wcslen(destination);
+	if( destinationLength < length)
+	{
+		wcsncpy(destination + destinationLength,source,length - destinationLength);
+	}
+	return destination;
+}
+
+int __cdecl wcsicmp(const wchar_t *string1, const wchar_t *string2)
+{
+	return lstrcmpiW(string1, string2);
+}
+
 /*! @} */
