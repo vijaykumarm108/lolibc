@@ -21,6 +21,7 @@ namespace lo
 		ref_base(object_base *obj);
 		virtual ~ref_base();
 		object_base	*m_obj;		// Object we are referring to
+		bool		is_null()	{ return m_obj == nullptr; }
 	private:
 		uintptr_t	m_id;		// The unique id bit/number of this reference
 	};
@@ -31,13 +32,14 @@ namespace lo
 	{
 	public:
 		ref() : ref_base() {}
-		ref(const T& obj) : ref_base(&obj)	{  }
-		ref(const T* obj) : ref_base(obj)	{  }
-		ref(object_base *obj) : ref_base(obj) {}
+		ref(T& obj) : ref_base(&obj)	{  }
+		ref(T* obj) : ref_base(obj)	{  }
+		//ref(object_base *obj) : ref_base(obj) {}
 //		inline ref( ref<T> & external ) : ref_base(external.ptr) {}
 		inline T *operator->()				{ return ((reinterpret_cast<T *>(m_obj))); }
 		inline const T *operator->() const 	{ return (((const T *)(m_obj))); }
 		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_obj); }
+		static ref<T>	null()				{ return lo::ref<InfLine>((InfLine *)nullptr); }
 	private:
 	};
 

@@ -516,13 +516,7 @@
   <ItemGroup>
     <ClInclude Include="include\assert.h" />
     <ClInclude Include="include\ctype.h" />
-    <ClInclude Include="include\dll\advapi32.h" />
-    <ClInclude Include="include\dll\gdi32.h" />
     <ClInclude Include="include\dll\printer_driver.h" />
-    <ClInclude Include="include\dll\psapidll.h" />
-    <ClInclude Include="include\dll\shell32.h" />
-    <ClInclude Include="include\dll\user32.h" />
-    <ClInclude Include="include\dll\wininet.h" />
     <ClInclude Include="include\fcntl.h" />
     <ClInclude Include="include\internal.h" />
     <ClInclude Include="include\ios_base.h" />
@@ -542,8 +536,6 @@
     <ClInclude Include="include\cfloat" />
     <ClInclude Include="include\clocale" />
     <ClInclude Include="include\cmath" />
-    <ClInclude Include="include\dll.h" />
-    <ClInclude Include="include\dll\kernel32.h" />
     <ClInclude Include="include\dll\ntoskrnl.h" />
     <ClInclude Include="include\errno.h" />
     <ClInclude Include="include\float.h" />

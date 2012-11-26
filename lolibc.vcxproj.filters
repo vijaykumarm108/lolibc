@@ -182,12 +182,6 @@
     <ClInclude Include="include\stack">
       <Filter>Header Files\stl</Filter>
     </ClInclude>
-    <ClInclude Include="include\dll\kernel32.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
-    <ClInclude Include="include\dll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\dll\ntoskrnl.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
@@ -281,9 +275,6 @@
     <ClInclude Include="include\lolibc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\dll\psapidll.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
     <ClInclude Include="include\time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -296,26 +287,11 @@
     <ClInclude Include="include\setjmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\dll\advapi32.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
-    <ClInclude Include="include\dll\wininet.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
-    <ClInclude Include="include\dll\gdi32.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
     <ClInclude Include="include\dll\printer_driver.h">
       <Filter>Header Files\dll</Filter>
     </ClInclude>
     <ClInclude Include="include\lolog.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\dll\user32.h">
-      <Filter>Header Files\dll</Filter>
-    </ClInclude>
-    <ClInclude Include="include\dll\shell32.h">
-      <Filter>Header Files\dll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
