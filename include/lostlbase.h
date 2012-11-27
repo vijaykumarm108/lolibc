@@ -39,7 +39,8 @@ namespace lo
 		inline T *operator->()				{ return ((reinterpret_cast<T *>(m_obj))); }
 		inline const T *operator->() const 	{ return (((const T *)(m_obj))); }
 		inline T *Ptr() const				{ return reinterpret_cast<T*>(m_obj); }
-		static ref<T>	null()				{ return lo::ref<InfLine>((InfLine *)nullptr); }
+		inline operator const T &()			{ return *Ptr(); }
+		static ref<T>	null()				{ return lo::ref<T>((T*)nullptr); }
 	private:
 	};
 
