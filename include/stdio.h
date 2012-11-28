@@ -105,6 +105,7 @@ extern "C" {
 #endif
 
 	_CRTIMP int		fclose ( FILE * stream );
+	_CRTIMP FILE *	_fdopen( int fd, const char *mode );
 	_CRTIMP int		feof (FILE *stream);
 	_CRTIMP int		ferror (FILE *stream);
 	_CRTIMP int		fflush(_Inout_opt_ FILE * _File);
@@ -118,22 +119,25 @@ extern "C" {
 	_CRTIMP size_t	fwrite ( const void * ptr, size_t size, size_t count, FILE * stream );
 	_CRTIMP int		getc ( FILE * stream );
 	_CRTIMP int		getchar ( void );
-	_CRTIMP int printf( const char * format, ... );
-	_CRTIMP int putc ( int character, FILE * stream );
-	_CRTIMP int puts ( const char * str );
-	int remove (const char *filename);	// In stdlib.h
-	_CRTIMP int scanf (const char *format, ...);
-	_CRTIMP int sprintf( char *str, const char *format, ... );
-	_CRTIMP int vprintf( const char *format, va_list ap );
-	_CRTIMP int vsprintf( char *str, const char *format, va_list ap );
-	_CRTIMP int _vsnprintf( char *str, size_t size, const char *format, va_list ap );
+	_CRTIMP int		printf( const char * format, ... );
+	_CRTIMP int		putc ( int character, FILE * stream );
+	_CRTIMP int		puts ( const char * str );
+	_CRTIMP int		remove (const char *filename);	// In stdlib.h
+	_CRTIMP int		scanf (const char *format, ...);
+	_CRTIMP int		_snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
+	_CRTIMP int		sprintf( char *str, const char *format, ... );
+	_CRTIMP int		sscanf( const char *buffer, const char *format, ... );
+	_CRTIMP int		swscanf( const wchar_t *buffer,	const wchar_t *format, ... );
+	_CRTIMP int		vprintf( const char *format, va_list ap );
+	_CRTIMP int		vsprintf( char *str, const char *format, va_list ap );
+	_CRTIMP int		_vsnprintf( char *str, size_t size, const char *format, va_list ap );
 	__inline int	vsnprintf(char *str, size_t size, const char *format, va_list ap )
 	{
 		return _vsnprintf(str,size,format,ap);
 	}
-	_CRTIMP int vswprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
-	_CRTIMP int vfprintf( FILE *stream, const char *format, va_list ap );
-
+	_CRTIMP int		vswprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
+	_CRTIMP int		vfprintf( FILE *stream, const char *format, va_list ap );
+	_CRTIMP int		_vsnwprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
 #ifdef __cplusplus
 };
 #endif
