@@ -459,6 +459,32 @@ namespace std {
 		fill_n (iat(oldn), maxV(ssize_t(n-oldn),0), c);
 	}
 
+
+	bool	string::operator== (const_wpointer s) const
+	{
+		// Check the nullptr cases
+		const char *ptr = c_str();
+		if( s == nullptr && ptr == nullptr)
+			return true;
+		if( s == nullptr || ptr == nullptr)
+			return false;
+		// Compare byte by byte
+		char temp[5];
+		int i, l;
+		for( ; *ptr && *s; ++s)
+		{
+			if( (l = WideCharToMultiByte(CP_UTF8,0,s,1,temp,5,NULL,NULL)) <= 0)
+				break;	// End of s
+			for( i = 0; i < l; ++i )
+			{
+				if(temp[i] != *ptr)
+					return false;
+			}
+		}
+		return *ptr == *s;
+	}
+
+
 	string::size_type string::minimumFreeCapacity (void) const throw() { return (1); }
 
 	//------------------------------ wstring helper functions ---------------------
@@ -501,5 +527,6 @@ namespace std {
 		else
 			text.clear();
 	}
+
 
 } // namespace std

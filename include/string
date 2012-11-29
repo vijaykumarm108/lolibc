@@ -38,22 +38,59 @@ namespace std {
 		explicit		string(	size_type n, value_type c = 0 );
 		//~string();
 	
-		inline void				append(	const_iterator i1, const_iterator i2 )	{ append (i1, distance (i1, i2)); }
+		inline void				append(	const_iterator i1, const_iterator i2 )
+		{
+			append (i1, distance (i1, i2));
+		}
 		void	   				append(	const_pointer s, size_type len );
 		void	   				append(	const_pointer s );
 		void					append(	size_type n, const_reference c );
-		inline void				append(	size_type n, wvalue_type c )		{ insert (size(), c, n); }
-		inline void				append(	const_wpointer s1, const_wpointer s2 )	{ insert (size(), s1, s2); }
-		inline void				append(	const_wpointer s )			{ const_wpointer se (s); for (;se&&*se;++se) ; append (s, se); }
-		inline void				append(	const string& s )			{ append (s.begin(), s.end()); }
-		inline void				append(	const string& s, uoff_t o, size_type n )	{ append (s.iat(o), s.iat(o+n)); }
-		inline void				assign(	const_iterator i1, const_iterator i2 )		{ assign (i1, distance (i1, i2)); }
+		inline void				append(	size_type n, wvalue_type c )
+		{
+			insert (size(), c, n);
+		}
+		inline void				append(	const_wpointer s1, const_wpointer s2 )
+		{
+			insert (size(), s1, s2);
+		}
+		inline void				append(	const_wpointer s )
+		{
+			const_wpointer se (s);
+			for (;se&&*se;++se) ;
+			append (s, se);
+		}
+		inline void				append(	const string& s )
+		{
+			append (s.begin(), s.end());
+		}
+		inline void				append(	const string& s, uoff_t o, size_type n )
+		{
+			append (s.iat(o), s.iat(o+n));
+		}
+		inline void				assign(	const_iterator i1, const_iterator i2 )
+		{
+			assign (i1, distance (i1, i2));
+		}
 		void	    			assign(	const_pointer s, size_type len );
 		void	    			assign(	const_pointer s );
-		inline void				assign(	const_wpointer s1, const_wpointer s2 )	{ clear(); append (s1, s2); }
-		inline void				assign(	const_wpointer s1 )			{ clear(); append (s1); }
-		inline void				assign(	const string& s )			{ assign (s.begin(), s.end()); }
-		inline void				assign(	const string& s, uoff_t o, size_type n )	{ assign (s.iat(o), s.iat(o+n)); }
+		inline void				assign(	const_wpointer s1, const_wpointer s2 )
+		{
+			clear();
+			append (s1, s2);
+		}
+		inline void				assign(	const_wpointer s1 )
+		{
+			clear();
+			append (s1);
+		}
+		inline void				assign(	const string& s )
+		{
+			assign (s.begin(), s.end());
+		}
+		inline void				assign(	const string& s, uoff_t o, size_type n )
+		{
+			assign (s.iat(o), s.iat(o+n));
+		}
 		inline const_reference	at( uoff_t pos ) const		{ assert (pos <= size() && begin()); return (begin()[pos]); }
 		inline reference		at( uoff_t pos )			{ assert (pos <= size() && begin()); return (begin()[pos]); }
 		inline const_reference	back( void ) const			{ return (at(size()-1)); }
@@ -68,8 +105,14 @@ namespace std {
 		static int				compare( const_iterator first1, const_iterator last1, const_iterator first2, const_iterator last2);
 		size_type				copyto( pointer p, size_type n, const_iterator start = NULL) const;
 		inline pointer			data( void )				{ return (string::pointer (block::data())); }
-		inline const_iterator	end( void ) const			{ return (const_iterator (block::end())); }
-		inline iterator			end( void )					{ return (iterator (block::end())); }
+		inline const_iterator	end( void ) const
+		{
+			return (const_iterator (block::end()));
+		}
+		inline iterator			end( void )
+		{
+			return (iterator (block::end()));
+		}
 		inline const_iterator	iat( uoff_t pos ) const		{ return (begin() + minV (pos, size())); }
 		inline iterator			iat( uoff_t pos )			{ return (begin() + minV (pos, size())); }
 		const_iterator			wiat( uoff_t i ) const;
@@ -101,7 +144,11 @@ namespace std {
 								operator const value_type* (void) const;
 		inline					operator const unsigned char *() { return reinterpret_cast<const unsigned char *>(c_str()); }
 								operator value_type* (void);
-		inline const string&	operator= (const string& s)		{ assign (s.begin(), s.end()); return (*this); }
+		inline const string&	operator= (const string& s)
+		{
+			assign (s.begin(), s.end());
+			return (*this);
+		}
 		inline const string&	operator= (const_reference c)	{ assign (&c, 1); return (*this); }
 		inline const string&	operator= (const_pointer s)		{ assign (s); return (*this); }
 		inline const string&	operator= (const_wpointer s)	{ assign (s); return (*this); }
@@ -113,6 +160,7 @@ namespace std {
 		string					operator+ (const string& s) const;
 		inline bool				operator== (const string& s) const	{ return (block::operator== (s)); }
 		bool					operator== (const_pointer s) const;
+		bool					operator== (const_wpointer s) const;
 		inline bool				operator== (const_reference c) const { return (size() == 1 && c == at(0)); }
 		inline bool				operator!= (const string& s) const	{ return (!operator== (s)); }
 		inline bool				operator!= (const_pointer s) const	{ return (!operator== (s)); }

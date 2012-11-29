@@ -60,23 +60,23 @@ namespace std {
 #define TEMPLATE_TYPE3(type,a1,a2,a3)	type<a1,a2,a3>
 #endif
 
-/// Returns the minimum of \p a and \p b
-template <typename T1, typename T2>
-inline T1 minV (const T1& a, const T2& b)
-{
-    return (a < b ? a : b);
-}
+	/// Returns the minimum of \p a and \p b
+	template <typename T1, typename T2>
+	inline T1 minV (const T1& a, const T2& b)
+	{
+		return (a < b ? a : b);
+	}
 
-/// Returns the maximum of \p a and \p b
-template <typename T1, typename T2>
-inline T1 maxV (const T1& a, const T2& b)
-{
-    return (b < a ? a : b);
-}
+	/// Returns the maximum of \p a and \p b
+	template <typename T1, typename T2>
+	inline T1 maxV (const T1& a, const T2& b)
+	{
+		return (b < a ? a : b);
+	}
 
-/// Returns a NULL pointer cast to T.
-template <typename T> inline T* NullPointer (void)
-{ return ((T*) NULL); }
+	/// Returns a NULL pointer cast to T.
+	template <typename T> inline T* NullPointer (void)
+	{ return ((T*) NULL); }
 
 	/// \brief Returns a non-dereferentiable value reference.
 	/// This is useful for passing to alignof or the like which need a value but
@@ -106,34 +106,34 @@ template <typename T> struct __is_negative<T,false> { inline bool operator()(con
 template <typename T> inline bool is_negative (const T& v) { return (__is_negative<T,numeric_limits<T>::is_signed>()(v)); }
 #endif
 
-/// \brief Returns the absolute value of \p v
-/// Unlike the stdlib functions, this is inline and works with all types.
-template <typename T>
-inline T absv (T v)
-{
-    return (is_negative(v) ? -v : v);
-}
+	/// \brief Returns the absolute value of \p v
+	/// Unlike the stdlib functions, this is inline and works with all types.
+	template <typename T>
+	inline T absv (T v)
+	{
+		return (is_negative(v) ? -v : v);
+	}
 
-/// \brief Returns -1 for negative values, 1 for positive, and 0 for 0
-template <typename T>
-inline T sign (T v)
-{
-    return ((0 < v) - is_negative(v));
-}
+	/// \brief Returns -1 for negative values, 1 for positive, and 0 for 0
+	template <typename T>
+	inline T sign (T v)
+	{
+		return ((0 < v) - is_negative(v));
+	}
 
-/// Returns the absolute value of the distance i1 and i2
-template <typename T1, typename T2>
-inline size_t abs_distance (T1 i1, T2 i2)
-{
-    return (absv (distance(i1, i2)));
-}
+	/// Returns the absolute value of the distance i1 and i2
+	template <typename T1, typename T2>
+	inline size_t abs_distance (T1 i1, T2 i2)
+	{
+		return (absv (distance(i1, i2)));
+	}
 
-/// Returns the size of \p n elements of size \p T
-template <typename T>
-inline size_t size_of_elements (size_t n, const T*)
-{
-    return (n * sizeof(T));
-}
+	/// Returns the size of \p n elements of size \p T
+	template <typename T>
+	inline size_t size_of_elements (size_t n, const T*)
+	{
+		return (n * sizeof(T));
+	}
 
 // Defined in byteswap.h, which is usually unusable.
 #undef bswap_16
@@ -160,26 +160,26 @@ inline uint32_t bswap_32 (uint32_t v)
 inline uint64_t bswap_64 (uint64_t v)
 {
 #if x86_64
-    if (!__builtin_constant_p(v)) asm ("bswap %0":"+r"(v)); else
+	if (!__builtin_constant_p(v)) asm ("bswap %0":"+r"(v)); else
 #endif
-	v = (uint64_t(bswap_32((uint32_t)v)) << 32) | uint64_t(bswap_32(v >> 32));
-    return (v);
+		v = (uint64_t(bswap_32((uint32_t)v)) << 32) | uint64_t(bswap_32(v >> 32));
+	return (v);
 }
 #endif
 
-/// \brief Swaps the byteorder of \p v.
-template <typename T>
-inline T bswap (const T& v)
-{
-    switch (BitsInType(T)) {
-	default:	return (v);
-	case 16:	return (T (bswap_16 (uint16_t (v))));
-	case 32:	return (T (bswap_32 (uint32_t (v))));
-#if HAVE_INT64_T
-	case 64:	return (T (bswap_64 (uint64_t (v))));
-#endif
-    }
-}
+	/// \brief Swaps the byteorder of \p v.
+	template <typename T>
+	inline T bswap (const T& v)
+	{
+		switch (BitsInType(T)) {
+		default:	return (v);
+		case 16:	return (T (bswap_16 (uint16_t (v))));
+		case 32:	return (T (bswap_32 (uint32_t (v))));
+	#if HAVE_INT64_T
+		case 64:	return (T (bswap_64 (uint64_t (v))));
+	#endif
+		}
+	}
 
 #if BYTE_ORDER == BIG_ENDIAN
 template <typename T> inline T le_to_native (const T& v) { return (bswap (v)); }
@@ -223,88 +223,88 @@ template <typename T> inline T native_to_be (const T& v) { return (bswap (v)); }
 		return (y < x);
 	}
 
-/// Template of making <= from < and ==
-template <typename T>
-inline bool operator<= (const T& x, const T& y)
-{
-    return (!(y < x));
-}
+	/// Template of making <= from < and ==
+	template <typename T>
+	inline bool operator<= (const T& x, const T& y)
+	{
+		return (!(y < x));
+	}
 
-/// Template of making >= from < and ==
-template <typename T>
-inline bool operator>= (const T& x, const T& y)
-{
-    return (!(x < y));
-}
+	/// Template of making >= from < and ==
+	template <typename T>
+	inline bool operator>= (const T& x, const T& y)
+	{
+		return (!(x < y));
+	}
 
-/// Packs \p s multiple times into \p b. Useful for loop unrolling.
-template <typename TSmall, typename TBig>
-inline void pack_type (TSmall s, TBig& b)
-{
-    const size_t n = sizeof(TBig) / sizeof(TSmall);
-    b = s;
-    // Calls to min are here to avoid warnings for shifts bigger than the type. min will be gone when optimized.
-    if (n < 2) return;
-    b = (b << min (BitsInType(TSmall), BitsInType(TBig))) | b;
-    if (n < 4) return;
-    b = (b << min (BitsInType(TSmall) * 2, BitsInType(TBig))) | b;
-    if (n < 8) return;
-    b = (b << min (BitsInType(TSmall) * 4, BitsInType(TBig))) | b;
-}
+	/// Packs \p s multiple times into \p b. Useful for loop unrolling.
+	template <typename TSmall, typename TBig>
+	inline void pack_type (TSmall s, TBig& b)
+	{
+		const size_t n = sizeof(TBig) / sizeof(TSmall);
+		b = s;
+		// Calls to min are here to avoid warnings for shifts bigger than the type. min will be gone when optimized.
+		if (n < 2) return;
+		b = (b << min (BitsInType(TSmall), BitsInType(TBig))) | b;
+		if (n < 4) return;
+		b = (b << min (BitsInType(TSmall) * 2, BitsInType(TBig))) | b;
+		if (n < 8) return;
+		b = (b << min (BitsInType(TSmall) * 4, BitsInType(TBig))) | b;
+	}
 
-/// \brief Divides \p n1 by \p n2 and rounds the result up.
-/// This is in contrast to regular division, which rounds down.
-template <typename T1, typename T2>
-inline T1 DivRU (T1 n1, T2 n2)
-{
-    T2 adj = n2 - 1;
-    if (is_negative (n1))
-	adj = -adj;
-    return ((n1 + adj) / n2);
-}
+	/// \brief Divides \p n1 by \p n2 and rounds the result up.
+	/// This is in contrast to regular division, which rounds down.
+	template <typename T1, typename T2>
+	inline T1 DivRU (T1 n1, T2 n2)
+	{
+		T2 adj = n2 - 1;
+		if (is_negative (n1))
+		adj = -adj;
+		return ((n1 + adj) / n2);
+	}
 
-/// Sets the contents of \p pm to 1 and returns true if the previous value was 0.
-inline bool TestAndSet (int* pm)
-{
-#if CPU_HAS_CMPXCHG8
-    bool rv;
-    int oldVal (1);
-    asm volatile ( // cmpxchg compares to %eax and swaps if equal
-	"cmpxchgl %3, %1\n\t"
-	"sete %0"
-	: "=a" (rv), "=m" (*pm), "=r" (oldVal)
-	: "2" (oldVal), "a" (0)
-	: "memory");
-    return (rv);
-#elif __i386__ || __x86_64__
-    int oldVal (1);
-    asm volatile ("xchgl %0, %1" : "=r"(oldVal), "=m"(*pm) : "0"(oldVal), "m"(*pm) : "memory");
-    return (!oldVal);
-#elif __sparc32__	// This has not been tested
-    int rv;
-    asm volatile ("ldstub %1, %0" : "=r"(rv), "=m"(*pm) : "m"(pm));
-    return (!rv);
-#else
-    const int oldVal (*pm);
-    *pm = 1;
-    return (!oldVal);
-#endif
-}
+	/// Sets the contents of \p pm to 1 and returns true if the previous value was 0.
+	inline bool TestAndSet (int* pm)
+	{
+	#if CPU_HAS_CMPXCHG8
+		bool rv;
+		int oldVal (1);
+		asm volatile ( // cmpxchg compares to %eax and swaps if equal
+		"cmpxchgl %3, %1\n\t"
+		"sete %0"
+		: "=a" (rv), "=m" (*pm), "=r" (oldVal)
+		: "2" (oldVal), "a" (0)
+		: "memory");
+		return (rv);
+	#elif __i386__ || __x86_64__
+		int oldVal (1);
+		asm volatile ("xchgl %0, %1" : "=r"(oldVal), "=m"(*pm) : "0"(oldVal), "m"(*pm) : "memory");
+		return (!oldVal);
+	#elif __sparc32__	// This has not been tested
+		int rv;
+		asm volatile ("ldstub %1, %0" : "=r"(rv), "=m"(*pm) : "m"(pm));
+		return (!rv);
+	#else
+		const int oldVal (*pm);
+		*pm = 1;
+		return (!oldVal);
+	#endif
+	}
 
-/// Returns the index of the first set bit in \p v or \p nbv if none.
-inline uoff_t FirstBit (uint32_t v, uoff_t nbv)
-{
-    uoff_t n = nbv;
-#if __i386__ || __x86_64__
-    if (!__builtin_constant_p(v)) asm ("bsr\t%1, %k0":"+r,r"(n):"r,m"(v)); else
-#endif
-#if __GNUC__
-    if (v) n = 31 - __builtin_clz(v);
-#else
-    if (v) for (uint32_t m = uint32_t(1)<<(n=31); !(v & m); m >>= 1) --n;
-#endif
-    return (n);
-}
+	/// Returns the index of the first set bit in \p v or \p nbv if none.
+	inline uoff_t FirstBit (uint32_t v, uoff_t nbv)
+	{
+		uoff_t n = nbv;
+	#if __i386__ || __x86_64__
+		if (!__builtin_constant_p(v)) asm ("bsr\t%1, %k0":"+r,r"(n):"r,m"(v)); else
+	#endif
+	#if __GNUC__
+		if (v) n = 31 - __builtin_clz(v);
+	#else
+		if (v) for (uint32_t m = uint32_t(1)<<(n=31); !(v & m); m >>= 1) --n;
+	#endif
+		return (n);
+	}
 	/// Returns the index of the first set bit in \p v or \p nbv if none.
 	inline uoff_t FirstBit (uint64_t v, uoff_t nbv)
 	{

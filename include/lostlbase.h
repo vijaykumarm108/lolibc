@@ -347,8 +347,14 @@ namespace lo
 		void					read (std::istream&);
 		inline void				relink (const void* p, size_type n);
 		inline size_type		readable_size (void) const	{ return (size()); }
-		inline void				resize (size_type n)		{ m_Size = n; }
-		inline size_type		size (void) const			{ return (m_Size); }
+		inline void				resize (size_type n)
+		{
+			m_Size = n;
+		}
+		inline size_type		size (void) const
+		{
+			return (m_Size);
+		}
 		size_type				stream_size (void) const;
 		void					swap (cblocklink& l);
 		void					text_write (std::ostringstream& os) const;
@@ -406,29 +412,77 @@ namespace lo
 		inline					blocklink (const void* p, size_type n)	: cblocklink (p, n) {}
 		inline					blocklink (rcself_t l)			: cblocklink (l) {}
 		inline explicit			blocklink (const cblocklink& l)		: cblocklink (l) {}
-		inline const_iterator	begin (void) const			{ return (cblocklink::begin()); }
-		inline iterator			begin (void)				{ return (iterator (data())); }
-		inline pointer			data (void)					{ return (const_cast<pointer>(cdata())); }
-		inline iterator			end (void)					{ return (iat (size())); }
-		inline const_iterator	end (void) const			{ return (cblocklink::end()); }
+		inline const_iterator	begin (void) const
+		{
+			return (cblocklink::begin());
+		}
+		inline iterator			begin (void)
+		{
+			return (iterator (data()));
+		}
+		inline pointer			data (void)
+		{
+			return (const_cast<pointer>(cdata()));
+		}
+		inline iterator			end (void)
+		{
+			return (iat (size()));
+		}
+		inline const_iterator	end (void) const
+		{
+			return (cblocklink::end());
+		}
 		void					erase (iterator start, size_type size);
 		void					fill (iterator start, const void* p, size_type elsize, size_type elCount = 1);
 		iterator				iat (size_type i);
-		inline const_iterator	iat (size_type i) const		{ return (cblocklink::iat (i)); }
+		inline const_iterator	iat (size_type i) const
+		{
+			return (cblocklink::iat (i));
+		}
 		void					insert (iterator start, size_type size);
-		inline void				link (const void* p, size_type n)	{ cblocklink::link (p, n); }
-		inline void				link (void* p, size_type n)			{ cblocklink::link (p, n); }
-		inline void				link (const cblocklink& l)			{ cblocklink::link (l); }
-		inline void				link (blocklink& l)					{ cblocklink::link (l); }
+		inline void				link (const void* p, size_type n)
+		{
+			cblocklink::link (p, n);
+		}
+		inline void				link (void* p, size_type n)
+		{
+			cblocklink::link (p, n);
+		}
+		inline void				link (const cblocklink& l)
+		{
+			cblocklink::link (l);
+		}
+		inline void				link (blocklink& l)
+		{
+			cblocklink::link (l);
+		}
 		void					link (const void* first, const void* last);
 		void					link (void* first, void* last);
-		inline rcself_t			operator= (const cblocklink& l)		{ cblocklink::operator= (l); return (*this); }
-		inline rcself_t			operator= (rcself_t l)				{ cblocklink::operator= (l); return (*this); }
-		inline void				relink (const void* p, size_type n)	{ cblocklink::relink (p, n); }
-		inline void				relink (void* p, size_type n)		{ cblocklink::relink (p, n); }
+		inline rcself_t			operator= (const cblocklink& l)
+		{
+			cblocklink::operator= (l); return (*this);
+		}
+		inline rcself_t			operator= (rcself_t l)
+		{
+			cblocklink::operator= (l); return (*this);
+		}
+		inline void				relink (const void* p, size_type n)
+		{
+			cblocklink::relink (p, n);
+		}
+		inline void				relink (void* p, size_type n)
+		{
+			cblocklink::relink (p, n);
+		}
 		void					read (std::istream& is);
-		inline void				swap (blocklink& l)					{ cblocklink::swap (l); }
-		size_type				writable_size (void) const			{ return (size()); }
+		inline void				swap (blocklink& l)
+		{
+			cblocklink::swap (l);
+		}
+		size_type				writable_size (void) const
+		{
+			return (size());
+		}
 	};
 
 	

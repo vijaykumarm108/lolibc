@@ -323,6 +323,11 @@ void _CrtSetCheckCount(int i)
 
 }
 
+wchar_t *wcscat( wchar_t *destination, const wchar_t *source )
+{
+	return wcscpy(destination + wcslen(destination),source);
+}
+
 errno_t wcscat_s( wchar_t *strDestination, size_t numberOfElements, const wchar_t *strSource )
 {
 	size_t i;
