@@ -89,30 +89,33 @@ typedef unsigned short wchar_t;
 	{
 		return _strdup(str);
 	}
-_CRTIMP char *  __cdecl		_strerror(const char *);
-_CRTIMP char *  __cdecl		strerror(int);
-_CRTIMP char *  __cdecl		_strlwr(char *);
-_CRTIMP char *  __cdecl		strncat(char *, const char *, size_t);
-_CRTIMP int     __cdecl		strncmp(const char *, const char *, size_t);
-_CRTIMP int     __cdecl		_strnicmp(const char *, const char *, size_t);
-_CRTIMP char *  __cdecl		strncpy(char *, const char *, size_t);
-_CRTIMP char *  __cdecl		_strnset(char *, int, size_t);
-_CRTIMP char *  __cdecl		strpbrk(const char *, const char *);
-_CRTIMP char *  __cdecl		strrchr(const char *, int);
-_CRTIMP char *  __cdecl		_strrev(char *);
-_CRTIMP size_t  __cdecl		strspn(const char *, const char *);
-_CRTIMP char *  __cdecl		strstr(const char *, const char *);
-_CRTIMP char *  __cdecl		strtok(char *, const char *);
-_CRTIMP char *  __cdecl		_strupr(char *);
-_CRTIMP size_t  __cdecl		strxfrm (char *, const char *, size_t);
-_CRTIMP int __cdecl			strcmpi(const char *, const char *);
-_CRTIMP int __cdecl			stricmp(const char *, const char *);
-_CRTIMP char * __cdecl		strlwr(char *);
-_CRTIMP int __cdecl			strnicmp(const char *, const char *, size_t);
-_CRTIMP char * __cdecl		strnset(char *, int, size_t);
-_CRTIMP char * __cdecl		strrev(char *);
-		char * __cdecl		strset(char *, int);
-_CRTIMP char * __cdecl		strupr(char *);
+	_CRTIMP char *  __cdecl		_strerror(const char *);
+	_CRTIMP char *  __cdecl		strerror(int);
+	_CRTIMP char *  __cdecl		_strlwr(char *);
+	_CRTIMP char *  __cdecl		strncat(char *, const char *, size_t);
+	_CRTIMP int     __cdecl		strncmp(const char *, const char *, size_t);
+	_CRTIMP int     __cdecl		_strnicmp(const char *, const char *, size_t);
+	_CRTIMP char *  __cdecl		strncpy(char *, const char *, size_t);
+	_CRTIMP char *  __cdecl		_strnset(char *, int, size_t);
+	_CRTIMP char *  __cdecl		strpbrk(const char *, const char *);
+	_CRTIMP char *  __cdecl		strrchr(const char *, int);
+	_CRTIMP char *  __cdecl		_strrev(char *);
+	_CRTIMP size_t  __cdecl		strspn(const char *, const char *);
+	_CRTIMP char *  __cdecl		strstr(const char *, const char *);
+	_CRTIMP char *  __cdecl		strtok(char *, const char *);
+	_CRTIMP char *  __cdecl		_strupr(char *);
+	_CRTIMP size_t  __cdecl		strxfrm (char *, const char *, size_t);
+	_CRTIMP int		__cdecl		strcmpi(const char *, const char *);
+	__inline int	__cdecl		stricmp(const char *str1, const char *str2)
+	{
+		return _stricmp(str1,str2);
+	}
+	_CRTIMP char * __cdecl		strlwr(char *);
+	_CRTIMP int __cdecl			strnicmp(const char *, const char *, size_t);
+	_CRTIMP char * __cdecl		strnset(char *, int, size_t);
+	_CRTIMP char * __cdecl		strrev(char *);
+	char * __cdecl		strset(char *, int);
+	_CRTIMP char * __cdecl		strupr(char *);
 
 /* wide function prototypes, also declared in wchar.h  */
 #ifndef _WSTRING_DEFINED

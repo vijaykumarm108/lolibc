@@ -13,8 +13,7 @@ namespace std {
 //const uoff_t string::npos;
 
 	/// Assigns itself the value of string \p s
-	string::string (const string& s)
-	: block ((s.size()+1) & (s.is_linked()-1))	// Allocate with terminator if not linked (can't call virtuals from base ctor)
+	string::string (const string& s) : block ((s.size()+1) & (s.is_linked()-1))	// Allocate with terminator if not linked (can't call virtuals from base ctor)
 	{
 		if (s.is_linked())
 			relink (s.c_str(), s.size());
@@ -465,13 +464,13 @@ namespace std {
 	//------------------------------ wstring helper functions ---------------------
 
 	/// Converts the UTF-8 string in \p bufferIn to a widechar string
-	void wstring::init(const char *bufferIn)
+	void wstring::init(const char *bufferIn, size_t maxLength )
 	{
 		if(bufferIn == nullptr)
 			buffer = nullptr;
 		else
 		{
-			int length = MultiByteToWideChar(CP_UTF8, 0, bufferIn, -1, NULL, 0 );
+			int length = MultiByteToWideChar(CP_UTF8, 0, bufferIn, maxLength, NULL, 0 );
 			if( length > 0 )
 			{
 				buffer = reinterpret_cast<wchar_t *>(malloc(length*sizeof(wchar_t)));
