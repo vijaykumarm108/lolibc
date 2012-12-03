@@ -16,12 +16,13 @@ namespace lo
 	/// Base class of the ref<T> and iref<T> smart pointers
 	class ref_base
 	{
+	public:
+		bool		is_null()	{ return m_obj == nullptr; }
 	protected:
 		ref_base();
 		ref_base(object_base *obj);
 		virtual ~ref_base();
 		object_base	*m_obj;		// Object we are referring to
-		bool		is_null()	{ return m_obj == nullptr; }
 	private:
 		uintptr_t	m_id;		// The unique id bit/number of this reference
 	};
@@ -329,7 +330,7 @@ namespace lo
 		typedef const_iterator		iterator;
 		typedef const cblocklink&		rcself_t;
 	public:
-		inline					cblocklink (void)				: m_Data (NULL), m_Size (0) { }
+		inline					cblocklink (void) : m_Data (NULL), m_Size (0) { }
 		cblocklink (const void* p, size_type n);
 		inline					cblocklink (const cblocklink& l) : m_Data (l.m_Data), m_Size (l.m_Size) {}
 		inline virtual			~cblocklink (void) throw()	{}
@@ -358,9 +359,11 @@ namespace lo
 		size_type				stream_size (void) const;
 		void					swap (cblocklink& l);
 		void					text_write (std::ostringstream& os) const;
+		/** Simply clears the pointer to the data. Dangerous function. */
 		virtual void			unlink (void) throw();
 		void					write (std::ostream& os) const;
 		void					write_file (const char* filename, int mode = 0644) const;
+	protected:
 	private:
 		const_pointer	m_Data;		///< Pointer to the data block (const)
 		size_type		m_Size;		///< size of the data block

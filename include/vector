@@ -6,26 +6,13 @@
 
 namespace std {
 
-	template <class T> struct vector_base
-	{
-	public:
-		enum { IsClass = 1, IsValue = 0 };
-	};
-
-	template <> struct vector_base<unsigned char>	{ enum { IsClass = 0, IsValue = 1 }; };
-	template <> struct vector_base<char>			{ enum { IsClass = 0, IsValue = 1 }; };
-
-	/// \class vector
-	/// \ingroup Sequences
-	///
-	/// \brief STL vector equivalent.
-	///
-	/// Provides a typed array-like interface to a managed memory block, including
-	/// element access, iteration, modification, resizing, and serialization. In
-	/// this design elements frequently undergo bitwise move, so don't put it in
-	/// here if it doesn't support it. This mostly means having no self-pointers.
-	///
-	template <typename T> class vector : public lo::object_base, public vector_base<T>
+	/**
+	STL vector equivalent.
+	Class types such as vector<string> must have a default constructor and working copy constructor.
+	Class types will be stored as a block of pointers, therefore the class elements will be stored in the heap even if the vector is on the stack.
+	All other types, i.e. pointers to types (including classes) will be treated as values.
+	*/
+	template <typename T> class vector : public lo::object_base
 	{
 	public:
 		typedef T										value_type;
@@ -59,7 +46,10 @@ namespace std {
 		vector (const vector<T>& v) : m_Data ()
 		{
 			resize (v.size());
-			::std::copy (v.begin(), v.end(), begin());
+			auto input = v.begin();
+			auto output = begin();
+			for( ; input != v.end(); ++input, ++output )
+				construct(output,*input);
 		}
 		//vector (T *v );
 		/// Copies range [\p i1, \p i2]
@@ -80,55 +70,83 @@ namespace std {
 			destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
 		}
 		//----- Operators -----
+		/** non-standard. Checks if underlying data points to the same block. i.e. assigned but not overwritten. */
 		bool					operator== (const vector<T>& v) const	{ return (m_Data == v.m_Data); }
 								operator lo::blocklink (void) const		{ return (lo::blocklink (m_Data)); }
 								operator lo::blocklink (void)			{ return (lo::blocklink (m_Data)); }
 		//----- Methods -----
-		/// Copies the range [\p i1, \p i2]
+		/**	Assigns new content to the vector, dropping all the elements contained in the container before the call and replacing them by those specified by the parameters.
+		In the range version (1), the new content of the container object is a copy of those contained in the range between first and last.
+		*/
 		void					assign (const_iterator i1, const_iterator i2)
 		{
 			assert (i1 <= i2);
 			resize (distance (i1, i2));
 			::std::copy (i1, i2, begin());
 		}
-		/// Copies \p n elements with value \p v.
-		void					assign (size_type n, const T& v)
+		/**	Assigns new content to the vector, dropping all the elements contained in the container before the call and replacing them by those specified by the parameters.
+		In the fill version (2), the new content is the repetition \p n times of copies of \p val. */
+		void					assign (size_type n, const T& val)
 		{
 			resize (n);
-			::std::fill (begin(), end(), v);
+			::std::fill (begin(), end(), val);
 		}
-		inline reference		at (size_type i)			{ assert (i < size()); return (begin()[i]); }
-		inline const_reference	at (size_type i) const		{ assert (i < size()); return (begin()[i]); }
+		/** Returns a reference to the element at position \p n in the vector */
+		inline reference		at (size_type n)			{ assert (n < size()); return (begin()[n]); }
+		/** Returns a const reference to the element at position \p n in the vector */
+		inline const_reference	at (size_type n) const		{ assert (n < size()); return (begin()[n]); }
+		/** Returns a reference to the last element in the vector. Similar to end(). */
 		reference				back (void)
 		{
 			assert (!empty());
 			return (end()[-1]);
 		}
+		/** Returns a const reference to the last element in the vector. Similar to end() const. */
 		const_reference			back (void) const
 		{
 			assert (!empty());
 			return (end()[-1]);
 		}
+		/** Returns an iterator pointing to the first element in the vector. Similar to front(). */
 		inline iterator			begin (void)				{ return (iterator (m_Data.begin()));		}
+		/** Returns an const iterator pointing to the first element in the vector. Similar to front(). */
 		inline const_iterator	begin (void) const			{ return (const_iterator (m_Data.begin()));	}
-		inline size_type		capacity (void) const		{ return (m_Data.capacity() / sizeof(T));	}
-		inline void				clear (void)			{ m_Data.clear(); }
+		/** Returns the size of the currently allocated storage space, expressed in terms of elements. */
+		inline size_type		capacity (void) const
+		{
+			return (m_Data.capacity() / element_size());
+		}
+		/** Returns a const_iterator pointing to the first element in the container. (c++11) */
+		const_iterator cbegin() const						{ return (const_iterator (m_Data.begin()));	}
+		/** Removes all elements from the vector, calling their respective destructors, leaving the container with a size of 0. */
+		void					clear (void)
+		{
+			destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
+			m_Data.clear();
+		}
+		/** non standard. */
 		inline void				copy_link (void)						{ m_Data.copy_link(); }
-		/// Calls element destructors and frees storage.
+		/** Returns a direct pointer to the memory array used internally by the vector to store its owned elements. (c++11) */
+		value_type* data() throw()			{ return value_type *(m_Data.data()); }
+		/** Returns a direct pointer to the const memory array used internally by the vector to store its owned elements. */
+		const value_type* cdata() const throw()	{ return const value_type *(m_Data.cdata()); }
+		/** non standard. Calls element destructors and frees storage. */
 		void					deallocate (void) throw()
 		{
 			destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
 			m_Data.deallocate();
 		}
+		/** non standard. Returns the actual storage space required to store an element in the array. It may not represent the actual size required to store it in memory. */
+		inline int				element_size() const
+		{
+			return sizeof(T); // __is_class(T) ? sizeof(T *) : sizeof(T);
+		}	
+		/** Returns whether the vector is empty (i.e. whether its size is 0). */
 		inline bool				empty (void) const			{ return (m_Data.empty());			}
-		inline iterator			end (void)
-		{
-			return (iterator (m_Data.end()));
-		}
-		inline const_iterator	end (void) const
-		{
-			return (const_iterator (m_Data.end()));
-		}
+		/** Returns an iterator referring to the past-the-end element in the vector container. */
+		inline iterator			end (void)					{ return (iterator (m_Data.end()));	}
+		/** Returns a const iterator referring to the past-the-end element in the vector container. */
+		inline const_iterator	end (void) const			{ return (const_iterator (m_Data.end())); }
 		/// Removes elements from \p ep1 to \p ep2.
 		iterator				erase (iterator ep1, iterator ep2)
 		{
@@ -138,12 +156,15 @@ namespace std {
 		/// Removes \p count elements at offset \p ep.
 		iterator				erase (iterator ep, size_type n = 1)
 		{
-			return (iterator (m_Data.erase (block::iterator(ep), n * sizeof(T))));
+			return (iterator (m_Data.erase (block::iterator(ep), n * element_size())));
 		}
+		/** Returns a reference to the first element in the vector. Unlike begin(), this returns a direct reference. */
 		inline reference		front (void)				{ return (at(0)); }
+		/** Returns a const reference to the first element in the vector. Unlike begin(), this returns a direct reference. */
 		inline const_reference	front (void) const			{ return (at(0)); }
-		inline size_t			get_Length(void) const		{size();}
+		/** non standard. Easy to work with version of at() when you need an interator. */ 
 		inline iterator			iat (size_type i)			{ assert (i <= size()); return (begin() + i); }
+		/** non standard. Easy to work with version of at() when you need an interator. */
 		inline const_iterator	iat (size_type i) const		{ assert (i <= size()); return (begin() + i); }
 		/// Inserts value \p v at offset \p ip.
 		iterator				vector<T>::insert (iterator ip, const T& v = T())
@@ -167,48 +188,68 @@ namespace std {
 			return (ip);
 		}
 		inline bool				is_linked (void) const					{ return (m_Data.is_linked()); }
-		inline void				link (const_pointer p, size_type n)		{ m_Data.link (p, n * sizeof(T)); }
-		inline void				link (pointer p, size_type n)			{ m_Data.link (p, n * sizeof(T)); }
+		inline void				link (const_pointer p, size_type n)		{ m_Data.link (p, n * element_size()); }
+		inline void				link (pointer p, size_type n)			{ m_Data.link (p, n * element_size()); }
 		inline void				link (const vector<T>& v)				{ m_Data.link (v); }
 		inline void				link (vector<T>& v)						{ m_Data.link (v); }
 		inline void				link (const_pointer first, const_pointer last)	{ m_Data.link (first, last); }
 		inline void				link (pointer first, pointer last)		{ m_Data.link (first, last); }
-		inline void				manage (pointer p, size_type n)			{ m_Data.manage (p, n * sizeof(T)); }
-		inline size_type		max_size (void) const		{ return (m_Data.max_size() / sizeof(T));	}
-		/// Inserts value \p v at the end of the vector.
-		void					push_back (const T& v = T())
+		inline void				manage (pointer p, size_type n)			{ m_Data.manage (p, n * element_size()); }
+		inline size_type		max_size (void) const					{ return (m_Data.max_size() / element_size());	}
+		/** Adds a new element at the end of the vector, after its current last element. The content of \p val is copied (or moved) to the new element. If capacity is exceeded, reallocation is made. */
+		void					push_back (const T& val = T())
 		{
 			resize (size() + 1, false);
-			back() = v;
+			// Get a pointer to the end element.
+			T *newLast = (T *)m_Data.end() - 1;
+			// We invoke the copy constructor using the memory space in the array, rather than allocating another block.
+			construct(newLast,val);
 		}
-		inline void				pop_back (void)				{ m_Data.blocklink::resize (m_Data.size() - sizeof(T)); }
-		inline const_reverse_iterator	rbegin (void) const	{ return (const_reverse_iterator (end()));	}
+		/** Removes the last element in the vector, effectively reducing the container size by one. Calls the destructor, if needed. */
+		inline void				pop_back (void)				{ m_Data.blocklink::resize (m_Data.size() - element_size()); }
+		/** non standard. Reads a vector from a string*/
 		inline void				read (istream& is)						{ container_read (is, *this); }
-		inline reverse_iterator	rbegin (void)				{ return (reverse_iterator (end()));		}
-		inline reverse_iterator	rend (void)				{ return (reverse_iterator (begin()));		}
+		/** Points to the element right before the one that would be pointed to by member end(). TODO: Test.*/ 
+		inline const_reverse_iterator	rbegin (void) const	{ return (const_reverse_iterator (end() - 1));	}
+		/** Points to the element right before the one that would be pointed to by member end(). TODO: Test.*/ 
+		inline reverse_iterator	rbegin (void)				{ return (reverse_iterator (end() - 1));		}
+		/** Points to the element right before the one that would be pointed to by member end(). TODO: Test.*/ 
+		inline reverse_iterator	rend (void)				{ return (reverse_iterator (begin() - 1));		}
+		/** Points to the element right before the one that would be pointed to by member end(). TODO: Test.*/ 
 		inline const_reverse_iterator	rend (void) const	{ return (const_reverse_iterator (begin()));	}
 		/// Allocates space for at least \p n elements.
 		void					reserve (size_type n, bool bExact = true)
 		{
-			const size_type oldCapacity = m_Data.capacity() - m_Data.capacity() % sizeof(T);
-			m_Data.reserve (n * sizeof(T), bExact);
+			const size_type oldCapacity = m_Data.capacity() - m_Data.capacity() % element_size();
+			m_Data.reserve (n * element_size(), bExact);
 			construct (iterator (m_Data.begin() + oldCapacity), iterator (m_Data.begin() + m_Data.capacity()));
 		}
 		/// Resizes the vector to contain \p n elements.
 		void					resize (size_type n, bool bExact = true)
 		{
-			const size_type nb = n * sizeof(T);
+			const size_type nb = n * element_size();
 			if (m_Data.capacity() < nb)
 				reserve (n, bExact);
 			m_Data.blocklink::resize (nb);
 		}
-		inline reference		operator[] (size_type i)	{ return (at (i)); }
-		inline const_reference	operator[] (size_type i) const	{ return (at (i)); }
-		inline size_type		size (void) const			{ return (m_Data.size() / sizeof(T));		}
-		inline void				swap (vector<T>& v)		{ m_Data.swap (v.m_Data); }
+		/** Returns a reference to the element at position n in the vector container. Unlike at(), this function is not bound checked.  */
+		inline reference		operator[] (size_type n)				{ return (begin()[n]); }
+		/** Returns a const reference to the element at position n in the vector container. Unlike at(), this function is not bound checked.  */
+		inline const_reference	operator[] (size_type n) const			{ return (begin()[n]); }
+		/** Returns the number of initialized elements in the vector which is not necessarily its capacity. */
+		inline size_type		size (void) const
+		{
+			return (m_Data.size() / element_size());
+		}
+		/** Exchanges the content of the container by the content of \p x, which is another vector object containing elements of the same type. Sizes may differ.  */
+		inline void				swap (vector<T>& x)						{ m_Data.swap (x.m_Data); }
+		/** non standard. returns the number of bytes required to store this array in a binary stream. */
 		inline size_t			stream_size (void) const				{ return (container_stream_size (*this)); }
+		/** non standard. writes this container into a string format (printable). */
 		inline void				text_write (ostringstream& os) const	{ container_text_write (os, *this); }
+		/** non standard. clears all links to this container. dangerous function. */
 		inline void				unlink (void)							{ m_Data.unlink(); }
+		/** non standard. Writes the vector to the output stream. */
 		inline void				write (ostream& os) const				{ container_write (os, *this); }
 	protected:
 		/// Inserts \p n uninitialized elements at \p ip.
@@ -216,10 +257,14 @@ namespace std {
 		{
 			const uoff_t ipmi = distance (m_Data.begin(), block::iterator(ip));
 			reserve (size() + n, false);
-			return (iterator (m_Data.insert (m_Data.iat(ipmi), n * sizeof(T))));
+			return (iterator (m_Data.insert (m_Data.iat(ipmi), n * element_size())));
 		}
 
 	private:
+		void				free_element()
+		{
+
+		}
 		lo::block			m_Data;	///< Raw element data, consecutively stored.
 	};
 

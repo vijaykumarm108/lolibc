@@ -78,6 +78,7 @@ typedef unsigned short wchar_t;
 	_CRTIMP void *  __cdecl		memmove(void *, const void *, size_t);
 	_CRTIMP char *  __cdecl		strchr(const char *, int);
 	_CRTIMP int     __cdecl		_strcmpi(const char *, const char *);
+	_CRTIMP char				*strerror( int errnum );
 	_CRTIMP int     __cdecl		_stricmp(const char *, const char *);
 	_CRTIMP int     __cdecl		strcoll(const char *, const char *);
 	_CRTIMP int     __cdecl		_stricoll(const char *, const char *);

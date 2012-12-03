@@ -12,6 +12,7 @@ namespace lo {
 		static void error( long errorcode, const char *format, ...);
 		static void verbose( const char *format, ...);
 		static void warning( const char *format, ...);
+		static int format_message( long errorcode, char *format, int length );
 	private:
 		static void write( const char *output );
 	};

@@ -11,7 +11,7 @@
 #include "istream"
 #include "ostream"
 #include "functional"
-#include "typeinfo.h"
+#include "typeinfo"
 
 namespace std {
 

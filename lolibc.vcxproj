@@ -679,6 +679,7 @@
     <None Include="include\initializer_list" />
     <None Include="include\iterator" />
     <None Include="include\limits" />
+    <None Include="include\type_traits" />
     <None Include="ReadMe.txt" />
     <CustomBuild Include="windows\chandler.rsp">
       <FileType>Document</FileType>

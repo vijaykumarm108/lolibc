@@ -5,6 +5,7 @@
 #include "lo_utf8.h"
 #include "stdarg.h"
 #include "xutility"
+#include "vector"
 
 namespace std {
 
@@ -43,6 +44,10 @@ namespace std {
 			append (i1, distance (i1, i2));
 		}
 		void	   				append(	const_pointer s, size_type len );
+		void					append( value_type c )
+		{
+			append((const_pointer)&c,1);
+		}
 		void	   				append(	const_pointer s );
 		void					append(	size_type n, const_reference c );
 		inline void				append(	size_type n, wvalue_type c )
@@ -152,10 +157,22 @@ namespace std {
 		inline const string&	operator= (const_reference c)	{ assign (&c, 1); return (*this); }
 		inline const string&	operator= (const_pointer s)		{ assign (s); return (*this); }
 		inline const string&	operator= (const_wpointer s)	{ assign (s); return (*this); }
-		inline const string&	operator+= (const string& s)	{ append (s.begin(), s.size()); return (*this); }
-		inline const string&	operator+= (const_reference c)	{ append (1, c); return (*this); }
-		inline const string&	operator+= (const_pointer s)	{ append (s); return (*this); }
-		inline const string&	operator+= (wvalue_type c)		{ append (1, c); return (*this); }
+		inline const string&	operator+= (const string& s)
+		{
+			append (s.begin(), s.size()); return (*this);
+		}
+		inline const string&	operator+= (const_reference c)
+		{
+			append (1, c); return (*this);
+		}
+		inline const string&	operator+= (const_pointer s)
+		{
+			append (s); return (*this);
+		}
+		inline const string&	operator+= (wvalue_type c)
+		{
+			append (1, c); return (*this);
+		}
 		inline const string&	operator+= (const_wpointer s)	{ append (s); return (*this); }
 		string					operator+ (const string& s) const;
 		inline bool				operator== (const string& s) const	{ return (block::operator== (s)); }
@@ -193,6 +210,8 @@ namespace std {
 		inline void				resize( size_type n, value_type c);
 		uoff_t					rfind( const_reference c, uoff_t pos = npos) const;
 		uoff_t					rfind( const string& s, uoff_t pos = npos) const;
+		vector<string>			split(const char delimeter);
+		vector<string>			split(const char *delimeters);
 		size_t					stream_size( void ) const;
 		inline string			substr( uoff_t o, size_type n = npos) const	{ return (string (*this, o, n)); }
 		inline utf8_iterator	utf8_begin( void ) const	{ return (utf8_iterator (begin())); }

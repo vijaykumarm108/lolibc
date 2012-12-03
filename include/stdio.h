@@ -124,6 +124,7 @@ extern "C" {
 	_CRTIMP int		puts ( const char * str );
 	_CRTIMP int		remove (const char *filename);	// In stdlib.h
 	_CRTIMP int		scanf (const char *format, ...);
+	_CRTIMP int		_snprintf( char *buffer, size_t count, const char *format, ...  );
 	_CRTIMP int		_snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
 	_CRTIMP int		sprintf( char *str, const char *format, ... );
 	_CRTIMP int		sscanf( const char *buffer, const char *format, ... );

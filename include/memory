@@ -7,6 +7,9 @@
 //#include "lo_uiterator.h"
 #include "limits"
 
+void* operator new (size_t size, void* ptr) throw();
+void operator delete (void* ptr, void* voidptr2) throw();
+
 namespace std {
 
 	/// \class auto_ptr umemory.h std.h
@@ -49,6 +52,7 @@ namespace std {
 	private:
 		pointer		m_p;
 	};
+
 
 	/// Calls the placement new on \p p.
 	/// \ingroup RawStorageAlgorithms

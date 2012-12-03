@@ -63,6 +63,9 @@
     </None>
     <None Include="roadmap.txt" />
     <None Include="gnulibc.csv" />
+    <None Include="include\type_traits">
+      <Filter>Header Files\stl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ostream">
