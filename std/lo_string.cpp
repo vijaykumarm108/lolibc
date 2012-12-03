@@ -496,7 +496,7 @@ namespace std {
 			buffer = nullptr;
 		else
 		{
-			int length = MultiByteToWideChar(CP_UTF8, 0, bufferIn, maxLength, NULL, 0 );
+			int length = MultiByteToWideChar(CP_UTF8, 0, bufferIn, (int)maxLength, NULL, 0 );
 			if( length > 0 )
 			{
 				buffer = reinterpret_cast<wchar_t *>(malloc(length*sizeof(wchar_t)));
