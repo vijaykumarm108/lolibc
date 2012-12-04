@@ -67,7 +67,7 @@ namespace std {
 		/// Destructor
 		~vector (void) throw()
 		{
-			destroy (begin(), iterator (m_Data.begin() + m_Data.capacity()));
+			destroy (begin(), end());
 		}
 		//----- Operators -----
 		/** non-standard. Checks if underlying data points to the same block. i.e. assigned but not overwritten. */

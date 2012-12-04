@@ -439,7 +439,7 @@ namespace std {
 	/// Returns the pointer to the first character.
 	string::operator string::value_type* (void)
 	{
-		assert ((end() && !*end()) && "This string is linked to data that is not 0-terminated. This may cause serious security problems. Please assign the data instead of linking.");
+	//	assert ((end() && !*end()) && "This string is linked to data that is not 0-terminated. This may cause serious security problems. Please assign the data instead of linking.");
 		return (begin());
 	}
 
