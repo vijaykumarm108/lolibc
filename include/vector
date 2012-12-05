@@ -127,9 +127,9 @@ namespace std {
 		/** non standard. */
 		inline void				copy_link (void)						{ m_Data.copy_link(); }
 		/** Returns a direct pointer to the memory array used internally by the vector to store its owned elements. (c++11) */
-		value_type* data() throw()			{ return value_type *(m_Data.data()); }
+		pointer					data() throw()			{ return pointer(m_Data.data()); }
 		/** Returns a direct pointer to the const memory array used internally by the vector to store its owned elements. */
-		const value_type* cdata() const throw()	{ return const value_type *(m_Data.cdata()); }
+		const_pointer			cdata() throw()	{ return const_pointer(m_Data.cdata()); }
 		/** non standard. Calls element destructors and frees storage. */
 		void					deallocate (void) throw()
 		{
