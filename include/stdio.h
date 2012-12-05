@@ -110,6 +110,7 @@ extern "C" {
 	_CRTIMP int		ferror (FILE *stream);
 	_CRTIMP int		fflush(_Inout_opt_ FILE * _File);
 	_CRTIMP FILE *	fopen ( const char * filename, const char * mode );
+	_CRTIMP	int		fputs( const char *str, FILE *stream );
 	_CRTIMP size_t	fread ( void * ptr, size_t size, size_t count, FILE * stream );
 	_CRTIMP FILE *	freopen ( const char * fileName, const char * mode, FILE *stream );
 	_CRTIMP int		fseek ( FILE * stream, long int offset, int origin );
@@ -139,6 +140,7 @@ extern "C" {
 	_CRTIMP int		vswprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
 	_CRTIMP int		vfprintf( FILE *stream, const char *format, va_list ap );
 	_CRTIMP int		_vsnwprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list argptr );
+	_CRTIMP FILE	*_wfopen( const wchar_t *filename, const wchar_t *mode );
 #ifdef __cplusplus
 };
 #endif

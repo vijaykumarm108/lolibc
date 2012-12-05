@@ -102,26 +102,19 @@ namespace lo {  	// Extended exception definitions
 		const libc_exception&	operator= (const libc_exception& v);
 	};
 
-	/// \class file_exception
-	/// \ingroup Exceptions
-	///
-	/// \brief File-related exceptions.
-	///
-	/// Contains the file name. This is a std extension.
-	///
+	/** Generic file-related exceptions. */
 	class file_exception : public libc_exception {
 	public:
 		file_exception (const char* operation, const char* filename) throw();
 	};
 
-	/// \class stream_bounds_exception
-	/// \ingroup Exceptions
-	///
-	/// \brief Stream bounds checking.
-	///
-	/// Only thrown in debug builds unless you say otherwise in config.h
-	/// This is a std extension.
-	///
+	/** Generic file-related exceptions. */
+	class file_not_found_exception : public file_exception {
+	public:
+		file_not_found_exception (const char* filename) throw() : file_exception("file not found", filename) {}
+	};
+
+	/** Stream bounds checking. Only thrown in debug builds unless you say otherwise in config.h */
 	class stream_bounds_exception : public libc_exception {
 	public:
 		stream_bounds_exception (const char* operation, const char* type, uoff_t offset, size_t expected, size_t remaining) throw();

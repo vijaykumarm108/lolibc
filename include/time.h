@@ -38,7 +38,7 @@ extern "C" {
 	_CRTIMP struct tm *_localtime64 (const __time64_t *time);
 	_CRTIMP __time32_t mktime( struct tm *timeptr );
 	_CRTIMP __time64_t _mktime64( struct tm *timeptr );
-	_CRTIMP __time32_t time ( __time32_t * timer );
+	_CRTIMP time_t time ( time_t * timer );
 	_CRTIMP __time64_t _time64( __time64_t *timer );
 	int utime (const char *filename, const struct utimbuf *times);	// in StdLibC.c
 
