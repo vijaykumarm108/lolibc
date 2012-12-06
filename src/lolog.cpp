@@ -67,7 +67,7 @@ namespace lo {
 
 	void log::error( long errorcode, const char *format, ...)
 	{
-		static const char errorHeader[] = {"ERROR:"};
+		static const char errorHeader[] = {"ERR_"};
 		char message[1024];
 		va_list	VAList;
 		SetLastError(errorcode);
@@ -166,5 +166,40 @@ namespace lo {
 		}
 		return messageLength;
 	}
+
+
+	int	progress::m_level = 0;
+
+	progress::progress(const char *operation) : m_operation(operation)
+	{
+		++m_level;
+	}
+
+	progress::~progress()
+	{
+		--m_level;
+	}
+
+	void progress::report(int current, int total)
+	{
+		if(current > 0)
+		{
+			__time64_t endTime;
+			time(&endTime);
+			endTime += ((endTime - m_startTime)*total)/current;
+		}
+	}
+
+	void progress::start()
+	{
+		m_started = true;
+		time(&m_startTime);
+	}
+
+	void progress::stop()
+	{
+		m_started = false;
+	}
+
 
 }

@@ -145,6 +145,8 @@ namespace std {
 		inline void				insert(	uoff_t ip, const_pointer s, size_type nlen)		{ insert (iat(ip), s, s + nlen); }
 		inline void				insert(	uoff_t ip, size_type n, value_type c)			{ insert (iat(ip), c, n); }
 		inline void				insert(	uoff_t ip, const string& s, uoff_t sp, size_type slen)	{ insert (iat(ip), s.iat(sp), s.iat(sp + slen)); }
+		/** Translates the english string to a localized version, by looking in a local file: modulename.lang.lls with english = lang (local language.) */
+		static string			local(const char *english);
 		size_type				max_size (void) const;
 								operator const value_type* (void) const;
 		inline					operator const unsigned char *() { return reinterpret_cast<const unsigned char *>(c_str()); }
@@ -280,4 +282,3 @@ private:
 
 // Specialization for stream alignment
 //JCS -- ALIGNOF (::lo::std::string, __alignof(::lo::std::string::value_type()))
-

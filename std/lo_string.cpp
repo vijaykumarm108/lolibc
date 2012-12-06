@@ -219,6 +219,11 @@ namespace std {
 		erase (iat(epo), n);
 	}
 
+	string string::local(const char *english)
+	{
+		return string(english);
+	}
+
 	/// Replaces range [\p start, \p start + \p len] with string \p s.
 	void string::replace (iterator first, iterator last, const_pointer s)
 	{

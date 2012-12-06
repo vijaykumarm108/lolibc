@@ -39,11 +39,13 @@ public:
 	void				munmap (lo::blocklink& l);
 	void				msync (lo::blocklink& l);
 	inline const string& name (void) const	{ return (m_Filename); }
+	/** Opens the file in the given mode and permissions and throws an exception when it fails. */
 	void				open (const char* filename, openmode mode, mode_t perms = 0644);
 	off_t				pos (void) const;
 	off_t				read (void* p, off_t n);
 	off_t				readsome (void* p, off_t n);
 	off_t				seek (off_t n, seekdir whence = beg);
+	/** Returns the size of the file */
 	off_t				size (void) const;
 	void				stat (struct stat& rs) const;
 	void				sync (void);

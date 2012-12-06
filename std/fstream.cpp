@@ -76,15 +76,15 @@ namespace std {
 	/*static*/ int fstream::om_to_flags (openmode m)
 	{
 		static const int s_OMFlags [nombits] = {
-			0,			// in
-			O_CREAT,	// out
-			O_APPEND,	// app
-			O_APPEND,	// ate
-			0,			// binary
-			O_TRUNC,	// trunc
+			_O_RDONLY,			// in
+			_O_CREAT,			// out
+			_O_APPEND,			// app
+			_O_APPEND,			// ate
+			_O_BINARY,			// binary
+			_O_TRUNC,			// trunc
 			0 /*O_NONBLOCK*/,	// nonblock
 			0,		// nocreate
-			0 /*O_NOCTTY*/	// noctty
+			0 /*O_NOCTTY*/		// noctty
 		};
 		int flags = (m - 1) & O_ACCMODE;	// in and out
 		for (uoff_t i = 0; i < _countof(s_OMFlags); ++ i)
@@ -94,11 +94,12 @@ namespace std {
 		return (flags);
 	}
 
+	extern "C" _CRTIMP int _wopen( const wchar_t *filename, int oflag, ... );
 	/// \brief Opens \p filename in the given mode.
 	/// \warning The string at \p filename must exist until the object is closed.
 	void fstream::open (const char* filename, openmode mode, mode_t perms)
 	{
-		int nfd = ::open (filename, om_to_flags(mode), perms);
+		int nfd = _wopen(wstring(filename), om_to_flags(mode), perms);
 		attach (nfd, filename);
 	}
 
@@ -161,26 +162,9 @@ namespace std {
 	/// Writes \p n bytes from buffer \p p.
 	off_t fstream::write (const void* p, off_t n)
 	{
-		off_t btw (n);
-		while (btw) {
-			const off_t bw (n - btw);
-			ssize_t bwn = ::write (m_fd, advance(p,bw), btw);
-			if (bwn > 0)
-				btw -= bwn;
-			else if (!bwn) {
-				if (ios_base::set_and_throw (eofbit | failbit))
-					throw stream_bounds_exception ("write", name(), pos() - bw, n, bw);
-				break;
-			} else if (errno != EINTR) {
-				if (errno != EAGAIN)
-					set_and_throw (failbit, "write");
-				break;
-			}
-		}
-		return (n - btw);
+		return (off_t)::write(m_fd,p,n);
 	}
 
-	/// Returns the file size of the stream.
 	off_t fstream::size (void) const
 	{
 		struct stat st;

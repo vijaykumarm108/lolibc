@@ -36,10 +36,11 @@ void block::resize (size_type newSize, bool bExact)
 /// Frees internal data.
 void block::deallocate (void) throw()
 {
-    if (m_Capacity) {
-	assert (cdata() && "Internal error: space allocated, but the pointer is NULL");
-	assert (data() && "Internal error: read-only block is marked as allocated space");
-	free (data());
+    if (m_Capacity)
+	{
+//		assert (cdata() && "Internal error: space allocated, but the pointer is NULL");
+//		assert (data() && "Internal error: read-only block is marked as allocated space");
+		free (data());
     }
     unlink();
 }
