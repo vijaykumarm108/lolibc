@@ -8,6 +8,304 @@
 
 namespace lo
 {
+
+	/** This class is required for each shared memory object. */
+	class refbuffer
+	{
+		friend class reflink;
+	protected:
+		/** Returns a pointer to the buffer which can be used to alter this. Will throw an exception if more than one reference is made. */
+		char		*begin()		{ return *this; }
+		/** Returns a pointer to the buffer which can be used to alter this. Will throw an exception if more than one reference is made. */
+		const char	*begin() const	{ return const_cast<const char *>(m_data); }
+		/** Returns the number of bytes allocated for this buffer */
+		size_t		capacity()		{ return m_allocated; }
+		/** Returns a pointer to the buffer which can be used to alter this. Will throw an exception if more than one reference is made. */
+		char		*end()			{ return begin() + m_used; }
+		/** Returns a pointer to non-mutable data. Do not modify the data pointed to by this return value. */
+		const char	*end() const	{ return begin() + m_used; }
+		/** Virtual destructor allows specialization of this refbuffer to point to a pimpl. */
+		virtual ~refbuffer()
+		{
+			if( m_data )
+				free(m_data);
+		}
+		/** remove a reflink with the given id */
+		bool		unlink(unsigned id)
+		{
+			m_mask &= ~id;
+			return m_mask == 0;
+		}
+		/** add a reflink to this buffer by allocating a new id. */
+		unsigned	link()
+		{
+			// Enter Critical Section
+			unsigned	retval;
+			for( retval = 1; m_mask & retval; retval <<= 1);
+			m_mask |= retval;
+			return retval;
+			// Leave Critical Section
+		}
+		/** Returns a pointer to the raw data, but which cannot be used to alter it. */
+		operator const char *()
+		{
+			return begin();
+		}
+		/** Returns a pointer to the raw data, which can be written to, however this only works if have only one reference. */
+		operator char *()
+		{
+			if(count()>1)
+				throw "Altering an object which has been referenced more than once is not allowed.";
+			return m_data;
+		}
+		/** Returns the reference count */
+		unsigned count()
+		{
+			unsigned retval = 0;
+			for( unsigned mask = 1; mask < 0x80000000; mask <<= 1)
+			{
+				if(m_mask & mask)
+					++retval;
+			}
+			return retval;
+		}
+		refbuffer(char *data, size_t len)
+		{
+			m_data = (char *)malloc(len);
+			memcpy(m_data,data,len);
+			m_allocated=len;
+			m_used=len;
+			m_mask = 0;
+		}
+	private:
+		char		*m_data;		/*!< Pointer to the raw data */
+		unsigned	m_allocated;	/*!< How many bytes has been allocated for m_data. */
+		unsigned	m_used;			/*!< How much of m_data's memory is being used (in bytes). */
+		unsigned	m_mask;			/*!< Which reflink is using m_data's memory? */
+		unsigned	m_elementSize;	/*!< Size of the elements pointed to by this structure. */
+		refbuffer(unsigned int allocated = 0, unsigned int elementSize=1)
+		{
+			if(allocated)
+				m_data = (char *)malloc(allocated);
+			m_allocated=allocated;
+			m_used=0;
+			m_mask=0;
+			m_elementSize=elementSize;
+		}
+	};
+
+	/** The smart pointer container for refbuffer */
+	class reflink
+	{
+	public:
+		/** Initialize this reflink using another reflink, which means we will use that buffer. */
+		reflink( const reflink &rl)
+		{
+			m_id = rl.m_data->link();
+			m_data = rl.m_data;
+		}
+		/** In the case we receive a pointer to a const buffer, just treat it as such and link to it, do not copy it.*/
+		reflink(const char *data, size_t used)
+		{
+			m_str = const_cast<char *>(data);
+			m_id = 0;
+			m_used = used;
+		}
+		/** This constructor makes a copy of the data provided. */
+		reflink(char *data, size_t used)
+		{
+			m_data = new refbuffer(data,used);
+			m_id = m_data->link();
+		}
+		/** Grabs a pointer to the buffer provided. */
+		operator const char *()
+		{
+			if(m_id == 0)	// Special case where we are pointer to a constant buffer.
+				return const_cast<const char *>(m_str);
+			else			// Otherwise get the pointer to the data using the implicit conversion operator.
+				return *m_data;
+		}
+		~reflink()
+		{
+			//TODO: Critical section lock here - Use TryEnterCritical section in case of other destructor reflinks being called within the object destructor.
+			if(m_data->unlink(m_id))	// Remove our back-link 
+				delete m_data;			// If no more back-links, then delete this object.
+			//TODO: Unlock Critical section here.
+		}
+		char		*begin()		{ beginWrite(); return m_data->begin(); }
+		const char	*begin() const	{ return m_data->begin(); }
+		char		*end()			{ beginWrite(); return m_data->end(); }
+		const char	*end() const	{ return m_data->end(); }
+		size_t		size() const	{ return m_id == 0 ? m_used : m_data->m_used; }
+	private:
+		void		beginWrite()	/*!< Make sure we can write to the data area. If data is shared, then spawn a copy. */
+		{
+			if(m_id == 0)
+			{
+				m_data = new refbuffer(reinterpret_cast<char *>(m_data),m_used);
+				m_id = m_data->link();
+			}
+		}
+		union {
+			refbuffer	*m_data;	/*!< The current m_data buffer */
+			char		*m_str;		/*!< optional string */
+		};
+		unsigned	m_id;			/*!< The unique id of this reflink on the refbuffer. If 0, then m_data is a link. */
+		size_t		m_used;			/*!< Used length in case we need to copy a constant reference. */
+	};
+
+	class newstring : public reflink
+	{
+	public:
+		typedef	char*		iterator;
+		typedef const char *const_iterator;
+		typedef	char*		reverse_iterator;
+		typedef const char *const_reverse_iterator;
+		static const size_t npos = -1;
+		/** The copy constructor */
+		newstring(newstring &another) : reflink((reflink)another) {}
+		/** This constructor is fast and simple and simply links to the constant buffer, which must be truly static. */
+		newstring(const char *str) : reflink(str,strlen(str)+1) { }
+		/** This constructor actually makes a copy of the str object. */
+		newstring(char *str) : reflink(str,strlen(str)+1) {}
+		/** Returns an iterator referring to the first character in the string. If the underlying object is shared at the time of this call, then do not write to this object. */
+		iterator				begin()						{ return iterator(reflink::begin()); }
+		/** Returns a constant iterator. */
+		const_iterator			begin() const				{ return const_iterator(reflink::begin()); }
+		/** The string content is set to an empty string, erasing any previous content and thus leaving its size at 0 characters. */
+		void					clear()						{ begin()[0] = '\0'; }
+		/** Compares strings or parts of strings and when all are the same it returns 0. */
+		int						compare ( const newstring& str ) const;
+		int						compare ( const char* s ) const;
+		int						compare ( size_t pos1, size_t n1, const newstring& str ) const;
+		int						compare ( size_t pos1, size_t n1, const char* s) const;
+		int						compare ( size_t pos1, size_t n1, const newstring& str, size_t pos2, size_t n2 ) const;
+		int						compare ( size_t pos1, size_t n1, const char* s, size_t n2) const;
+		/** Copies characters from the string to the provided buffer without appending a '\0'. Returns the number of characters copied. */
+		size_t					copy ( char* s, size_t n, size_t pos = 0) const;
+		/** */
+		const char*				c_str ( ) const	{ return begin(); }
+		/** */
+		const char*				data ( ) const	{ return begin(); }
+		/** Returns true if the contents are null or the first element in the buffer is a '\0'. */
+		bool					empty ( ) const;
+		/** Returns an iterator referring to the next element after the last character in the string. */
+		iterator				end();
+		const_iterator			end() const;
+		/** Erases a part of the string content, shortening the length of the string. */
+		newstring&				erase( size_t pos = 0, size_t n = npos );
+		iterator				erase( iterator position );
+		iterator				erase( iterator first, iterator last );
+		/** Searches the string for the content specified in either str, s or c, and returns the position of the first occurrence in the string. */
+		size_t					find( const newstring& str, size_t pos = 0 ) const;
+		size_t					find( const char* s, size_t pos, size_t n ) const;
+		size_t					find( const char* s, size_t pos = 0 ) const;
+		size_t					find( char c, size_t pos = 0 ) const;
+		/** Searches for the first character in the object which is not part of either str, s or c, and returns its position. */
+		size_t					find_first_not_of( const newstring& str, size_t pos = 0 ) const;
+		size_t					find_first_not_of( const char* s, size_t pos, size_t n ) const;
+		size_t					find_first_not_of( const char* s, size_t pos = 0 ) const;
+		size_t					find_first_not_of( char c, size_t pos = 0 ) const;
+		/** */
+		size_t					find_first_of( const newstring& str, size_t pos = 0 ) const;
+		size_t					find_first_of( const char* s, size_t pos, size_t n ) const;
+		size_t					find_first_of( const char* s, size_t pos = 0 ) const;
+		size_t					find_first_of( char c, size_t pos = 0 ) const;
+		/** */
+		size_t					find_last_not_of( const newstring& str, size_t pos = npos ) const;
+		size_t					find_last_not_of( const char* s, size_t pos, size_t n ) const;
+		size_t					find_last_not_of( const char* s, size_t pos = npos ) const;
+		size_t					find_last_not_of( char c, size_t pos = npos ) const;
+		/** */
+		size_t					find_last_of( const newstring& str, size_t pos = npos ) const;
+		size_t					find_last_of( const char* s, size_t pos, size_t n ) const;
+		size_t					find_last_of( const char* s, size_t pos = npos ) const;
+		size_t					find_last_of( char c, size_t pos = npos ) const;
+		/** Returns an iterator referring to the next element after the last character in the string. */
+		newstring&				insert( size_t pos1, const newstring& str );
+		newstring&				insert( size_t pos1, const newstring& str, size_t pos2, size_t n );
+		newstring&				insert( size_t pos1, const char* s, size_t n);
+		newstring&				insert( size_t pos1, const char* s );
+		newstring&				insert( size_t pos1, size_t n, char c );
+		iterator				insert( iterator p, char c );
+		void					insert( iterator p, size_t n, char c );
+		template<class InputIterator>
+		void					insert( iterator p, InputIterator first, InputIterator last );
+		/** Returns a count of the number of characters in the string. */
+		size_t					length() const				{ return reflink::size() - 1; }
+		/** Returns the maximum number of characters that the string object can hold. */
+		size_t					max_size ( ) const;
+		/** Appends a copy of the argument to the string. */
+		newstring& operator+= ( const newstring& str );
+		newstring& operator+= ( const char* s );
+		newstring& operator+= ( char c );
+		/** Sets a copy of the argument as the new content for the string object. */
+		newstring& operator= ( const newstring& str );
+		newstring& operator= ( const char* s );
+		newstring& operator= ( char c );
+		/** Returns a reference the character at position pos in the string. */
+		const char& operator[] ( size_t pos ) const	{ return begin()[pos]; }
+		/** Returns a reference the character at position pos in the string. */
+		char& operator[] ( size_t pos )				{ return begin()[pos]; }
+		/** Appends a single character to the string content, increasing its size by one. */
+		void					push_back( char c );
+		/** Returns a reverse iterator referring to the last character in the string, which is considered the reverse beginning. */
+		reverse_iterator		rbegin();
+		const_reverse_iterator	rbegin() const;
+		/** Returns a reverse iterator referring to the element right before the first character in the string, which is considered the reverse end. */
+		reverse_iterator		rend();
+		const_reverse_iterator	rend() const;
+		/** Replaces a section of the current string by some other content determined by the arguments passed. */
+		newstring&				replace( size_t pos1, size_t n1,   const newstring& str );
+		newstring&				replace( iterator i1, iterator i2, const newstring& str );
+		newstring&				replace( size_t pos1, size_t n1, const newstring& str, size_t pos2, size_t n2 );
+		newstring&				replace( size_t pos1, size_t n1,   const char* s, size_t n2 );
+		newstring&				replace( iterator i1, iterator i2, const char* s, size_t n2 );
+		newstring&				replace( size_t pos1, size_t n1,   const char* s );
+		newstring&				replace( iterator i1, iterator i2, const char* s );
+		newstring&				replace( size_t pos1, size_t n1,   size_t n2, char c );
+		newstring&				replace( iterator i1, iterator i2, size_t n2, char c );
+		template<class InputIterator>
+		newstring&				replace ( iterator i1, iterator i2, InputIterator j1, InputIterator j2 );
+		/** Requests that the capacity of the allocated storage space in the string be at least res_arg. */
+		void					reserve( size_t res_arg=0 );
+		/** Resizes the string content to n characters. */
+		void					resize( size_t n, char c );
+		void					resize( size_t n );
+		/** Searches the string for the content specified in either str, s or c, and returns the position of the last occurrence in the string. */
+		size_t					rfind( const newstring& str, size_t pos = npos ) const;
+		size_t					rfind( const char* s, size_t pos, size_t n ) const;
+		size_t					rfind( const char* s, size_t pos = npos ) const;
+		size_t					rfind( char c, size_t pos = npos ) const;
+		/** Returns a count of the number of characters in the string. */
+		size_t					size() const				{ return reflink::size() - 1; }
+		/** Returns a string object with its contents initialized to a substring of the current object. */
+		newstring				substr ( size_t pos = 0, size_t n = npos ) const;
+		/** Swaps the contents of the string with those of string object str, such that after the call to this member function, the contents of this string are those which were in str before the call, and the contents of str are those which were in this string. */
+		void					swap ( newstring& str );
+	private:
+	};
+
+	template<typename T, bool isClass = __is_class(T)> class newvector
+	{
+	};
+
+	template<typename T>
+	class newvector<T,true>
+	{
+	public:
+		void print()	{ puts("I am a class.");}
+	};
+
+	template<typename T>
+	class newvector<T,false>
+	{
+	public:
+		void print()	{ puts("I am a integral value.");}
+	};
+
+
+
 	class object_base;
 	template <typename T> class ref;
 	typedef ref<object_base>	object;
