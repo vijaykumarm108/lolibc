@@ -20,6 +20,8 @@ namespace lo {
 		static const wchar_t *get_appdataDir();
 		/** Gets the name of the current log file. */
 		static const wchar_t *get_currentFile();
+		/** Module directors. */
+		static const wchar_t *get_moduleDirectory();
 		/** Returns the full path of the module which contains this log library. */
 		static const wchar_t *get_moduleFileName();
 		/** Returns just the file name of the module which contains this log library. */
@@ -40,6 +42,7 @@ namespace lo {
 		static wchar_t	m_logDirectory[];
 		static wchar_t	m_logFile[];
 		static time_t	m_lastTime;
+		static wchar_t	m_moduleDirectory[];
 		static wchar_t	m_moduleName[];
 		static wchar_t	m_moduleFileName[];
 	};

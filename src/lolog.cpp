@@ -14,9 +14,10 @@ namespace lo {
 
 	wchar_t log::m_logDirectory[MAX_PATH*2];
 	wchar_t log::m_logFile[MAX_PATH*2];
+	wchar_t	log::m_moduleDirectory[MAX_PATH] = {0};
 	wchar_t log::m_moduleName[MAX_PATH] = {0};
 	wchar_t	log::m_moduleFileName[MAX_PATH] = {0};
-	
+
 	time_t log::m_lastTime;
 
 	const wchar_t *log::get_appdataDir()
@@ -45,6 +46,12 @@ namespace lo {
 		return m_logFile;
 	}
 
+	const wchar_t *log::get_moduleDirectory()
+	{
+		get_moduleName();
+		return m_moduleDirectory;
+	}
+
 	const wchar_t *log::get_moduleFileName()
 	{
 		if( *m_moduleFileName == 0)
@@ -57,10 +64,12 @@ namespace lo {
 		if( *m_moduleName == 0)
 		{
 			const wchar_t *source = get_moduleFileName();
+			const wchar_t *directory = source;
 			for( source += wcslen(m_moduleFileName) - 1; source > m_moduleFileName && *source != '\\'; --source );
 			if( *source == '\\')
 				++source;
 			wcscpy(m_moduleName,source);
+			wcsncpy(m_moduleDirectory,directory,source-directory +1);
 		}
 		return m_moduleName;
 	}
@@ -104,7 +113,6 @@ namespace lo {
 	{
 #ifdef _DEBUG
 		OutputDebugStringA(output);
-		OutputDebugStringA("\r\n");
 #endif
 		if(!s_isCsInitialized)
 		{

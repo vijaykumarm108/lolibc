@@ -79,11 +79,11 @@ namespace lo
 		}
 	private:
 		char		*m_data;		/*!< Pointer to the raw data */
-		unsigned	m_allocated;	/*!< How many bytes has been allocated for m_data. */
-		unsigned	m_used;			/*!< How much of m_data's memory is being used (in bytes). */
+		size_t		m_allocated;	/*!< How many bytes has been allocated for m_data. */
+		size_t		m_used;			/*!< How much of m_data's memory is being used (in bytes). */
 		unsigned	m_mask;			/*!< Which reflink is using m_data's memory? */
-		unsigned	m_elementSize;	/*!< Size of the elements pointed to by this structure. */
-		refbuffer(unsigned int allocated = 0, unsigned int elementSize=1)
+		size_t		m_elementSize;	/*!< Size of the elements pointed to by this structure. */
+		refbuffer(size_t allocated = 0, size_t elementSize=1)
 		{
 			if(allocated)
 				m_data = (char *)malloc(allocated);
@@ -294,14 +294,14 @@ namespace lo
 	class newvector<T,true>
 	{
 	public:
-		void print()	{ puts("I am a class.");}
+		const char * print()	{ return "I am a class.";}
 	};
 
 	template<typename T>
 	class newvector<T,false>
 	{
 	public:
-		void print()	{ puts("I am a integral value.");}
+		const char * print()	{ return "I am a integral value.";}
 	};
 
 

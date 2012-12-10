@@ -2574,7 +2574,7 @@ VOID WINAPI EngUnicodeToMultiByteN( LPSTR MultiByteString, ULONG MaxBytesInMulti
 // for the spooler
 
 #define EngWritePrinter     WritePrinter
-#define EngGetPrinter       GetPrinter
+#define EngGetPrinter       getPrinter
 #define EngGetPrinterDriver GetPrinterDriver
 #define EngGetPrinterData   GetPrinterData
 #define EngSetPrinterData   SetPrinterData

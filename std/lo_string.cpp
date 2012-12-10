@@ -136,7 +136,7 @@ namespace std {
 	bool string::operator== (const_pointer s) const
 	{
 		if (!s) s = "";
-		return (size() == strlen(s) && 0 == memcmp (c_str(), s, size()));
+		return strcmp(this->c_str(),s) == 0;
 	}
 
 	/// Returns the beginning of character \p i.
