@@ -639,4 +639,12 @@ int __cdecl wcsicmp(const wchar_t *string1, const wchar_t *string2)
 	return lstrcmpiW(string1, string2);
 }
 
+char *  __cdecl	itoa ( int value, char * str, int base )
+{
+	_CRTIMP char * __cdecl	_itoa ( int value, char * str, int base );
+
+	return _itoa(value,str,base);
+}
+
+
 /*! @} */

@@ -120,8 +120,7 @@ namespace std {
 		}
 		inline const_iterator	iat( uoff_t pos ) const		{ return (begin() + minV (pos, size())); }
 		inline iterator			iat( uoff_t pos )			{ return (begin() + minV (pos, size())); }
-		const_iterator			wiat( uoff_t i ) const;
-		inline iterator			wiat( uoff_t i )			{ return (const_cast<iterator>(const_cast<const string*>(this)->wiat(i))); }
+		/** The same as strlen(). */
 		inline size_type		length( void ) const			{ return (end() - begin()); }
 		iterator				erase( iterator epo, size_type n = 1);
 		void					erase( uoff_t epo = 0, size_type n = 1);
@@ -129,13 +128,17 @@ namespace std {
 		inline void				eraser( uoff_t first, uoff_t last)		{ erase (iat(first), iat(last)); }
 		uoff_t					find( const_reference c, uoff_t pos = 0) const;
 		uoff_t					find( const string& s, uoff_t pos = 0) const;
-		uoff_t					find_first_of( const string& s, uoff_t pos = 0) const;
+		/** Returns the offset of the first occurrence of one of characters in \p s of size \p n after \p pos. */
+		size_t					find_first_of( const string& s, uoff_t pos = 0) const;
+		/** Searches the string for any of the characters that are part of either str, s or c, and returns the position of the first occurrence in the string. */
+		size_t					find_first_of ( char c, size_t pos = 0 ) const;
 		uoff_t					find_first_not_of( const string& s, uoff_t pos = 0) const;
 		uoff_t					find_last_of( const string& s, uoff_t pos = npos) const;
 		size_t					find_last_of( char c, size_t pos = npos ) const;
 		size_t					find_last_of( const char* s, size_t pos = npos ) const;
 		uoff_t					find_last_not_of (const string& s, uoff_t pos = npos) const;
-		int						format( const char* fmt, ...) __attribute__((__format__(__printf__, 2, 3)));
+		static string			format( const char* fmt, ...) __attribute__((__format__(__printf__, 2, 3)));
+//		int						format( const char* fmt, ...) __attribute__((__format__(__printf__, 2, 3)));
 		static hashvalue_t		hash( const char* f1, const char* l1);
 		void					insert(	const uoff_t ip, wvalue_type c, size_type n = 1);
 		void					insert(	const uoff_t ip, const_wpointer first, const_wpointer last, const size_type n = 1);
@@ -188,6 +191,8 @@ namespace std {
 		inline bool				operator< (const_pointer s) const	{ return (0 > compare (s)); }
 		inline bool				operator< (const_reference c) const	{ return (0 > compare (begin(), end(), &c, &c + 1)); }
 		inline bool				operator> (const_pointer s) const	{ return (0 < compare (s)); }
+		/** Constructs a string using an integer number \p n with the given \p radix. */
+		static string			number( int n, int radix = 10 );
 		inline void				push_back (const_reference c)	{ append (1, c); }
 		inline void				push_back (wvalue_type c)		{ append (1, c); }
 		inline void				pop_back (void)					{ resize (size() - 1); }
@@ -210,15 +215,23 @@ namespace std {
 		inline void				replace( uoff_t rp, size_type n, size_type count, value_type c)			{ replace (iat(rp), iat(rp + n), count, c); }
 		void					resize( size_type n);
 		inline void				resize( size_type n, value_type c);
-		uoff_t					rfind( const_reference c, uoff_t pos = npos) const;
-		uoff_t					rfind( const string& s, uoff_t pos = npos) const;
-		vector<string>			split(const char delimeter);
+		/** Returns the offset of the last occurrence of character \p c before \p pos. */
+		size_t					rfind( const_reference c, uoff_t pos = npos) const;
+		/** Returns the offset of the last occurrence of substring \p s of size \p n before \p pos. */
+		size_t					rfind( const string& s, uoff_t pos = npos) const;
+		/** Returns a vector of substrings with the given single UTF8 character delimeter. */
+		vector<string>			split(char delimeter);
+		/** Returns a vector of substrings with the given delimeters: each position is a single delimeter. */
 		vector<string>			split(const char *delimeters);
 		size_t					stream_size( void ) const;
+		/** This substring is the character sequence that starts at character position pos and has a length of n characters. */
 		inline string			substr( uoff_t o, size_type n = npos) const	{ return (string (*this, o, n)); }
 		inline utf8_iterator	utf8_begin( void ) const	{ return (utf8_iterator (begin())); }
 		inline utf8_iterator	utf8_end( void ) const	{ return (utf8_iterator (end())); }
-		int						vformat( const char* fmt, va_list args );
+		/** Equivalent to a vsprintf on the string. */
+		static string			vformat( const char* fmt, va_list args );
+		const_iterator			wiat( uoff_t i ) const;
+		inline iterator			wiat( uoff_t i )			{ return (const_cast<iterator>(const_cast<const string*>(this)->wiat(i))); }
 		void					write( ostream& os ) const;
 	
 	protected:
@@ -255,8 +268,10 @@ inline hashvalue_t hash_value (const char* v)
 	return (hash_value (v, v + strlen(v)));
 }
 
-//----------------------------------------------------------------------
-// Class wstring is only for the cases when we need to convert to and from widechar strings
+/**
+Class wstring is only for the cases when we need to convert to and from widechar strings.
+For all other forms of text manipulation, use string. Lolibc was never intended to be a full-featured, but rather implemented with speed in mind.
+*/
 class wstring
 {
 public:

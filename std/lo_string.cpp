@@ -271,35 +271,23 @@ namespace std {
 		return (npos);
 	}
 
-	/// Returns the offset of the last occurence of character \p c before \p pos.
-	uoff_t string::rfind (const_reference c, uoff_t pos) const
-	{
-		for (int i = (int)minV(pos,size()-1); i >= 0; --i)
-		if (at((uoff_t)i) == c)
-			return ((uoff_t)i);
-		return (npos);
-	}
 
-	/// Returns the offset of the last occurence of substring \p s of size \p n before \p pos.
-	uoff_t string::rfind (const string& s, uoff_t pos) const
-	{
-		const_iterator d = iat(pos) - 1;
-		const_iterator sp = begin() + s.size() - 1;
-		const_iterator m = s.end() - 1;
-		for (long int i = 0; d > sp && size_type(i) < s.size(); -- d)
-		for (i = 0; size_type(i) < s.size(); ++ i)
-			if (m[-i] != d[-i])
-			break;
-		return (d > sp ? (uoff_t) distance (begin(), d + 2 - s.size()) : npos);
-	}
-
-	/// Returns the offset of the first occurence of one of characters in \p s of size \p n after \p pos.
-	uoff_t string::find_first_of (const string& s, uoff_t pos) const
+	size_t string::find_first_of (const string& s, uoff_t pos) const
 	{
 		for (uoff_t i = minV(pos,size()); i < size(); ++ i)
-		if (s.find (at(i)) != npos)
-			return (i);
+			if (s.find (at(i)) != npos)
+				return (i);
 		return (npos);
+	}
+
+	size_t string::find_first_of ( char c, size_t pos ) const
+	{
+		for( uoff_t i = pos; i < size(); ++i )
+		{
+			if(at(i) == c)
+				return i;
+		}
+		return npos;
 	}
 
 	/// Returns the offset of the first occurrence of one of characters not in \p s of size \p n after \p pos.
@@ -340,27 +328,24 @@ namespace std {
 		return (npos);
 	}
 
-	/// Equivalent to a vsprintf on the string.
-	int string::vformat (const char* fmt, va_list args)
+	string string::vformat (const char* fmt, va_list args)
 	{
-		size_t rv = size();
-		do {
-			reserve (rv);
-			rv = vsnprintf (data(), block::capacity(), fmt, args);
-			rv = minV (rv, block::capacity());
-		} while (rv > capacity());
-		resize (minV (rv, capacity()));
-		return (int)(rv);
+		string returns;
+		for( size_t capacity = 1024; capacity < 32768; capacity += 1024)
+		{
+			returns.reserve (capacity);
+			vsnprintf (returns.data(), returns.capacity(), fmt, args);
+		}
+		return returns;
 	}
 
 	/// Equivalent to a sprintf on the string.
-	int string::format (const char* fmt, ...)
+	string string::format (const char* fmt, ...)
 	{
 		va_list args;
 		va_start (args, fmt);
-		const int rv = vformat (fmt, args);
+		return vformat (fmt, args);
 		va_end (args);
-		return (rv);
 	}
 
 	/// Returns the number of bytes required to write this object to a stream.
@@ -381,6 +366,27 @@ namespace std {
 		if (!is.verify_remaining ("read", "lo::std::string", n)) return;
 		resize (n);
 		is.read (data(), size());
+	}
+
+
+	size_t string::rfind (const_reference c, uoff_t pos) const
+	{
+		for (int i = (int)minV(pos,size()-1); i >= 0; --i)
+			if (at((uoff_t)i) == c)
+				return ((uoff_t)i);
+		return (npos);
+	}
+
+	size_t string::rfind (const string& s, uoff_t pos) const
+	{
+		const_iterator d = iat(pos) - 1;
+		const_iterator sp = begin() + s.size() - 1;
+		const_iterator m = s.end() - 1;
+		for (long int i = 0; d > sp && size_type(i) < s.size(); -- d)
+			for (i = 0; size_type(i) < s.size(); ++ i)
+				if (m[-i] != d[-i])
+					break;
+		return (d > sp ? (uoff_t) distance (begin(), d + 2 - s.size()) : npos);
 	}
 
 	/// Writes the object to stream \p os
@@ -434,6 +440,14 @@ namespace std {
 		assign (s1, s2);
 	}
 
+	string	string::number( int n, int radix )
+	{
+		char str[25];
+		itoa( n, str, radix );
+		return string(str);
+	}
+
+
 	/// Returns the pointer to the first character.
 	string::operator const string::value_type* (void) const
 	{
@@ -464,6 +478,28 @@ namespace std {
 		fill_n (iat(oldn), maxV(ssize_t(n-oldn),0), c);
 	}
 
+	vector<string>			string::split(char delimeter)
+	{
+		vector<string>	returns;
+		uoff_t start, end;
+		for( start = end = 0; end != npos; start = end + 1 )
+		{
+			end = find_first_of(delimeter,start);
+			returns.push_back( substr(start,end-start) );
+		}
+
+		return returns;
+	}
+
+	vector<string>			string::split(const char *delimeters)
+	{
+		vector<string>	returns;
+		uoff_t start, end;
+		for( start = end = 0; (end = find_first_of(string(delimeters),end)) != npos; start = end + 1 )
+			returns.push_back( substr(start,end) );
+		
+		return returns;
+	}
 
 	bool	string::operator== (const_wpointer s) const
 	{

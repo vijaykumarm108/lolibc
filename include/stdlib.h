@@ -21,6 +21,7 @@ _CRTIMP int __cdecl			atoi ( const char * str );
 _CRTIMP void * __cdecl		calloc(size_t nmemb, size_t size);
 _CRTIMP void				exit (int status);
 _CRTIMP void __cdecl		free(void *ptr);
+char *  __cdecl				itoa ( int value, char * str, int base );
 _CRTIMP void * __cdecl		malloc(size_t size);
 _CRTIMP int					rand (void);
 _CRTIMP void * __cdecl		realloc(void *ptr, size_t size);
