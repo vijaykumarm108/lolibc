@@ -330,13 +330,10 @@ namespace std {
 
 	string string::vformat (const char* fmt, va_list args)
 	{
+		char temp[1024];
 		string returns;
-		for( size_t capacity = 1024; capacity < 32768; capacity += 1024)
-		{
-			returns.reserve (capacity);
-			vsnprintf (returns.data(), returns.capacity(), fmt, args);
-		}
-		return returns;
+		vsnprintf (temp, sizeof(temp), fmt, args);
+		return string(temp);
 	}
 
 	/// Equivalent to a sprintf on the string.
@@ -344,8 +341,9 @@ namespace std {
 	{
 		va_list args;
 		va_start (args, fmt);
-		return vformat (fmt, args);
+		string returns = vformat (fmt, args);
 		va_end (args);
+		return returns;
 	}
 
 	/// Returns the number of bytes required to write this object to a stream.
