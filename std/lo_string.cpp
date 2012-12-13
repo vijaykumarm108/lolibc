@@ -479,10 +479,10 @@ namespace std {
 	vector<string>			string::split(char delimeter)
 	{
 		vector<string>	returns;
-		uoff_t start, end;
+		int start, end;
 		for( start = end = 0; end != npos; start = end + 1 )
 		{
-			end = find_first_of(delimeter,start);
+			end = (int)find_first_of(delimeter,(size_t)start);
 			returns.push_back( substr(start,end-start) );
 		}
 
