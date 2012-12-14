@@ -201,7 +201,7 @@ namespace std {
 		{
 			resize (size() + 1, false);
 			// Get a pointer to the end element.
-			T *newLast = (T *)m_Data.end() - 1;
+			T *newLast = (T *)(end() - 1);
 			// We invoke the copy constructor using the memory space in the array, rather than allocating another block.
 			construct(newLast,val);
 		}
