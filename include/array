@@ -44,68 +44,44 @@ namespace std {
 			::std::fill_n(_Elems, _Size, _Value);
 		}
 
-		// assign value to all elements
-		void fill(const _Ty& _Value)
+		/** Returns a reference to the element at position n in the array. */
+		reference at( size_type n )
 		{
-			::std::fill_n(_Elems, _Size, _Value);
+			if (_Size <= n)
+				_Xran();
+			return (_Elems[n]);
 		}
 
-		void swap(_Myt& _Other)
-		{	// swap contents with _Other
-			_Swap_ranges(::std::addressof(_Elems[0]), ::std::addressof(_Elems[0]) + _Size, ::std::addressof(_Other._Elems[0]));
+		/** Returns a non-mutable reference to the element at position n in the array. */
+		const_reference at( size_type n ) const
+		{
+			if (_Size <= _Pos)
+				_Xran();
+			return (_Elems[_Pos]);
 		}
 
-		void swap(_Myt&& _Other)
-		{	// swap contents with _Other
-			_Move(_Other.begin(), _Other.end(), begin());
+		/** Returns a reference to the last element in the array container. */
+		inline reference back()
+		{
+			return (_Elems[_Size - 1]);
 		}
 
-		// return iterator for beginning of mutable sequence
+		// return last element of non-mutable array
+		const_reference back() const
+		{
+			return (_Elems[_Size - 1]);
+		}
+
+		/** return iterator for beginning of mutable sequence */
 		iterator begin()
 		{
 			return (iterator(::std::addressof(_Elems[0]), 0));
 		}
 
-		// return iterator for beginning of non-mutable sequence
+		/** return iterator for beginning of non-mutable sequence */
 		const_iterator begin() const
 		{
 			return (const_iterator(::std::addressof(_Elems[0]), 0));
-		}
-
-		// return iterator for end of mutable sequence
-		iterator end()
-		{
-			return (iterator(::std::addressof(_Elems[0]), _Size));
-		}
-
-		// return iterator for beginning of non-mutable sequence
-		const_iterator end() const
-		{
-			return (const_iterator(::std::addressof(_Elems[0]), _Size));
-		}
-
-		// return iterator for beginning of reversed mutable sequence
-		reverse_iterator rbegin()
-		{
-			return (reverse_iterator(end()));
-		}
-
-		// return iterator for beginning of reversed non-mutable sequence
-		const_reverse_iterator rbegin() const
-		{
-			return (const_reverse_iterator(end()));
-		}
-
-		// return iterator for end of reversed mutable sequence
-		reverse_iterator rend()
-		{
-			return (reverse_iterator(begin()));
-		}
-
-		// return iterator for end of reversed non-mutable sequence
-		const_reverse_iterator rend() const
-		{
-			return (const_reverse_iterator(begin()));
 		}
 
 		// return iterator for beginning of non-mutable sequence
@@ -132,60 +108,40 @@ namespace std {
 			return (((const _Myt *)this)->rend());
 		}
 
-		// return the array length
-		size_type size() const
+		/** return pointer to mutable data array */
+		_Ty *data()
 		{
-			return (_Size);
+			return (_Elems);
 		}
 
-		// return maximum possible length of array
-		size_type max_size() const
+		/** return pointer to non-mutable data array */
+		const _Ty *data() const
 		{
-			return (_Size);
+			return (_Elems);
 		}
 
-		// test if the array is empty
-		bool empty() const
+		// return iterator for end of mutable sequence
+		iterator end()
+		{
+			return (iterator(::std::addressof(_Elems[0]), _Size));
+		}
+
+		/** Test if the array is empty */
+		inline bool empty() const
 		{
 			return (_Size == 0);
 		}
 
-		// subscript mutable sequence with checking
-		reference at(size_type _Pos)
+		// return iterator for beginning of non-mutable sequence
+		const_iterator end() const
 		{
-			if (_Size <= _Pos)
-				_Xran();
-			return (_Elems[_Pos]);
+			return (const_iterator(::std::addressof(_Elems[0]), _Size));
 		}
 
-		// subscript non-mutable sequence with checking
-		const_reference at(size_type _Pos) const
+		/** Sets val as the value for all the elements in the array object. */
+		void fill(const _Ty& _Value)
 		{
-			if (_Size <= _Pos)
-				_Xran();
-			return (_Elems[_Pos]);
-		}
-
-		// subscript mutable array
-		reference operator[](size_type _Pos)
-		{
-#ifndef NDEBUG
-			if (_Size <= _Pos)
-				strerror(ERANGE);				// array subscript out of range
-#endif
-			__analysis_assume(_Pos < _Size);
-			return (_Elems[_Pos]);
-		}
-
-		// subscript non-mutable array
-		const_reference operator[](size_type _Pos) const
-		{
-#ifndef NDEBUG
-			if (_Size <= _Pos)
-				strerror(ERANGE);			// array subscript out of range
-#endif
-			__analysis_assume(_Pos < _Size);
-			return (_Elems[_Pos]);
+			::std::fill_n(_Elems, _Size, _Value);
 		}
 
 		// return first element of mutable array
@@ -200,28 +156,66 @@ namespace std {
 			return (_Elems[0]);
 		}
 
-		// return last element of mutable array
-		reference back()
+		/** Returns the maximum number of elements that the array container can hold. Like size(), this equals the second parameter. */
+		inline size_type max_size() const
 		{
-			return (_Elems[_Size - 1]);
+			return (_Size);
 		}
 
-		// return last element of non-mutable array
-		const_reference back() const
+		// subscript mutable array
+		reference operator[](size_type _Pos)
 		{
-			return (_Elems[_Size - 1]);
+			__analysis_assume(_Pos < _Size);
+			return (_Elems[_Pos]);
 		}
 
-		// return pointer to mutable data array
-		_Ty *data()
+		// subscript non-mutable array
+		const_reference operator[](size_type _Pos) const
 		{
-			return (_Elems);
+			__analysis_assume(_Pos < _Size);
+			return (_Elems[_Pos]);
 		}
 
-		// return pointer to non-mutable data array
-		const _Ty *data() const
+		/** return iterator for beginning of reversed mutable sequence */
+		reverse_iterator rbegin()
 		{
-			return (_Elems);
+			return (reverse_iterator(end()));
+		}
+
+		/** rbegin points to the element right before the one that would be pointed to by member end. */
+		const_reverse_iterator rbegin() const
+		{
+			return (const_reverse_iterator(end()));
+		}
+
+		// return iterator for end of reversed mutable sequence
+		reverse_iterator rend()
+		{
+			return (reverse_iterator(begin()));
+		}
+
+		// return iterator for end of reversed non-mutable sequence
+		const_reverse_iterator rend() const
+		{
+			return (const_reverse_iterator(begin()));
+		}
+
+		/** Returns the maximum number of elements that the array container can hold. Like max_size(), this equals the second parameter. */
+		inline size_type size() const
+		{
+			return (_Size);
+		}
+
+		/** Exchanges the content of the array by the content of x, which is another array object of the same type. */
+		void swap(_Myt& _Other)
+		{
+			_Swap_ranges(::std::addressof(_Elems[0]), ::std::addressof(_Elems[0]) + _Size, ::std::addressof(_Other._Elems[0]));
+		}
+
+		/** Exchanges the content of the array by the content of x, which is another array object of the same type. */
+		void swap(_Myt&& _Other)
+		{	// swap contents with _Other
+			_Move(_Other.begin(), _Other.end(), begin());
 		}
 
 		__declspec(noreturn) void _Xran() const
