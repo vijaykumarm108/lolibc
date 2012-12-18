@@ -157,6 +157,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <OutputFile>$(OutputPath)$(TargetName)$(TargetExt)</OutputFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <IgnoreSpecificDefaultLibraries>LIBCMT.LIB</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

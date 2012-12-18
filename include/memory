@@ -60,8 +60,7 @@ namespace std {
 	template <typename T>
 	inline void construct (T* p)
 	{
-	//    new (p) T;
-		new T;
+	    new (p) T;
 	}
 
 	/// Calls the placement new on \p p.

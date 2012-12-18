@@ -144,7 +144,9 @@ namespace lo {
 	}
 	function_trace::function_trace( const char *format ) : m_id(format)
 	{
-
+#ifdef _DEBUG
+		OutputDebugStringA(format);
+#endif
 	}
 	function_trace::~function_trace()
 	{

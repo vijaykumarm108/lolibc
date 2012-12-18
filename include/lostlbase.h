@@ -372,11 +372,22 @@ namespace std
 	typedef size_t size_type;
 	
 	/// Returns the difference \p p1 - \p p2
-	template <typename T1, typename T2>
-	inline ptrdiff_t distance (T1 i1, T2 i2)
+	template<class InputIterator>
+	ptrdiff_t distance (const InputIterator first, const InputIterator last)
 	{
-		return ((intptr_t)i2 - (intptr_t)i1);
+		return (last - first);
 	}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+	template<> inline ptrdiff_t distance (const void *p1, const void *p2)
+	{
+		return (reinterpret_cast<const uint8_t*>(p2) - reinterpret_cast<const uint8_t*>(p1));
+	}
+	template<> inline ptrdiff_t distance (void *p1, void *p2)
+	{
+		return (reinterpret_cast<uint8_t*>(p2) - reinterpret_cast<uint8_t*>(p1));
+	}
+#endif
 	
 	/// Assigns the contents of a to b and the contents of b to a.
 	/// This is used as a primitive operation by many other algorithms. 

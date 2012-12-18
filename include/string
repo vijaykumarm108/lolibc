@@ -124,7 +124,7 @@ namespace std {
 		inline size_type		length( void ) const			{ return (end() - begin()); }
 		iterator				erase( iterator epo, size_type n = 1);
 		void					erase( uoff_t epo = 0, size_type n = 1);
-		inline iterator			erase( iterator first, const_iterator last)	{ return (erase (first, size_type(distance(first,last)))); }
+		inline iterator			erase( iterator first, const_iterator last)	{ return (erase (first, size_type(distance((const_iterator)first,last)))); }
 		inline void				eraser( uoff_t first, uoff_t last)		{ erase (iat(first), iat(last)); }
 		uoff_t					find( const_reference c, uoff_t pos = 0) const;
 		uoff_t					find( const string& s, uoff_t pos = 0) const;

@@ -88,17 +88,6 @@ namespace std {
 
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define UNVOID_DISTANCE(T1const,T2const)				   \
-template <> inline ptrdiff_t distance (T1const void* p1, T2const void* p2) \
-{ return ((T2const uint8_t*)(p2) - (T1const uint8_t*)(p1)); }
-UNVOID_DISTANCE(,)
-//UNVOID_DISTANCE(const,const)
-UNVOID_DISTANCE(,const)
-UNVOID_DISTANCE(const,)
-#undef UNVOID_DISTANCE
-#endif
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // The compiler issues a warning if an unsigned type is compared to 0.
 template <typename T, bool IsSigned> struct __is_negative { inline bool operator()(const T& v) { return (v < 0); } };
 template <typename T> struct __is_negative<T,false> { inline bool operator()(const T&) { return (false); } };

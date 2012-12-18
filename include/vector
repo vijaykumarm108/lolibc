@@ -1,5 +1,11 @@
 #pragma once
+#include "istream"
 #include "lo_block.h"
+#include "stdlib.h"
+#include "lo_utf8.h"
+#include "stdarg.h"
+#include "xutility"
+#include "assert.h"
 #include "memory"
 #include "algorithm"
 #include "lo_uctrstrm.h"
@@ -81,7 +87,7 @@ namespace std {
 		void					assign (const_iterator i1, const_iterator i2)
 		{
 			assert (i1 <= i2);
-			resize (distance (i1, i2));
+			resize (i2 -i1);
 			::std::copy (i1, i2, begin());
 		}
 		/**	Assigns new content to the vector, dropping all the elements contained in the container before the call and replacing them by those specified by the parameters.
