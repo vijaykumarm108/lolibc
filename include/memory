@@ -12,15 +12,12 @@ void operator delete (void* ptr, void* voidptr2) throw();
 
 namespace std {
 
-	/// \class auto_ptr umemory.h std.h
-	/// \ingroup MemoryManagement
-	///
-	/// \brief A smart pointer.
-	///
-	/// Calls delete in the destructor; assignment transfers ownership.
-	/// This class does not work with void pointers due to the absence
-	/// of the required dereference operator.
-	///
+	/** A smart pointer.
+	TODO: In future all smart pointers should be of one type: ref_ptr
+	Calls delete in the destructor; assignment transfers ownership.
+	This class does not work with void pointers due to the absence
+	of the required dereference operator.
+	*/
 	template <typename T>
 	class auto_ptr {
 	public:
@@ -54,9 +51,7 @@ namespace std {
 	};
 
 
-	/// Calls the placement new on \p p.
-	/// \ingroup RawStorageAlgorithms
-	///
+	/// Calls the placement new on \p p using a default constructor.
 	template <typename T>
 	inline void construct (T* p)
 	{
@@ -64,8 +59,6 @@ namespace std {
 	}
 
 	/// Calls the placement new on \p p.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename ForwardIterator>
 	inline void construct (ForwardIterator first, ForwardIterator last)
 	{
@@ -77,9 +70,7 @@ namespace std {
 			construct (&*first);
 	}
 
-	/// Calls the placement new on \p p.
-	/// \ingroup RawStorageAlgorithms
-	///
+	/// Calls the placement new on \p p while using the copy constructor
 	template <typename T>
 	inline void construct (T* p, const T& value)
 	{
@@ -87,35 +78,39 @@ namespace std {
 	}
 
 	/// Calls the destructor of \p p without calling delete.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename T>
 	inline void destroy (T* p) throw()
 	{
 		p->~T();
 	}
 
-	// Helper templates to not instantiate anything for integral types.
+	// Function template which calls all the destructors on an iterative type.
 	template <typename T>
 	void dtors (T first, T last) throw()
-		{ for (--last; intptr_t(first) <= intptr_t(last); ++first) destroy (&*first); }
+	{
+		for (--last; intptr_t(first) <= intptr_t(last); ++first)
+			destroy (&*first);
+	}
+	/// Template struct with one operator () which calls all destructors on non-integral types.
 	template <typename T, bool bIntegral>
-	struct Sdtorsr {
+	struct Sdtorsr
+	{
 		inline void operator()(T first, T last) throw() { dtors (first, last); }
 	};
+	/// Specific implementation of template struct for integral values which does not call a destructor.
 	template <typename T>
-	struct Sdtorsr<T,true> {
+	struct Sdtorsr<T,true>
+	{
 		inline void operator()(T, T) throw() {}
 	};
-
-	/// Calls the destructor on elements in range [first, last) without calling delete.
-	/// \ingroup RawStorageAlgorithms
-	///
+	/** Calls the destructor on elements in range [first, last) without calling delete.
+	It correctly adjusts for non-integral and integral values calling destructors when allowed. */
 	template <typename ForwardIterator>
 	inline void destroy (ForwardIterator first, ForwardIterator last) throw()
-	{
+	{ 
 		typedef typename iterator_traits<ForwardIterator>::value_type value_type;
-		Sdtorsr<ForwardIterator,numeric_limits<value_type>::is_integral>()(first, last);
+//		Sdtorsr<ForwardIterator,numeric_limits<value_type>::is_integral>()(first, last);
+		Sdtorsr<ForwardIterator,!__has_trivial_destructor(value_type)&&!__has_user_destructor(value_type)&&!__has_virtual_destructor(value_type)>()(first, last);
 	}
 
 	/// Casts \p p to the type of the second pointer argument.
@@ -124,8 +119,6 @@ namespace std {
 	/// \brief Creates a temporary buffer pair from \p p and \p n
 	/// This is intended to be used with alloca to create temporary buffers.
 	/// The size in the returned pair is set to 0 if the allocation is unsuccessful.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename T>
 	inline pair<T*, ptrdiff_t> make_temporary_buffer (void* p, size_t n, const T* ptype)
 	{
@@ -143,45 +136,37 @@ namespace std {
 	#endif
 
 	/// Copies [first, last) into result by calling copy constructors in result.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename InputIterator, typename ForwardIterator>
 	ForwardIterator uninitialized_copy (InputIterator first, InputIterator last, ForwardIterator result)
 	{
 		for (; first < last; ++result, ++first)
-		construct (&*result, *first);
+			construct (&*result, *first);
 		return (result);
 	}
 
 	/// Copies [first, first + n) into result by calling copy constructors in result.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename InputIterator, typename ForwardIterator>
 	ForwardIterator uninitialized_copy_n (InputIterator first, size_t n, ForwardIterator result)
 	{
 		for (++n; --n; ++result, ++first)
-		construct (&*result, *first);
+			construct (&*result, *first);
 		return (result);
 	}
 
 	/// Calls construct on all elements in [first, last) with value \p v.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename ForwardIterator, typename T>
 	void uninitialized_fill (ForwardIterator first, ForwardIterator last, const T& v)
 	{
 		for (; first < last; ++first)
-		construct (&*first, v);
+			construct (&*first, v);
 	}
 
 	/// Calls construct on all elements in [first, first + n) with value \p v.
-	/// \ingroup RawStorageAlgorithms
-	///
 	template <typename ForwardIterator, typename T>
 	ForwardIterator uninitialized_fill_n (ForwardIterator first, size_t n, const T& v)
 	{
 		for (++n; --n; ++first)
-		construct (&*first, v);
+			construct (&*first, v);
 		return (first);
 	}
     

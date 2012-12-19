@@ -244,9 +244,7 @@
     <ClCompile Include="std\memblock.cpp" />
     <ClCompile Include="std\blocklink.cpp" />
     <ClCompile Include="std\mistream.cpp" />
-    <ClCompile Include="std\new.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="std\new.cpp" />
     <ClCompile Include="std\ofstream.cpp" />
     <ClCompile Include="std\istringstream.cpp" />
     <ClCompile Include="std\ostream.cpp" />
