@@ -27,6 +27,7 @@ void BvtMsvcrt();
 void BvtMemory();
 void BvtString();
 void BvtVector();
+void BvtOStringStream();
 int main(int argc, char* argv[])
 {
 	printf("Build Verification Tests\n");
@@ -38,6 +39,8 @@ int main(int argc, char* argv[])
 	BvtString();			// String checks.
 	heapCheck(heapUsed);
 	BvtVector();			// Vector checks.
+	heapCheck(heapUsed);
+	BvtOStringStream();
 	heapCheck(heapUsed);
 	std::string str = "Tests pass successfully, press any key to continue";
 	printf(str.c_str());

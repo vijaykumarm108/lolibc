@@ -190,48 +190,31 @@ int __cdecl _XcptFilter(_In_ unsigned long _ExceptionNum, _In_ struct _EXCEPTION
 */
 static int __cdecl pre_c_init(void)
 {
-	/*
-	 * Set __app_type properly
-	 */
+	// Set __app_type properly.
 #ifdef _WINMAIN_
 	__set_app_type(_GUI_APP);
 #else  /* _WINMAIN_ */
 	__set_app_type(_CONSOLE_APP);
 #endif  /* _WINMAIN_ */
 
-	/*
-	 * Mark this module as an EXE file so that atexit/_onexit
-	 * will do the right thing when called, including for C++
-	 * d-tors.
-	 */
+	// Mark this module as an EXE file so that atexit/_onexit will do the right thing when called, including for C++ d-tors.
 	__onexitbegin = __onexitend = (_PVFV *)(-1);
 
-	/*
-	 * Propagate the _fmode and _commode variables to the DLL
-	 */
+	// Propagate the _fmode and _commode variables to the DLL.
 	*_IMP___FMODE = _fmode;
 	*_IMP___COMMODE = _commode;
 
 #ifdef _M_IX86
-	/*
-	 * Set the local copy of the Pentium FDIV adjustment flag
-	 */
-
+	// Set the local copy of the Pentium FDIV adjustment flag.
 	// _adjust_fdiv = * _imp___adjust_fdiv;
 #endif  /* _M_IX86 */
 
-	/*
-	 * Run the RTC initialization code for this DLL
-	 */
+	// Run the RTC initialization code for this DLL
 #ifdef _RTC
 	_RTC_Initialize();
 #endif  /* _RTC */
 
-	/*
-	 * Call _setargv(), which will trigger a call to __setargv() if
-	 * SETARGV.OBJ is linked with the EXE.  If SETARGV.OBJ is not
-	 * linked with the EXE, a dummy _setargv() will be called.
-	 */
+	// Call _setargv(), which will trigger a call to __setargv() if SETARGV.OBJ is linked with the EXE.  If SETARGV.OBJ is not linked with the EXE, a dummy _setargv() will be called.
 //#ifdef WPRFLAG
 //    _wsetargv();
 //#else  /* WPRFLAG */
@@ -239,7 +222,7 @@ static int __cdecl pre_c_init(void)
 //#endif  /* WPRFLAG */
 
 #if 0
-	/* If the user has supplied a _matherr routine then set * __pusermatherr to point to it. */
+	// If the user has supplied a _matherr routine then set * __pusermatherr to point to it.
 	if ( !__defaultmatherr )
 		__setusermatherr(_matherr);
 #endif
@@ -253,7 +236,7 @@ static int __cdecl pre_c_init(void)
 
 /*!
 \brief The code in mainCRTStartup that was executed after C initializers and
-before C++ initializers is shifted in this function. Also this funciton
+before C++ initializers is shifted in this function. Also this function
 is the first thing that is executed in C++ init section.
 */
 static void __cdecl pre_cpp_init(void)
@@ -262,13 +245,8 @@ static void __cdecl pre_cpp_init(void)
 	atexit(_RTC_Terminate);
 #endif  /* _RTC */
 
-	/*
-	 * Get the arguments for the call to main. Note this must be
-	 * done explicitly, rather than as part of the dll's
-	 * initialization, to implement optional expansion of wild
-	 * card chars in filename args
-	 */
-
+	/* Get the arguments for the call to main. Note this must be done explicitly, rather than as part of the DLL's
+	   initialization, to implement optional expansion of wild card chars in filename args */
 	startinfo.newmode = 0; // _newmode;
 
 #ifdef _UNICODE
@@ -313,18 +291,13 @@ int __declspec(noinline) wWinMainCRTStartup(
 #else  /* _UNICODE */
 int __declspec(noinline) WinMainCRTStartup(
 #endif  /* _UNICODE */
-
 #else  /* _WINMAIN_ */
-
 #ifdef _UNICODE
-int __declspec(noinline) wmainCRTStartup(
+int __declspec(noinline) wmainCRTStartup( void )
 #else  /* _UNICODE */
-int __declspec(noinline) mainCRTStartup(
+int __declspec(noinline) mainCRTStartup( void )
 #endif  /* _UNICODE */
-
 #endif  /* _WINMAIN_ */
-		void
-		)
 {
 	/*
 	* The /GS security cookie must be initialized before any exception
@@ -333,7 +306,6 @@ int __declspec(noinline) mainCRTStartup(
 	* after __security_init_cookie has been called.
 	*/
 	// __security_init_cookie() - You must compile with checking buffer overruns to off.
-
 	//ghInstance = (HINSTANCE)&__ImageBase;
 
 #ifdef _WINMAIN_
@@ -351,11 +323,7 @@ int __declspec(noinline) mainCRTStartup(
 #endif  /* _WINMAIN_ */
 
 
-		/*
-		 * Guard the initialization code and the call to user's main, or
-		 * WinMain, function in a __try/__except statement.
-		 */
-
+		/* Guard the initialization code and the call to user's main, or WinMain, function in a __try/__except statement. */
 		__try
 		{
 		   /*
@@ -378,8 +346,9 @@ int __declspec(noinline) mainCRTStartup(
 	//		_initterm( (_PVFV*)__xi_a, (_PVFV *)__xi_z );
 
 //			pre_cpp_init();
-			// Do C++ constructors (initializers) specific to this EXE
-	//		_initterm( __xc_a, __xc_z );
+
+			_initterm_e( __xi_a, __xi_z );	// Invoke C constructors
+			_initterm( __xc_a, __xc_z );	// Invoke C++ constructors
 
 			/*
 			 * If we have any dynamically initialized __declspec(thread)
@@ -405,21 +374,22 @@ int __declspec(noinline) mainCRTStartup(
 			 */
 #ifdef _UNICODE
 			/* OS may not support "W" flavors */
-			if (_wcmdln == NULL)
+			if( _wcmdln == NULL )
 				return 255;
 			lpszCommandLine = _wcmdln;
 #else  /* _UNICODE */
 			lpszCommandLine = _acmdln;
 #endif  /* _UNICODE */
 
-			while ( (*lpszCommandLine > SPACECHAR) || (*lpszCommandLine && inDoubleQuote) )
+			while( (*lpszCommandLine > SPACECHAR) || (*lpszCommandLine && inDoubleQuote) )
 			{
 				// Flip the count from 1 to 0 or 0 to 1 if current character is DOUBLEQUOTE.
-				if (*lpszCommandLine==DQUOTECHAR) inDoubleQuote=!inDoubleQuote;
+				if( *lpszCommandLine==DQUOTECHAR )
+					inDoubleQuote = !inDoubleQuote;
 #ifdef _MBCS
-				if (_ismbblead(*lpszCommandLine))
+				if( _ismbblead( *lpszCommandLine ) )
 				{
-					if (lpszCommandLine)
+					if( lpszCommandLine )
 					{
 						lpszCommandLine++;
 					}
@@ -428,10 +398,8 @@ int __declspec(noinline) mainCRTStartup(
 				++lpszCommandLine;
 			}
 
-			/*
-			 * Skip past any white space preceding the second token.
-			 */
-			while ( *lpszCommandLine && (*lpszCommandLine <= SPACECHAR) )
+			/* Skip past any white space preceding the second token. */
+			while( *lpszCommandLine && (*lpszCommandLine <= SPACECHAR) )
 			{
 				lpszCommandLine++;
 			}
@@ -452,7 +420,6 @@ int __declspec(noinline) mainCRTStartup(
 			__initenv = envp;
 			mainret = main(__argc, __argv, envp);
 #endif  /* _UNICODE */
-
 #endif  /* _WINMAIN_ */
 
 			exit(mainret);

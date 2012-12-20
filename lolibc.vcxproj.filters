@@ -296,6 +296,12 @@
     <ClInclude Include="include\lolog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\iostream">
+      <Filter>Header Files\stl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LoDllMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">

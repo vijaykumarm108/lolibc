@@ -1,0 +1,18 @@
+// iostream header for lolibc
+#pragma once
+#ifndef _IOSTREAM_
+#define _IOSTREAM_
+#ifndef RC_INVOKED
+#include <istream>
+#include <fstream>
+
+namespace std {
+
+extern ifstream cin;
+extern ofstream cout;
+extern ofstream cerr;
+
+}
+
+#endif /* RC_INVOKED */
+#endif /* _IOSTREAM_ */

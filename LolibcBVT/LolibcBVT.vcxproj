@@ -183,7 +183,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BvtMemory.cpp" />
-    <ClCompile Include="BVTmsvcrt.cpp" />
+    <ClCompile Include="BvtMsvcrt.cpp" />
+    <ClCompile Include="BvtOStringStream.cpp" />
     <ClCompile Include="BvtString.cpp" />
     <ClCompile Include="BvtVector.cpp" />
     <ClCompile Include="LolibcBVT.cpp" />

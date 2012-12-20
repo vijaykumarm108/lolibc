@@ -24,13 +24,16 @@
     <ClCompile Include="BvtVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BVTmsvcrt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BvtString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BvtMemory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BvtMsvcrt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BvtOStringStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

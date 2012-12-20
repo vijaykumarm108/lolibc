@@ -12,17 +12,15 @@ UINT_PTR __security_cookie;
 
 /*!
 \brief 
- Walk a table of function pointers in the same way as _initterm, but
- here the functions return an error code.  If an error is returned, it
- will be a nonzero value equal to one of the _RT_* codes.
+Walk a table of function pointers in the same way as _initterm, but here the functions return an error code.  If an error is returned, it
+will be a nonzero value equal to one of the _RT_* codes.
 
 @param[in]	pfbegin	pointer to the beginning of the table (first valid entry).
 @param[in]	*pfend	pointer to the end of the table (after last valid entry).
 
 @return int No return value
 
-\notes  This routine must be exported in the CRT DLL model so that the client
-      EXE and client DLL(s) can call it.
+\notes  This routine must be exported in the CRT DLL model so that the client EXE and client DLL(s) can call it.
 
 \exceptions
 	If either pfbegin or pfend is NULL, or invalid, all bets are off!

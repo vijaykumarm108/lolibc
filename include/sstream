@@ -12,11 +12,7 @@
 
 namespace std {
 
-/// \class istringstream sistream.h std.h
-/// \ingroup TextStreams
-///
-/// \brief A stream that reads textual data from a memory block.
-///
+/** A stream that reads textual data from a memory block. */
 class istringstream : public istream {
 public:
     static const size_type	c_MaxDelimiters = 16;	///< Maximum number of word delimiters.
@@ -150,11 +146,7 @@ ISTRSTREAM_CAST_OPERATOR (unsigned long long, long long)
 
 class string;
 
-/// \class ostringstream sostream.h std.h
-/// \ingroup TextStreams
-///
-/// \brief This stream writes textual data into a memory block.
-///
+/** This stream writes textual data into a memory block. */
 class ostringstream : public ostream {
 public:
 				ostringstream (const string& v = "");

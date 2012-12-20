@@ -74,7 +74,7 @@ typedef unsigned short wchar_t;
 	char *  __cdecl				strcat(char *, const char *);
 	int     __cdecl				strcmp(const char *, const char *);
 	size_t  __cdecl				strlen(const char *);             
-	_CRTIMP void *  __cdecl		memchr(const void *, int, size_t);
+	_CRTIMP const void *  __cdecl	memchr(const void *, int, size_t);
 	_CRTIMP void *  __cdecl		memmove(void *, const void *, size_t);
 	_CRTIMP char *  __cdecl		strchr(const char *, int);
 	_CRTIMP int     __cdecl		_strcmpi(const char *, const char *);
