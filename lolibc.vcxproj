@@ -521,6 +521,7 @@
     <ClInclude Include="include\ios_base.h" />
     <ClInclude Include="include\limits.h" />
     <ClInclude Include="include\LoDllMain.h" />
+    <ClInclude Include="include\LoLibTiff.h" />
     <ClInclude Include="include\lolog.h" />
     <ClInclude Include="include\process.h" />
     <ClInclude Include="include\regex" />

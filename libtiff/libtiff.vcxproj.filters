@@ -182,6 +182,9 @@
     <ClCompile Include="tiffiop.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LoTiff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SConstruct">

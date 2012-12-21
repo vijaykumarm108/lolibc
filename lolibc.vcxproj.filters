@@ -302,6 +302,9 @@
     <ClInclude Include="include\LoDllMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\LoLibTiff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="std\algobase.cpp">
