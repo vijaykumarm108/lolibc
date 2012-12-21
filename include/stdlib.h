@@ -9,7 +9,7 @@ extern "C" {
 /* Definition of the argument values for the exit() function */
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
-
+#define RAND_MAX		0x7fff
 
 _CRTIMP size_t __cdecl		_msize( void *memblock );
 _CRTIMP long int __cdecl	a64l (const char *string);

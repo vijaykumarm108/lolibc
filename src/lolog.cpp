@@ -111,9 +111,9 @@ namespace lo {
 	}
 	void log::raw( const char *output )
 	{
-#ifdef _DEBUG
+//#ifdef _DEBUG
 		OutputDebugStringA(output);
-#endif
+//#endif
 		if(!s_isCsInitialized)
 		{
 			s_isCsInitialized = true;

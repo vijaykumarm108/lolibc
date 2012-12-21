@@ -499,7 +499,7 @@ char * ZEXPORT gzgets(gzFile file, char *buf, int len)
 
         /* look for end-of-line in current output buffer */
         n = state->x.have > left ? left : state->x.have;
-        eol = memchr(state->x.next, '\n', n);
+        eol = (unsigned char *)memchr(state->x.next, '\n', n);
         if (eol != NULL)
             n = (unsigned)(eol - state->x.next) + 1;
 

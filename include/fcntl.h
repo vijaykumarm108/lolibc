@@ -1,6 +1,7 @@
 /* lolibc library
 */
 #pragma once
+#include "lolibbase.h"
 
 #ifndef _INC_FCNTL
 #define _INC_FCNTL
