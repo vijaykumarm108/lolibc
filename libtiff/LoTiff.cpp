@@ -23,20 +23,32 @@ namespace lo {
 		}
 	}
 
+	int		Tiff::GetField(uint32_t tag, ...)
+	{
+		va_list ap;
+		int status;
+
+		va_start(ap, tag);
+		status = TIFFVGetField(reinterpret_cast<TIFF *>(m_tiff),tag,ap);
+		va_end(ap);
+		return (status);
+	}
+
 	void Tiff::Open(const char *file)
 	{
 		Close();
 		m_tiff = reinterpret_cast<void *>(TIFFOpenW(wstring(file),"w"));
 	}
 
-	void	Tiff::SetField(uint32_t tagId, uint32_t value)
+	int	Tiff::SetField(uint32_t tagId, ...)
 	{
-		TIFFSetField(reinterpret_cast<TIFF *>(m_tiff),tagId,value);
-	}
+		va_list ap;
+		int status;
 
-	void	Tiff::SetField(uint32_t tagId, const char * value)
-	{
-		TIFFSetField(reinterpret_cast<TIFF *>(m_tiff),tagId,value);
+		va_start(ap, tagId);
+		status = TIFFVSetField(reinterpret_cast<TIFF *>(m_tiff),tagId,ap);
+		va_end(ap);
+		return status;
 	}
 
 	void	Tiff::WriteDirectory()

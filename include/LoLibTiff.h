@@ -182,7 +182,12 @@ namespace lo {
 		~Tiff();
 		void	Open(const char *file);
 		void	Close();
-		void	set_FileType(TiffFileType fileType)					{SetField(254,fileType);}
+		/**  */
+		int		GetField(uint32_t tag, ...);
+		/** TIFFTAG_ROWSPERSTRIP 278: rows per strip of data */
+		inline int get_DefaultStripSize(int n = 0)					{return GetField(278,n);}
+		/** */
+		inline void	set_FileType(TiffFileType fileType)				{SetField(254,fileType);}
 		/** bits per channel (sample) */
 		inline void	set_BitsPerSample(uint32_t bps)					{SetField(258,bps);}
 		/** +dithering matrix width */
@@ -209,6 +214,8 @@ namespace lo {
 		inline void set_PlanarConfig(TiffPlanarConfig config)		{SetField(284,config);}
 		/** photometric interpretation */
 		inline void set_Photometric( TiffPhotometric photometric )	{SetField(262,photometric); }
+		/** TIFFTAG_PAGENUMBER: 297	- page numbers of multi-page */
+		inline void set_PageNumber( uint32_t currentPage, uint32_t totalPages )	{ SetField(297,currentPage,totalPages); }
 		/** TIFFTAG_STRIPOFFSETS: offsets to data strips */
 		inline void set_StripOffsets(uint32_t offset)				{SetField(273,offset);}
 		/** +thresholding used on data */
@@ -218,7 +225,7 @@ namespace lo {
 		/** TIFFTAG_SAMPLESPERPIXEL		277: samples per pixel */
 		inline void set_SamplesPerPixel( uint32_t samplesPerPixel )	{SetField(277,samplesPerPixel);}
 		/** TIFFTAG_ROWSPERSTRIP		278: rows per strip of data */
-		inline void set_RowsPerString( uint32_t rowsPerStrip )		{SetField(278,rowsPerStrip);}
+		inline void set_RowsPerStrip( uint32_t rowsPerStrip )		{SetField(278,rowsPerStrip);}
 		/** TIFFTAG_STRIPBYTECOUNTS		279: bytes counts for strips */
 		inline void set_StripByteCounts( uint32_t stripByteCounts )	{SetField(279,stripByteCounts);}
 		/** TIFFTAG_MINSAMPLEVALUE		280: +minimum sample value */
@@ -232,8 +239,7 @@ namespace lo {
 		/** TIFFTAG_RESOLUTIONUNIT		296: units of resolutions */
 		inline void set_ResolutionUnit( TiffResolutionUnit unit)	{SetField(296,unit);}
 		void	SetFieldV(uint32_t tag, int value, va_list ap);
-		void	SetField(uint32_t tag, uint32_t value);
-		void	SetField(uint32_t tag, const char * value);
+		int		SetField(uint32_t tag, ...);
 		void	WriteDirectory();
 		void	WriteScanLine( void *line, size_t length );
 	private:
