@@ -180,7 +180,8 @@ namespace lo {
 	public:
 		Tiff() : m_tiff(nullptr) {}
 		~Tiff();
-		void	Open(const char *file);
+		void	OpenForReading(const char *file, const char *flags);
+		void	OpenForWriting(const char *file);
 		void	Close();
 		/**  */
 		int		GetField(uint32_t tag, ...);

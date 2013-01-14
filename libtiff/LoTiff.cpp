@@ -34,7 +34,13 @@ namespace lo {
 		return (status);
 	}
 
-	void Tiff::Open(const char *file)
+	void Tiff::OpenForReading(const char *file, const char *flags)
+	{
+		Close();
+		m_tiff = reinterpret_cast<void *>(TIFFOpenW(wstring(file),"r"));
+	}
+
+	void Tiff::OpenForWriting(const char *file)
 	{
 		Close();
 		m_tiff = reinterpret_cast<void *>(TIFFOpenW(wstring(file),"w"));
