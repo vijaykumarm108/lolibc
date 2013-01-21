@@ -34,7 +34,13 @@ namespace lo {
 		return (status);
 	}
 
-	void Tiff::OpenForReading(const char *file, const char *flags)
+	int		Tiff::GetFieldInt(uint32_t tag, int _default)
+	{
+		GetField(tag,&_default);
+		return _default;
+	}
+
+	void Tiff::OpenForReading(const char *file)
 	{
 		Close();
 		m_tiff = reinterpret_cast<void *>(TIFFOpenW(wstring(file),"r"));
@@ -44,6 +50,17 @@ namespace lo {
 	{
 		Close();
 		m_tiff = reinterpret_cast<void *>(TIFFOpenW(wstring(file),"w"));
+	}
+
+	bool Tiff::ReadNextDirectory()
+	{
+		return TIFFReadDirectory(reinterpret_cast<TIFF *>(m_tiff)) == 1;
+	}
+
+
+	void	Tiff::ReadScanLine( void *data, size_t line)
+	{
+		TIFFReadScanline( reinterpret_cast<TIFF *>(m_tiff), data, line );
 	}
 
 	int	Tiff::SetField(uint32_t tagId, ...)

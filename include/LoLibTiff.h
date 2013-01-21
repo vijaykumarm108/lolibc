@@ -180,14 +180,31 @@ namespace lo {
 	public:
 		Tiff() : m_tiff(nullptr) {}
 		~Tiff();
-		void	OpenForReading(const char *file, const char *flags);
+		void	OpenForReading(const char *file);
 		void	OpenForWriting(const char *file);
 		void	Close();
-		/**  */
+		/** Gets multiple parameter fields. */
 		int		GetField(uint32_t tag, ...);
-		/** TIFFTAG_ROWSPERSTRIP 278: rows per strip of data */
-		inline int get_DefaultStripSize(int n = 0)					{return GetField(278,n);}
-		/** */
+		/** Gets a field with one parameter. */
+		int		GetFieldInt(uint32_t tag1, int _default = 0);
+		/** Gets BitsPerPixel: 258. */
+		inline int					get_BitsPerPixel()				{return GetFieldInt(258);}
+		/** TIFFTAG_ROWSPERSTRIP 278: rows per strip of data. */
+		inline int					get_DefaultStripSize(int n = 0)	{return GetField(278,n);}
+		/** get image width in pixels */
+		inline int					get_ImageWidth()				{return GetField(256);}
+		/** get image height in pixels */
+		inline int					get_ImageLength()				{return GetField(257);}
+		/** Gets the type of tiff file: RGB or monochrome. */
+		inline TiffPhotometric		get_Photometric()				{return (TiffPhotometric)GetFieldInt(262);}
+		/** TIFFTAG_PLANARCONFIG		284: storage organization */
+		inline TiffPlanarConfig		get_PlanarConfig()				{return GetField(284);}
+		/** Gets SamplesPerPixel. */
+		inline int					get_SamplesPerPixel()			{return (TiffPhotometric)GetFieldInt(277);}
+
+
+
+		/** Sets the file type: 254 */
 		inline void	set_FileType(TiffFileType fileType)				{SetField(254,fileType);}
 		/** bits per channel (sample) */
 		inline void	set_BitsPerSample(uint32_t bps)					{SetField(258,bps);}
@@ -239,10 +256,12 @@ namespace lo {
 		inline void set_YResolution( uint32_t yResolution )			{SetField(283,yResolution);}
 		/** TIFFTAG_RESOLUTIONUNIT		296: units of resolutions */
 		inline void set_ResolutionUnit( TiffResolutionUnit unit)	{SetField(296,unit);}
+		bool	ReadNextDirectory();
+		void	ReadScanLine( void *line, size_t length);
 		void	SetFieldV(uint32_t tag, int value, va_list ap);
 		int		SetField(uint32_t tag, ...);
 		void	WriteDirectory();
-		void	WriteScanLine( void *line, size_t length );
+		void	WriteScanLine( void *data, size_t line );
 	private:
 		void	*m_tiff;
 	};
