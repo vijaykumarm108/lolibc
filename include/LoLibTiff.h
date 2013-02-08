@@ -192,13 +192,13 @@ namespace lo {
 		/** TIFFTAG_ROWSPERSTRIP 278: rows per strip of data. */
 		inline int					get_DefaultStripSize(int n = 0)	{return GetField(278,n);}
 		/** get image width in pixels */
-		inline int					get_ImageWidth()				{return GetField(256);}
+		inline int					get_ImageWidth()				{return GetFieldInt(256);}
 		/** get image height in pixels */
-		inline int					get_ImageLength()				{return GetField(257);}
+		inline int					get_ImageLength()				{return GetFieldInt(257);}
 		/** Gets the type of tiff file: RGB or monochrome. */
 		inline TiffPhotometric		get_Photometric()				{return (TiffPhotometric)GetFieldInt(262);}
 		/** TIFFTAG_PLANARCONFIG		284: storage organization */
-		inline TiffPlanarConfig		get_PlanarConfig()				{return GetField(284);}
+		inline TiffPlanarConfig		get_PlanarConfig()				{return GetFieldInt(284);}
 		/** Gets SamplesPerPixel. */
 		inline int					get_SamplesPerPixel()			{return (TiffPhotometric)GetFieldInt(277);}
 
